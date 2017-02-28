@@ -11,9 +11,9 @@ const base = crudQueries(
 
 const insertOne = function* (project) {
     const client = yield db.client();
-    return yield client.query(
-        base.insertOne(project),
-    );
+    const result = yield client.query(base.insertOne(project));
+
+    return result[0]; // FIXME: Use base.link(client)
 };
 
 const updateOne = function* (id, project) {
