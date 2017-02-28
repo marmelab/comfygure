@@ -16,20 +16,17 @@ export default function* (projectId, environmentName, configName, tagName = 'nex
     const version = yield versionsQueries.insertOne({
         hash: versionHash,
         previous: lastVersion.hash,
-        date: new Date(),
     });
 
     yield tagsQueries.updateOne(lastTag.id, {
         version_id: version.id,
     });
 
-    for (const key in this.event.body) {
-        if (Object.prototype.hasOwnProperty.call(this.event.body, key)) {
-            yield entriesQueries.insertOne({
-                key,
-                value: this.event.body[key],
-                version_id: version.id,
-            });
-        }
+    for (const key of Object.keys(this.event.body)) {
+        yield entriesQueries.insertOne({
+            key,
+            value: this.event.body[key],
+            version_id: version.id,
+        });
     }
 }
