@@ -10,10 +10,8 @@ const base = crudQueries(
 );
 
 const insertOne = function* (project) {
-    console.log('insertOne');
     const client = yield db.client();
     const result = yield client.query(base.insertOne(project));
-    console.log('insertOne');
 
     return result[0]; // FIXME: Use base.link(client)
 };

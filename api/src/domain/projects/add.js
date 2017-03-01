@@ -20,7 +20,6 @@ const generateRandomString = (size, upperAlphaOnly = false) => {
 };
 
 export default function* (name, environmentName = null) {
-    console.log(name, environmentName);
     const project = yield projectsQueries.insertOne({
         name,
         state: LIVE,
