@@ -1,8 +1,17 @@
 SERVERLESS := SLS_DEBUG=* node_modules/.bin/serverless
+DATABASE ?= comfy
+
+export PGUSER ?= postgres
+export PGHOST ?= localhost
 
 install:
 	npm i
+
+install-db:
 	docker run --name comfy-db -p 5432:5432 -d postgres:9.6
+	sleep 5s
+	psql -c "CREATE DATABASE ${DATABASE}"
+	psql ${DATABASE} < var/schema.sql
 
 start-db:
 	docker start comfy-db

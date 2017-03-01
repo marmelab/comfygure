@@ -24,7 +24,7 @@ CREATE TABLE project (
 
 CREATE TABLE environment (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    project_id UUID NOT NULL REFERENCES project,
+    project_id UUID NOT NULL REFERENCES project ON DELETE CASCADE,
     name TEXT NOT NULL,
     state state NOT NULL DEFAULT 'live',
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE environment (
 
 CREATE TABLE configuration (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    environment_id UUID NOT NULL REFERENCES environment,
+    environment_id UUID NOT NULL REFERENCES environment ON DELETE CASCADE,
     name TEXT NOT NULL,
     state state NOT NULL DEFAULT 'live',
     default_format format,
@@ -45,7 +45,7 @@ CREATE TABLE configuration (
 
 CREATE TABLE version (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    configuration_id UUID NOT NULL REFERENCES configuration,
+    configuration_id UUID NOT NULL REFERENCES configuration ON DELETE CASCADE,
     hash varchar(64) NOT NULL,
     previous varchar(64),
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -54,15 +54,15 @@ CREATE TABLE version (
 );
 
 CREATE TABLE entry (
-    version_id UUID NOT NULL REFERENCES version,
+    version_id UUID NOT NULL REFERENCES version ON DELETE CASCADE,
     key TEXT NOT NULL,
     value TEXT,
     UNIQUE(version_id, key)
 );
 
 CREATE TABLE tag (
-    configuration_id UUID NOT NULL REFERENCES configuration,
-    version_id UUID NOT NULL REFERENCES version,
+    configuration_id UUID NOT NULL REFERENCES configuration ON DELETE CASCADE,
+    version_id UUID NOT NULL REFERENCES version ON DELETE CASCADE,
     name TEXT NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
