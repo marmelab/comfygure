@@ -6,6 +6,20 @@ const { CONFIG_FOLDER, CONFIG_PATH, DEFAULT_ORIGIN } = require('./constants');
 
 module.exports = (client, ui) => {
     const create = function* (name, environment) {
+        const url = `${DEFAULT_ORIGIN}/projects`;
+
+        let response;
+        try {
+            response = yield client.post(url, { name, environment });
+        } catch (error) {
+            ui.printRequestError(error);
+            ui.exit(1);
+        }
+
+        return Object.assign(response.body, {
+            environments: [environment],
+        });
+
         return {
             id: uuid.v4(),
             name,

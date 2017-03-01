@@ -4,7 +4,7 @@ import db from './db';
 
 const base = crudQueries(
     'environment',
-    ['name', 'state'],
+    ['name', 'state', 'project_id'],
     ['id'],
     ['id', 'name'],
     [

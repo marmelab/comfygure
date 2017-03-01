@@ -1,18 +1,23 @@
 import co from 'co';
 
 import addProject from '../domain/projects/add';
+import getEnviroments from '../domain/environments/get';
 import renameProject from '../domain/projects/rename';
 import removeProject from '../domain/projects/remove';
 
 const create = (event, context, callback) => {
     co(function* () {
-        const { name: projectName } = event.body;
+        const { name: projectName, environment: environmentName } = event.body;
 
-        const body = yield addProject(projectName);
+        const project = yield addProject(projectName, environmentName);
+        const environments = yield getEnviroments(project.id);
 
         const response = {
             statusCode: 200,
-            body,
+            body: {
+                ...project,
+                environments: environments.map(env => env.name),
+            },
         };
 
         callback(null, response);
