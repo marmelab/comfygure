@@ -2,42 +2,32 @@ import { crudQueries } from 'co-postgres-queries';
 
 import db from './db';
 
-const base = crudQueries(
+const query = crudQueries(
     'environment',
     ['name', 'state', 'project_id'],
     ['id'],
     ['id', 'name'],
-    [
-        queries => queries.selectPage
-            .table('environment LEFT JOIN configuration ON (environment.id = configuration.environment_id')
-            .returnFields(['environment.id', 'environment.name', 'json_agg(configuration.name)'])
-            .groupByFields(['environment.id', 'environment.name']),
-    ],
 );
 
-const insertOne = function* (environment) {
-    const client = yield db.client();
-    return yield client.query(
-        base.insertOne(environment),
-    );
-};
+query.selectPage
+    .table('environment LEFT JOIN configuration ON (environment.id = configuration.environment_id)')
+    .idFields(['id'])
+    .searchableFields(['environment.name', 'project_id'])
+    .returnFields(['environment.id', 'environment.name', 'json_agg(configuration.name) as configurations'])
+    .groupByFields(['environment.id', 'environment.name', 'environment.project_id'])
+;
 
-const updateOne = function* (id, environment) {
-    const client = yield db.client();
-    return yield client.query(
-        base.updateOne(id, environment),
-    );
-};
+const insertOne = async environment =>
+    (await db.link(query)).insertOne(environment);
 
-const select = function* (filters) {
-    const client = yield db.client();
-    return yield client.query(
-        base.selectPage(undefined, undefined, filters),
-    );
-};
+const updateOne = async (id, environment) =>
+    (await db.link(query)).updateOne(id, environment);
 
-export default{
+const selectByProject = async projectId =>
+    (await db.link(query)).selectPage(undefined, undefined, { project_id: projectId });
+
+export default {
     insertOne,
     updateOne,
-    select,
+    selectByProject,
 };

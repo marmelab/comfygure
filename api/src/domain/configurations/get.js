@@ -6,12 +6,12 @@ const entriesToDictionary = entries => entries.reduce((dictionary, item) => ({
     [item.key]: item.value,
 }), {});
 
-export default function* (projectId, environmentName, configName, tagName) {
-    const defaultVersion = yield getDefaultVersion(projectId, configName, tagName);
-    const defaultEntries = entriesToDictionary(yield entriesQueries.findByVersion(defaultVersion.id));
+export default async (projectId, environmentName, configName, tagName) => {
+    const defaultVersion = await getDefaultVersion(projectId, configName, tagName);
+    const defaultEntries = entriesToDictionary(await entriesQueries.findByVersion(defaultVersion.id));
 
-    const { configuration, tag, version } = yield getVersion(projectId, environmentName, configName, tagName);
-    const entries = entriesToDictionary(yield entriesQueries.findByVersion(version.id));
+    const { configuration, tag, version } = await getVersion(projectId, environmentName, configName, tagName);
+    const entries = entriesToDictionary(await entriesQueries.findByVersion(version.id));
 
     return {
         name: configuration.name,
@@ -25,4 +25,4 @@ export default function* (projectId, environmentName, configName, tagName) {
         },
         state: configuration.state,
     };
-}
+};

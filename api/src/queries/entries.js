@@ -1,19 +1,17 @@
-import uuid from 'uuid/v4';
+import { crudQueries } from 'co-postgres-queries';
 
 import db from './db';
 
-export const insertOne = function* (entry) {
-    const insertedEntry = {
-        id: uuid(),
-        ...entry,
-    };
-    db.entries.push(insertedEntry);
-    return insertedEntry;
-};
+const query = crudQueries(
+    'entry',
+    ['version_id', 'key', 'value'],
+    ['version_id', 'key'],
+    ['key', 'value'],
+);
 
-export const findByVersion = function* (versionId) {
-    return db.entries.filter(entry => entry.version_id === versionId);
-};
+const insertOne = async entry => (await db.link(query)).insertOne(entry);
+
+const findByVersion = async versionId => (await db.link(query)).selectPage({ version_id: versionId });
 
 export default {
     insertOne,

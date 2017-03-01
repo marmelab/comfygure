@@ -1,41 +1,45 @@
-import uuid from 'uuid/v4';
+import { crudQueries } from 'co-postgres-queries';
 
 import db from './db';
 
-export const insertOne = function* (version) {
-    const insertedVersion = {
-        id: uuid(),
-        ...version,
-    };
-    db.versions.push(insertedVersion);
-    return insertedVersion;
-};
+const query = crudQueries(
+    'version',
+    ['id', 'configuration_id', 'hash', 'previous'],
+    ['id'],
+    ['hash', 'previous'],
+);
 
-export const find = function* (configurationId) {
-    return db.versions.filter(v => v.configuration_id === configurationId).map((v) => {
-        const tag = db.tags.find(t => t.version_id === v.id);
+query.selectPage
+    .table('version LEFT JOIN tag on (version.id = tag.version_id)')
+    .searchableFields(['configuration_id'])
+    .returnFields(['hash', 'previous', 'tag.name'])
+;
 
-        return {
-            ...v,
-            tag: tag ? tag.name : '',
-        };
+query.selectOne
+    .table('version LEFT JOIN tag on (version.id = tag.version_id)')
+    .searchableFields(['configuration_id', 'hash', 'tag.id'])
+    .returnFields(['hash', 'previous', 'tag.name'])
+;
+
+const insertOne = async version =>
+    (await db.link(query)).insertOne(version);
+
+const find = async configurationId =>
+    (await db.link(query)).selectPage({
+        configuration_id: configurationId,
     });
-};
 
-export const findOneByHash = function* (configurationId, hash) {
-    return db.versions.find(v =>
-        v.configuration_id === configurationId &&
-        v.hash === hash,
-    );
-};
+const findOneByHash = async (configurationId, hash) =>
+    (await db.link(query)).selectOne({
+        configuration_id: configurationId,
+        hash,
+    });
 
-export const findOneByTag = function* (configurationId, tagId) {
-    const tag = db.tags.find(t =>
-        t.configuration_id === configurationId &&
-        t.id === tagId,
-    );
-    return db.versions.find(v => v.id === tag.version_id);
-};
+const findOneByTag = async (configurationId, tagId) =>
+    (await db.link(query)).selectOne({
+        configuration_id: configurationId,
+        'tag.id': tagId,
+    });
 
 export default {
     insertOne,

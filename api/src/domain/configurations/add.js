@@ -5,28 +5,26 @@ import versionsQueries from '../../queries/versions';
 import tagsQueries from '../../queries/tags';
 import { get as getVersion } from './version';
 
-export default function* (projectId, environmentName, configName, tagName = 'next') {
-    const { version: lastVersion, tag: lastTag } = yield getVersion(projectId, environmentName, configName, tagName);
+export default async (projectId, environmentName, configName, entries, tagName = 'next') => {
+    const { version: lastVersion, tag: lastTag } = await getVersion(projectId, environmentName, configName, tagName);
 
     const versionHash = hash({
         previous: lastVersion.hash,
-        entries: this.event.body,
+        entries,
     });
 
-    const version = yield versionsQueries.insertOne({
+    const version = await versionsQueries.insertOne({
         hash: versionHash,
         previous: lastVersion.hash,
     });
 
-    yield tagsQueries.updateOne(lastTag.id, {
+    await tagsQueries.updateOne(lastTag.id, {
         version_id: version.id,
     });
 
-    for (const key of Object.keys(this.event.body)) {
-        yield entriesQueries.insertOne({
-            key,
-            value: this.event.body[key],
-            version_id: version.id,
-        });
-    }
-}
+    await Object.keys(entries).map(key => entriesQueries.insertOne({
+        key,
+        value: entries[key],
+        version_id: version.id,
+    }));
+};

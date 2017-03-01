@@ -1,29 +1,25 @@
-import uuid from 'uuid/v4';
+import { crudQueries } from 'co-postgres-queries';
 
 import db from './db';
 
-export const updateOne = function* (id, tag) {
-    const found = db.tags.find(t => t.id === id);
-    if (found) {
-        Object.assign(found, tag);
-    }
-};
+const query = crudQueries(
+    'tag',
+    ['configuration_id', 'version_id', 'name'],
+    ['configuration_id', 'version_id', 'name'],
+    ['name'],
+);
 
-export const insertOne = function* (tag) {
-    const insertedTag = {
-        id: uuid(),
-        ...tag,
-    };
-    db.tags.push(insertedTag);
-    return insertedTag;
-};
+const updateOne = async (id, tag) =>
+    (await db.link(query)).updateOne(id, tag);
 
-export const findOne = function* (configurationId, tagName) {
-    return db.tags.find(t =>
-        t.configuration_id === configurationId &&
-        t.name === tagName,
-    );
-};
+const insertOne = async tag =>
+    (await db.link(query)).insertOne(tag);
+
+const findOne = async (configurationId, tagName) =>
+    (await db.link(query)).selectOne({
+        configuration_id: configurationId,
+        name: tagName,
+    });
 
 export default {
     updateOne,

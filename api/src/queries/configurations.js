@@ -1,6 +1,6 @@
 import db from './db';
 
-export const findOne = function* (projectId, environmentName, configurationName) {
+const findOne = async (projectId, environmentName, configurationName) => {
     const project = db.projects.find(p => p.id === projectId);
     const environment = db.environments.find(e =>
         e.name === environmentName &&
