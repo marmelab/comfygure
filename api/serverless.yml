@@ -3,34 +3,30 @@ service: comfy
 provider:
   name: aws
   runtime: nodejs4.3
+  stage: dev
+  region: eu-west-1
 
 functions:
 
 ## PROJECTS
 
   projectCreate:
-    handler: handler.projects.create
+    handler: projects.create
     description: Create a new project
     events:
       - http:
           method: POST
-          integration: lambda
           path: projects
           cors: true
 
   projectUpdate:
-    handler: handler.projects.update
+    handler: projects.update
     description: Rename a project
     events:
       - http:
           method: PUT
-          integration: lambda
           path: projects/{id}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
 
   projectRemove:
     handler: handler.projects.remove
@@ -38,13 +34,8 @@ functions:
     events:
       - http:
           method: DELETE
-          integration: lambda
           path: projects/{id}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
 
 ## ENVIRONMENTS
 
@@ -54,13 +45,8 @@ functions:
     events:
       - http:
           method: GET
-          integration: lambda
           path: projects/{id}/environments
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
 
   environmentCreate:
     handler: handler.environments.create
@@ -68,13 +54,8 @@ functions:
     events:
       - http:
           method: POST
-          integration: lambda
           path: projects/{id}/environments
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
 
   environmentUpdate:
     handler: handler.environments.update
@@ -82,14 +63,8 @@ functions:
     events:
       - http:
           method: PUT
-          integration: lambda
           path: projects/{id}/environments/{environmentName}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-                environmentName: true
 
   environmentRemove:
     handler: handler.projects.remove
@@ -97,14 +72,8 @@ functions:
     events:
       - http:
           method: DELETE
-          integration: lambda
           path: projects/{id}/environments/{environmentName}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-                environmentName: true
 
 ## CONFIGURATIONS
 
@@ -114,15 +83,8 @@ functions:
     events:
       - http:
           method: GET
-          integration: lambda
           path: projects/{id}/environments/{environmentName}/config/{configName}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-                environmentName: true
-                configName: true
 
   configurationGet:
     handler: handler.configurations.get
@@ -130,16 +92,8 @@ functions:
     events:
       - http:
           method: GET
-          integration: lambda
           path: projects/{id}/environments/{environmentName}/config/{configName}/{tagName}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-                environmentName: true
-                configName: true
-                tagName: true
 
   configurationAdd:
     handler: handler.configurations.add
@@ -147,16 +101,8 @@ functions:
     events:
       - http:
           method: POST
-          integration: lambda
           path: projects/{id}/environments/{environmentName}/config/{configName}/{tagName}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-                environmentName: true
-                configName: true
-                tagName: true
 
   configurationRemove:
     handler: handler.configurations.remove
@@ -164,23 +110,12 @@ functions:
     events:
       - http:
           method: POST
-          integration: lambda
           path: projects/{id}/environments/{environmentName}/config/{configName}
           cors: true
-          request:
-            parameters:
-              paths:
-                id: true
-                environmentName: true
-                configName: true
 
 plugins:
   - serverless-webpack
   - serverless-offline
 custom:
   webpack: ./webpack.config.babel.js
-  webpackIncludeModules: true # enable auto-packing of external modules
-  serverless-offline:
-    babelOptions:
-      presets: ["es2015-node4", "es2016"]
-      plugins: ["add-module-exports", "transform-runtime"]
+  webpackIncludeModules: true

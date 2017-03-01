@@ -2,7 +2,7 @@ import environmentsQueries from '../../queries/environments';
 import { LIVE, ARCHIVED } from '../common/states';
 
 export default function* (projectId, environmentName) {
-    const environment = yield environmentQueries.selectOne({
+    const environment = yield environmentsQueries.selectOne({
         project_id: projectId,
         name: environmentName,
         state: LIVE,

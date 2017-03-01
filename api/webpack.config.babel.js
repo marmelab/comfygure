@@ -3,13 +3,19 @@ const ConfigPlugin = require('webpack-config-plugin');
 
 module.exports = {
     target: 'node',
-    entry: './src/handler.js',
+    entry: {
+        configurations: './src/handlers/configurations.js',
+        environments: './src/handlers/environments.js',
+        projects: './src/handlers/projects.js',
+    },
     plugins: [
         new ConfigPlugin({ dir: path.resolve(__dirname, 'config') }),
-        // new webpack.DefinePlugin({
-        //     CONFIG: JSON.stringify(config),
-        // }),
     ],
+    output: {
+        libraryTarget: 'commonjs',
+        path: '.webpack',
+        filename: '[name].js',
+    },
     module: {
         loaders: [
             {
@@ -19,5 +25,7 @@ module.exports = {
             },
             { test: /\.json$/, loader: 'json-loader' },
         ],
+        noParse: [/pg\/lib\/native/],
     },
+    externals: ['aws-sdk'],
 };
