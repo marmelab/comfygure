@@ -9,11 +9,21 @@ const query = crudQueries(
     ['id', 'name', 'access_key', 'read_token', 'write_token'],
 );
 
-const insertOne = async project =>
-    (await db.link(query)).insertOne(project);
+const insertOne = async (project) => {
+    const client = await db.link(query);
+    const result = await client.insertOne(project);
+    client.release();
 
-const updateOne = async (id, project) =>
-    (await db.link(query)).updateOne(id, project);
+    return result;
+};
+
+const updateOne = async (id, project) => {
+    const client = await db.link(query);
+    const result = await client.updateOne(id, project);
+    client.release();
+
+    return result;
+};
 
 export default {
     insertOne,

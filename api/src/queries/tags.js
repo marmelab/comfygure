@@ -9,17 +9,32 @@ const query = crudQueries(
     ['name'],
 );
 
-const updateOne = async (id, tag) =>
-    (await db.link(query)).updateOne(id, tag);
+const updateOne = async (id, tag) => {
+    const client = await db.link(query);
+    const result = await client.updateOne(id, tag);
+    client.release();
 
-const insertOne = async tag =>
-    (await db.link(query)).insertOne(tag);
+    return result;
+};
 
-const findOne = async (configurationId, tagName) =>
-    (await db.link(query)).selectOne({
+const insertOne = async (tag) => {
+    const client = await db.link(query);
+    const result = await client.insertOne(tag);
+    client.release();
+
+    return result;
+};
+
+const findOne = async (configurationId, tagName) => {
+    const client = await db.link(query);
+    const result = await client.selectOne({
         configuration_id: configurationId,
         name: tagName,
     });
+    client.release();
+
+    return result;
+};
 
 export default {
     updateOne,

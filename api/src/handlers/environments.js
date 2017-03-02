@@ -21,7 +21,7 @@ const create = λ(async (event) => {
 const update = λ(async (event) => {
     const { id: projectId, environmentName } = event.pathParameters;
     const { name: newEnvironmentName } = event.body;
-
+    console.log('rename environment');
     return renameEnvironment(projectId, environmentName, newEnvironmentName);
 });
 

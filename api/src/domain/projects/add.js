@@ -19,7 +19,7 @@ const generateRandomString = (size, upperAlphaOnly = false) => {
     return randomlyGeneratedString;
 };
 
-export default async (name, environmentName = null) => {
+export default async (name, environmentName = 'default') => {
     const project = await projectsQueries.insertOne({
         name,
         state: LIVE,

@@ -21,25 +21,45 @@ query.selectOne
     .returnFields(['hash', 'previous', 'tag.name'])
 ;
 
-const insertOne = async version =>
-    (await db.link(query)).insertOne(version);
+const insertOne = async (version) => {
+    const client = await db.link(query);
+    const result = await client.insertOne(version);
+    client.release();
 
-const find = async configurationId =>
-    (await db.link(query)).selectPage({
+    return result;
+};
+
+const find = async (configurationId) => {
+    const client = await db.link(query);
+    const result = await client.selectPage({
         configuration_id: configurationId,
     });
+    client.release();
 
-const findOneByHash = async (configurationId, hash) =>
-    (await db.link(query)).selectOne({
+    return result;
+};
+
+const findOneByHash = async (configurationId, hash) => {
+    const client = await db.link(query);
+    const result = await client.selectOne({
         configuration_id: configurationId,
         hash,
     });
+    client.release();
 
-const findOneByTag = async (configurationId, tagId) =>
-    (await db.link(query)).selectOne({
+    return result;
+};
+
+const findOneByTag = async (configurationId, tagId) => {
+    const client = await db.link(query);
+    const result = await client.selectOne({
         configuration_id: configurationId,
         'tag.id': tagId,
     });
+    client.release();
+
+    return result;
+};
 
 export default {
     insertOne,

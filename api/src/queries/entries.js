@@ -9,9 +9,21 @@ const query = crudQueries(
     ['key', 'value'],
 );
 
-const insertOne = async entry => (await db.link(query)).insertOne(entry);
+const insertOne = async (entry) => {
+    const client = await db.link(query);
+    const result = await client.insertOne(entry);
+    client.release();
 
-const findByVersion = async versionId => (await db.link(query)).selectPage({ version_id: versionId });
+    return result;
+};
+
+const findByVersion = async (versionId) => {
+    const client = await db.link(query);
+    const result = await client.selectPage({ version_id: versionId });
+    client.release();
+
+    return result;
+};
 
 export default {
     insertOne,

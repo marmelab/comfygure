@@ -26,10 +26,10 @@ const update = λ(async (event) => {
     return project;
 });
 
-const remove = λ(async (event, client) => {
+const remove = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
 
-    return removeProject(client)(projectId);
+    return removeProject(projectId);
 });
 
 export default {

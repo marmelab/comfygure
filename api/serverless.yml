@@ -29,7 +29,7 @@ functions:
           cors: true
 
   projectRemove:
-    handler: handler.projects.remove
+    handler: projects.remove
     description: Delete a project
     events:
       - http:
@@ -40,7 +40,7 @@ functions:
 ## ENVIRONMENTS
 
   environmentGet:
-    handler: handler.environments.get
+    handler: environments.get
     description: List environments of a project
     events:
       - http:
@@ -49,7 +49,7 @@ functions:
           cors: true
 
   environmentCreate:
-    handler: handler.environments.create
+    handler: environments.create
     description: Add a new environment to a project
     events:
       - http:
@@ -58,7 +58,7 @@ functions:
           cors: true
 
   environmentUpdate:
-    handler: handler.environments.update
+    handler: environments.update
     description: Rename environment of a project
     events:
       - http:
@@ -67,7 +67,7 @@ functions:
           cors: true
 
   environmentRemove:
-    handler: handler.projects.remove
+    handler: projects.remove
     description: Delete environment of a project
     events:
       - http:
@@ -78,7 +78,7 @@ functions:
 ## CONFIGURATIONS
 
   configurationHistory:
-    handler: handler.configurations.history
+    handler: configurations.history
     description: List history of a configuration
     events:
       - http:
@@ -87,7 +87,7 @@ functions:
           cors: true
 
   configurationGet:
-    handler: handler.configurations.get
+    handler: configurations.get
     description: Get tag version of a configuration
     events:
       - http:
@@ -96,7 +96,7 @@ functions:
           cors: true
 
   configurationAdd:
-    handler: handler.configurations.add
+    handler: configurations.add
     description: Add a new version of a configuration
     events:
       - http:
@@ -105,7 +105,7 @@ functions:
           cors: true
 
   configurationRemove:
-    handler: handler.configurations.remove
+    handler: configurations.remove
     description: Remove a configuration
     events:
       - http:
