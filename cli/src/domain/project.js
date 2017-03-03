@@ -8,26 +8,12 @@ module.exports = (client, ui) => {
     const create = function* (name, environment) {
         const url = `${DEFAULT_ORIGIN}/projects`;
 
-        let response;
         try {
-            response = yield client.post(url, { name, environment });
+            return yield client.post(url, { name, environment });
         } catch (error) {
             ui.printRequestError(error);
             ui.exit(1);
         }
-
-        return Object.assign(response.body, {
-            environments: [environment],
-        });
-
-        return {
-            id: uuid.v4(),
-            name,
-            environments: [environment],
-            accessKey: 'ACCESS-KEY',
-            readToken: 'READ-SECRET-TOKEN',
-            writeToken: 'WRITE-SECRET-TOKEN',
-        };
     };
 
     const saveToConfig = function* (project, passphrase) {
