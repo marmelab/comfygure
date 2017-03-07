@@ -6,18 +6,18 @@ const query = crudQueries(
     'version',
     ['id', 'configuration_id', 'hash', 'previous'],
     ['id'],
-    ['hash', 'previous'],
+    ['id', 'hash', 'previous'],
 );
 
 query.selectPage
     .table('version LEFT JOIN tag on (version.id = tag.version_id)')
-    .searchableFields(['configuration_id'])
-    .returnFields(['hash', 'previous', 'tag.name'])
+    .searchableFields(['version.configuration_id'])
+    .returnFields(['hash', 'previous', 'json_agg(tag.name) as tag'])
+    .groupByFields(['version.id', 'version.hash', 'version.previous'])
 ;
 
 query.selectOne
     .table('version LEFT JOIN tag on (version.id = tag.version_id)')
-    .searchableFields(['configuration_id', 'hash', 'tag.id'])
     .returnFields(['hash', 'previous', 'tag.name'])
 ;
 
@@ -31,8 +31,8 @@ const insertOne = async (version) => {
 
 const find = async (configurationId) => {
     const client = await db.link(query);
-    const result = await client.selectPage({
-        configuration_id: configurationId,
+    const result = await client.selectPage(undefined, undefined, {
+        'version.configuration_id': configurationId,
     });
     client.release();
 
@@ -41,24 +41,30 @@ const find = async (configurationId) => {
 
 const findOneByHash = async (configurationId, hash) => {
     const client = await db.link(query);
-    const result = await client.selectOne({
+    const result = await client.selectPage(undefined, undefined, {
         configuration_id: configurationId,
         hash,
     });
     client.release();
 
-    return result;
+    if (!result.length) {
+        return null;
+    }
+    return result[0];
 };
 
 const findOneByTag = async (configurationId, tagId) => {
     const client = await db.link(query);
-    const result = await client.selectOne({
-        configuration_id: configurationId,
+    const result = await client.selectPage(undefined, undefined, {
+        'version.configuration_id': configurationId,
         'tag.id': tagId,
     });
     client.release();
 
-    return result;
+    if (!result.length) {
+        return null;
+    }
+    return result[0];
 };
 
 export default {

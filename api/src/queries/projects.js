@@ -6,7 +6,7 @@ const query = crudQueries(
     'project',
     ['name', 'state', 'access_key', 'read_token', 'write_token'],
     ['id'],
-    ['id', 'name', 'access_key', 'read_token', 'write_token'],
+    ['id', 'name', 'access_key as "accessKey"', 'read_token as "readToken"', 'write_token as "writeToken"'],
 );
 
 const insertOne = async (project) => {

@@ -1,14 +1,10 @@
 import environmentsQueries from '../../queries/environments';
-import { LIVE, ARCHIVED } from '../common/states';
+import { ARCHIVED } from '../common/states';
 
 export default async (projectId, environmentName) => {
-    const environment = await environmentsQueries.selectOne({
-        project_id: projectId,
-        name: environmentName,
-        state: LIVE,
-    });
+    const environment = await environmentsQueries.findOne(projectId, environmentName);
 
-    if (!environment) {
+    if (!environment || environment.state === ARCHIVED) {
         return null;
     }
 

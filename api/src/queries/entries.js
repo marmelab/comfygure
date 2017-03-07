@@ -19,7 +19,7 @@ const insertOne = async (entry) => {
 
 const findByVersion = async (versionId) => {
     const client = await db.link(query);
-    const result = await client.selectPage({ version_id: versionId });
+    const result = await client.selectPage(undefined, undefined, { version_id: versionId });
     client.release();
 
     return result;

@@ -2,12 +2,14 @@ import { crudQueries } from 'co-postgres-queries';
 
 import db from './db';
 
-const query = crudQueries(
-    'tag',
-    ['configuration_id', 'version_id', 'name'],
-    ['configuration_id', 'version_id', 'name'],
-    ['name'],
-);
+const table = 'tag';
+const fields = ['configuration_id', 'version_id', 'name'];
+const idFields = ['configuration_id', 'version_id', 'name'];
+const returnFields = ['configuration_id', 'version_id', 'name'];
+
+const query = crudQueries(table, fields, idFields, returnFields);
+
+query.updateOne = query.updateOne.allowPrimaryKeyUpdate(true);
 
 const updateOne = async (id, tag) => {
     const client = await db.link(query);
@@ -25,19 +27,32 @@ const insertOne = async (tag) => {
     return result;
 };
 
-const findOne = async (configurationId, tagName) => {
+const batchInsert = async (tags) => {
     const client = await db.link(query);
-    const result = await client.selectOne({
-        configuration_id: configurationId,
-        name: tagName,
-    });
+    const result = await client.batchInsert(tags);
     client.release();
 
     return result;
 };
 
+const findOne = async (configurationId, tagName) => {
+    const client = await db.link(query);
+    const result = await client.selectPage(undefined, undefined, {
+        configuration_id: configurationId,
+        name: tagName,
+    });
+    client.release();
+
+    if (!result.length) {
+        return null;
+    }
+
+    return result[0];
+};
+
 export default {
     updateOne,
     insertOne,
+    batchInsert,
     findOne,
 };

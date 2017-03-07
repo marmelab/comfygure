@@ -19,7 +19,7 @@ const generateRandomString = (size, upperAlphaOnly = false) => {
     return randomlyGeneratedString;
 };
 
-export default async (name, environmentName = 'default') => {
+export default async (name, environmentName = 'default', configurationName = 'default') => {
     const project = await projectsQueries.insertOne({
         name,
         state: LIVE,
@@ -28,9 +28,10 @@ export default async (name, environmentName = 'default') => {
         write_token: generateRandomString(40),
     });
 
-    if (environmentName) {
-        await addEnvironment(project.id, environmentName);
-    }
+    const environment = await addEnvironment(project.id, environmentName, configurationName);
 
-    return project;
+    return {
+        ...project,
+        environments: [environment],
+    };
 };

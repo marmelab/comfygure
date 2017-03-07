@@ -13,6 +13,7 @@ export const get = async (projectId, environmentName, configName, tagName) => {
     } else {
         version = await versionsQueries.findOneByTag(configuration.id, tag.id);
     }
+
     return {
         configuration,
         tag,

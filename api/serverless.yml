@@ -67,7 +67,7 @@ functions:
           cors: true
 
   environmentRemove:
-    handler: projects.remove
+    handler: environments.remove
     description: Delete environment of a project
     events:
       - http:
@@ -83,7 +83,7 @@ functions:
     events:
       - http:
           method: GET
-          path: projects/{id}/environments/{environmentName}/config/{configName}
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}
           cors: true
 
   configurationGet:
@@ -92,16 +92,16 @@ functions:
     events:
       - http:
           method: GET
-          path: projects/{id}/environments/{environmentName}/config/{configName}/{tagName}
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagName}
           cors: true
 
   configurationAdd:
-    handler: configurations.add
+    handler: configurations.create
     description: Add a new version of a configuration
     events:
       - http:
           method: POST
-          path: projects/{id}/environments/{environmentName}/config/{configName}/{tagName}
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagName}
           cors: true
 
   configurationRemove:
@@ -110,7 +110,7 @@ functions:
     events:
       - http:
           method: POST
-          path: projects/{id}/environments/{environmentName}/config/{configName}
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}
           cors: true
 
 plugins:

@@ -1,14 +1,18 @@
 import environmentsQueries from '../../queries/environments';
+import addConfiguration from '../configurations/add';
 import { LIVE } from '../common/states';
 
-export default async (projectId, name) => {
-    const environment = environmentsQueries.insertOne({
-        name,
+export default async (projectId, environmentName = 'default', configurationName = 'default') => {
+    const environment = await environmentsQueries.insertOne({
+        name: environmentName,
         project_id: projectId,
         state: LIVE,
     });
 
-    // TODO: create a default configuration
+    const configuration = await addConfiguration(projectId, environmentName, configurationName);
 
-    return environment;
+    return {
+        ...environment,
+        configurations: [configuration],
+    };
 };

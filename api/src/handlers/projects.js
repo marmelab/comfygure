@@ -9,12 +9,8 @@ const create = λ(async (event) => {
     const { name: projectName, environment: environmentName } = event.body;
 
     const project = await addProject(projectName, environmentName);
-    const environments = await getEnviroments(project.id);
 
-    return {
-        ...project,
-        environments,
-    };
+    return project;
 });
 
 const update = λ(async (event) => {

@@ -13,7 +13,7 @@ query.selectPage
     .table('environment LEFT JOIN configuration ON (environment.id = configuration.environment_id)')
     .idFields(['id'])
     .searchableFields(['environment.name', 'project_id', 'environment.state'])
-    .returnFields(['environment.id', 'environment.name', 'case when count(configuration.name) = 0 then \'[]\' else json_agg(configuration.name) end as configurations'])
+    .returnFields(['environment.id', 'environment.name', 'case when count(configuration.name) = 0 then \'[]\' else json_agg((SELECT x FROM (SELECT configuration.id, configuration.name, configuration.default_format as "defaultFormat") x)) end as configurations'])
     .groupByFields(['environment.id', 'environment.name', 'environment.project_id'])
 ;
 
@@ -32,7 +32,7 @@ const findOne = async (projectId, environmentName) => {
     const client = await db.link(query);
     const result = await client.selectPage(undefined, undefined, {
         project_id: projectId,
-        name: environmentName,
+        'environment.name': environmentName,
     });
     client.release();
 

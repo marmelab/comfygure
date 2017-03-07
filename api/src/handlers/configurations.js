@@ -3,31 +3,33 @@ import λ from './utils/λ';
 import getConfiguration from '../domain/configurations/get';
 import getHistory from '../domain/configurations/history';
 import addConfiguration from '../domain/configurations/add';
+import environmentsQueries from '../queries/environments';
 
-const create = λ(async (event, client) => {
+const create = λ(async (event) => {
     const { id: projectId, environmentName, configName, tagName } = event.pathParameters;
 
-    return addConfiguration(client)(projectId, environmentName, configName, tagName);
+    // create new configuration with entries
+    return addConfiguration(projectId, environmentName, configName, tagName, event.body);
 });
 
 const update = λ(async (event) => {
-
+    //
 });
 
 const remove = λ(async (event) => {
-
+    // remove a configuration
 });
 
-const get = λ(async (event, client) => {
+const get = λ(async (event) => {
     const { id: projectId, environmentName, configName, tagName } = event.pathParameters;
 
-    return getConfiguration(client)(projectId, environmentName, configName, tagName);
+    return getConfiguration(projectId, environmentName, configName, tagName);
 });
 
-const history = λ(async (event, client) => {
+const history = λ(async (event) => {
     const { id: projectId, environmentName, configName } = event.pathParameters;
 
-    return getHistory(client)(projectId, environmentName, configName);
+    return getHistory(projectId, environmentName, configName);
 });
 
 export default {

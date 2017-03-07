@@ -114,33 +114,30 @@ Rename environment of a project
 ```
 ### DELETE /project/{id}/environments/{name}
 Delete environment of a project
-- Request
-
-```json
-{
-}
-```
-
 - Response
 
 ```json
 {
+  "id": "51a91863-4d32-4550-9603-3566cd95b446",
+  "name": "staging"
 }
 ```
 ### GET /projects/{id}/environments/{name}/configurations/{name}?all
 List history of configuration (tagged versions / all switch = everything)
-- Request
-
-```json
-{
-}
-```
-
 - Response
 
 ```json
-{
-}
+[
+  {
+    "name": "default",
+    "hash": "141f751bf4583d39e62ba8266ee82ab71ed5c35f",
+    "previous": null,
+    "tag": [
+      "stable",
+      "next"
+    ]
+  }
+]
 ```
 ### GET /projects/{id}/environments/{name}/configurations/{name}/{tag}
 Get {tag} version of configuration, tag is either a tag name or a hash
