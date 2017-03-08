@@ -9,7 +9,7 @@ const query = crudQueries(
     ['id', 'name'],
 );
 
-query.selectPage
+query.selectPage = query.selectPage
     .table('environment LEFT JOIN configuration ON (environment.id = configuration.environment_id)')
     .idFields(['id'])
     .searchableFields(['environment.name', 'project_id', 'environment.state'])

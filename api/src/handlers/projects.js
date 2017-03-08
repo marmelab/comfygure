@@ -1,7 +1,6 @@
 import λ from './utils/λ';
 
 import addProject from '../domain/projects/add';
-import getEnviroments from '../domain/environments/get';
 import renameProject from '../domain/projects/rename';
 import removeProject from '../domain/projects/remove';
 

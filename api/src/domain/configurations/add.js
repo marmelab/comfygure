@@ -13,6 +13,7 @@ export default async (projectId, environmentName, configurationName = 'default',
 
     if (!configuration) {
         const environment = await environmentsQueries.findOne(projectId, environmentName);
+
         configuration = await configurationsQueries.insertOne({
             environment_id: environment.id,
             name: configurationName,
@@ -20,7 +21,10 @@ export default async (projectId, environmentName, configurationName = 'default',
         });
     }
 
-    const { tag: currentTag, version: currentVersion } = await getVersion(projectId, environmentName, configurationName, tagName);
+    const {
+        tag: currentTag,
+        version: currentVersion,
+    } = await getVersion(projectId, environmentName, configurationName, tagName);
 
     const versionHash = hash({
         previous: currentVersion ? currentVersion.hash : null,

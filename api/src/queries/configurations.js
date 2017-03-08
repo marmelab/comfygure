@@ -9,7 +9,7 @@ const returnFields = ['id', 'name', 'state', 'default_format'];
 
 const query = crudQueries(table, fields, idFields, returnFields);
 
-query.selectPage
+query.selectPage = query.selectPage
     .table(`
         project
         LEFT JOIN environment ON (project.id = environment.project_id)
