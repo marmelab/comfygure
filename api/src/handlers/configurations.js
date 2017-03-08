@@ -3,7 +3,6 @@ import λ from './utils/λ';
 import getConfiguration from '../domain/configurations/get';
 import getHistory from '../domain/configurations/history';
 import addConfiguration from '../domain/configurations/add';
-import environmentsQueries from '../queries/environments';
 
 const create = λ(async (event) => {
     const { id: projectId, environmentName, configName, tagName } = event.pathParameters;

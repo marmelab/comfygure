@@ -12,7 +12,7 @@ const query = crudQueries(
 query.selectPage = query.selectPage
     .table('version LEFT JOIN tag on (version.id = tag.version_id)')
     .searchableFields(['version.configuration_id'])
-    .returnFields(['hash', 'previous', 'json_agg(tag.name) as tag'])
+    .returnFields(['hash', 'previous', 'json_agg(tag.name) as tags'])
     .groupByFields(['version.id', 'version.hash', 'version.previous'])
 ;
 

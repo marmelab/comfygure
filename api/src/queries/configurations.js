@@ -17,7 +17,17 @@ query.selectPage = query.selectPage
     `)
     .searchableFields(['project_id', 'environment.name', 'configuration.name'])
     .idFields(['configuration.id'])
-    .returnFields(['configuration.id', 'configuration.environment_id', 'configuration.name', 'configuration.state', 'configuration.default_format', 'configuration.created_at', 'configuration.updated_at', 'environment.name', 'project.id as project_id'])
+    .returnFields([
+        'configuration.id',
+        'configuration.environment_id',
+        'configuration.name',
+        'configuration.state',
+        'configuration.default_format',
+        'configuration.created_at',
+        'configuration.updated_at',
+        'environment.name as environment_name',
+        'project.id as project_id',
+    ])
 ;
 
 const findOne = async (projectId, environmentName, configurationName) => {

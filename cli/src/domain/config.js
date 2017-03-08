@@ -2,8 +2,8 @@ const { toFlat } = require('../format');
 const { encrypt, decrypt } = require('../crypto');
 
 module.exports = (client, ui) => {
-    const list = function* (project, env, all = false) {
-        const url = `${project.origin}/projects/${project.id}/environments/${env}/config/front-end`;
+    const list = function* (project, env, config, all = false) {
+        const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${config}`;
 
         try {
             return yield client.get(url);

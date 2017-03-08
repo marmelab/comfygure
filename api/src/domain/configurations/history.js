@@ -10,7 +10,7 @@ export default async (projectId, environmentName, configName) => {
         name: configuration.name,
         hash: version.hash,
         previous: version.previous,
-        tag: version.tag,
+        tags: version.tags,
         defaultFormat: configuration.defaultFormat,
     }));
 };
