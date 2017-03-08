@@ -1,18 +1,13 @@
 import environmentsQueries from '../../queries/environments';
-import { LIVE } from '../common/states';
 
-export default function* (projectId, environmentName, newEnvironmentName) {
-    const environment = yield environmentsQueries.selectOne({
-        project_id: projectId,
-        name: environmentName,
-        state: LIVE,
-    });
+export default async (projectId, environmentName, newEnvironmentName) => {
+    const environment = await environmentsQueries.findOne(projectId, environmentName);
 
     if (!environment) {
         return null;
     }
 
-    return yield environmentsQueries.updateOne(environment.id, {
+    return environmentsQueries.updateOne(environment.id, {
         name: newEnvironmentName,
     });
-}
+};

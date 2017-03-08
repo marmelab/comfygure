@@ -5,7 +5,8 @@ export default handler => (event, context) => {
         const body = yield handler({
             ...event,
             body: JSON.parse(event.body),
-        }, context);
+        });
+
         context.succeed({
             statusCode: 200,
             body: JSON.stringify(body),

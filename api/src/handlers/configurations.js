@@ -1,33 +1,35 @@
-import cowrap from './utils/cowrap';
+import λ from './utils/λ';
 
 import getConfiguration from '../domain/configurations/get';
 import getHistory from '../domain/configurations/history';
 import addConfiguration from '../domain/configurations/add';
+import environmentsQueries from '../queries/environments';
 
-const create = cowrap(function* (event) {
+const create = λ(async (event) => {
     const { id: projectId, environmentName, configName, tagName } = event.pathParameters;
 
-    return yield addConfiguration(projectId, environmentName, configName, tagName);
+    // create new configuration with entries
+    return addConfiguration(projectId, environmentName, configName, tagName, event.body);
 });
 
-const update = cowrap(function* (event) {
-
+const update = λ(async (event) => {
+    //
 });
 
-const remove = cowrap(function* (event) {
-
+const remove = λ(async (event) => {
+    // remove a configuration
 });
 
-const get = cowrap(function* (event) {
+const get = λ(async (event) => {
     const { id: projectId, environmentName, configName, tagName } = event.pathParameters;
 
-    return yield getConfiguration(projectId, environmentName, configName, tagName);
+    return getConfiguration(projectId, environmentName, configName, tagName);
 });
 
-const history = cowrap(function* (event) {
+const history = λ(async (event) => {
     const { id: projectId, environmentName, configName } = event.pathParameters;
 
-    return yield getHistory(projectId, environmentName, configName);
+    return getHistory(projectId, environmentName, configName);
 });
 
 export default {

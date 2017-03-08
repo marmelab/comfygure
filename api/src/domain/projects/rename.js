@@ -1,7 +1,6 @@
-import projectsQueries from '../../queries/projects';
+import projectQueries from '../../queries/projects';
 
-export default function* (id, name) {
-    return yield projectsQueries.updateOne(id, {
+export default async (id, name) =>
+    projectQueries.updateOne(id, {
         name,
     });
-}

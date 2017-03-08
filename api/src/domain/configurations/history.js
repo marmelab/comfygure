@@ -1,10 +1,10 @@
 import configurationsQueries from '../../queries/configurations';
 import versionsQueries from '../../queries/versions';
 
-export default function* (projectId, environmentName, configName) {
-    const configuration = yield configurationsQueries.findOne(projectId, environmentName, configName);
+export default async (projectId, environmentName, configName) => {
+    const configuration = await configurationsQueries.findOne(projectId, environmentName, configName);
 
-    const versions = yield versionsQueries.find(configuration.id);
+    const versions = await versionsQueries.find(configuration.id);
 
     return versions.map(version => ({
         name: configuration.name,
@@ -13,4 +13,4 @@ export default function* (projectId, environmentName, configName) {
         tag: version.tag,
         defaultFormat: configuration.defaultFormat,
     }));
-}
+};

@@ -1,40 +1,70 @@
-import uuid from 'uuid/v4';
+import { crudQueries } from 'co-postgres-queries';
 
 import db from './db';
 
-export const insertOne = function* (version) {
-    const insertedVersion = {
-        id: uuid(),
-        ...version,
-    };
-    db.versions.push(insertedVersion);
-    return insertedVersion;
+const query = crudQueries(
+    'version',
+    ['id', 'configuration_id', 'hash', 'previous'],
+    ['id'],
+    ['id', 'hash', 'previous'],
+);
+
+query.selectPage
+    .table('version LEFT JOIN tag on (version.id = tag.version_id)')
+    .searchableFields(['version.configuration_id'])
+    .returnFields(['hash', 'previous', 'json_agg(tag.name) as tag'])
+    .groupByFields(['version.id', 'version.hash', 'version.previous'])
+;
+
+query.selectOne
+    .table('version LEFT JOIN tag on (version.id = tag.version_id)')
+    .returnFields(['hash', 'previous', 'tag.name'])
+;
+
+const insertOne = async (version) => {
+    const client = await db.link(query);
+    const result = await client.insertOne(version);
+    client.release();
+
+    return result;
 };
 
-export const find = function* (configurationId) {
-    return db.versions.filter(v => v.configuration_id === configurationId).map((v) => {
-        const tag = db.tags.find(t => t.version_id === v.id);
-
-        return {
-            ...v,
-            tag: tag ? tag.name : '',
-        };
+const find = async (configurationId) => {
+    const client = await db.link(query);
+    const result = await client.selectPage(undefined, undefined, {
+        'version.configuration_id': configurationId,
     });
+    client.release();
+
+    return result;
 };
 
-export const findOneByHash = function* (configurationId, hash) {
-    return db.versions.find(v =>
-        v.configuration_id === configurationId &&
-        v.hash === hash,
-    );
+const findOneByHash = async (configurationId, hash) => {
+    const client = await db.link(query);
+    const result = await client.selectPage(undefined, undefined, {
+        configuration_id: configurationId,
+        hash,
+    });
+    client.release();
+
+    if (!result.length) {
+        return null;
+    }
+    return result[0];
 };
 
-export const findOneByTag = function* (configurationId, tagId) {
-    const tag = db.tags.find(t =>
-        t.configuration_id === configurationId &&
-        t.id === tagId,
-    );
-    return db.versions.find(v => v.id === tag.version_id);
+const findOneByTag = async (configurationId, tagId) => {
+    const client = await db.link(query);
+    const result = await client.selectPage(undefined, undefined, {
+        'version.configuration_id': configurationId,
+        'tag.id': tagId,
+    });
+    client.release();
+
+    if (!result.length) {
+        return null;
+    }
+    return result[0];
 };
 
 export default {

@@ -2,28 +2,30 @@ import { crudQueries } from 'co-postgres-queries';
 
 import db from './db';
 
-const base = crudQueries(
+const query = crudQueries(
     'project',
     ['name', 'state', 'access_key', 'read_token', 'write_token'],
     ['id'],
-    ['id', 'name', 'access_key', 'read_token', 'write_token'],
+    ['id', 'name', 'access_key as "accessKey"', 'read_token as "readToken"', 'write_token as "writeToken"'],
 );
 
-const insertOne = function* (project) {
-    const client = yield db.client();
-    const result = yield client.query(base.insertOne(project));
+const insertOne = async (project) => {
+    const client = await db.link(query);
+    const result = await client.insertOne(project);
+    client.release();
 
-    return result[0]; // FIXME: Use base.link(client)
+    return result;
 };
 
-const updateOne = function* (id, project) {
-    const client = yield db.client();
-    return yield client.query(
-        base.updateOne(id, project),
-    );
+const updateOne = async (id, project) => {
+    const client = await db.link(query);
+    const result = await client.updateOne(id, project);
+    client.release();
+
+    return result;
 };
 
-export default{
+export default {
     insertOne,
     updateOne,
 };

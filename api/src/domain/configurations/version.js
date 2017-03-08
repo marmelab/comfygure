@@ -2,17 +2,18 @@ import configurationsQueries from '../../queries/configurations';
 import versionsQueries from '../../queries/versions';
 import tagsQueries from '../../queries/tags';
 
-export const get = function* (projectId, environmentName, configName, tagName) {
-    const configuration = yield configurationsQueries.findOne(projectId, environmentName, configName);
+export const get = async (projectId, environmentName, configName, tagName) => {
+    const configuration = await configurationsQueries.findOne(projectId, environmentName, configName);
 
-    const tag = yield tagsQueries.findOne(configuration.id, tagName);
+    const tag = await tagsQueries.findOne(configuration.id, tagName);
 
     let version;
     if (!tag) {
-        version = yield versionsQueries.findOneByHash(configuration.id, tagName);
+        version = await versionsQueries.findOneByHash(configuration.id, tagName);
     } else {
-        version = yield versionsQueries.findOneByTag(configuration.id, tag.id);
+        version = await versionsQueries.findOneByTag(configuration.id, tag.id);
     }
+
     return {
         configuration,
         tag,
@@ -20,14 +21,14 @@ export const get = function* (projectId, environmentName, configName, tagName) {
     };
 };
 
-export const getDefault = function* (projectId, configName, tagName) {
-    const configuration = yield configurationsQueries.findOne(projectId, 'default', configName);
+export const getDefault = async (projectId, configName, tagName) => {
+    const configuration = await configurationsQueries.findOne(projectId, 'default', configName);
 
-    let tag = yield tagsQueries.findOne(configuration.id, tagName);
+    let tag = await tagsQueries.findOne(configuration.id, tagName);
     if (!tag) {
-        tag = yield tagsQueries.findOne(configuration.id, 'stable');
+        tag = await tagsQueries.findOne(configuration.id, 'stable');
     }
 
-    const version = yield versionsQueries.findOneByTag(configuration.id, tag.id);
+    const version = await versionsQueries.findOneByTag(configuration.id, tag.id);
     return version;
 };

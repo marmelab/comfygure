@@ -19,8 +19,8 @@ const generateRandomString = (size, upperAlphaOnly = false) => {
     return randomlyGeneratedString;
 };
 
-export default function* (name, environmentName = null) {
-    const project = yield projectsQueries.insertOne({
+export default async (name, environmentName = 'default', configurationName = 'default') => {
+    const project = await projectsQueries.insertOne({
         name,
         state: LIVE,
         access_key: generateRandomString(20, true),
@@ -28,9 +28,10 @@ export default function* (name, environmentName = null) {
         write_token: generateRandomString(40),
     });
 
-    if (environmentName) {
-        yield addEnvironment(project.id, environmentName);
-    }
+    const environment = await addEnvironment(project.id, environmentName, configurationName);
 
-    return project;
-}
+    return {
+        ...project,
+        environments: [environment],
+    };
+};
