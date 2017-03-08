@@ -27,3 +27,6 @@ deploy:
 
 undeploy:
 	NODE_ENV=production $(SERVERLESS) remove
+
+test:
+	NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register --opts ./mocha.opts "src/**/*.spec.js"
