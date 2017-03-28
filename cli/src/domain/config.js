@@ -20,7 +20,7 @@ module.exports = (client, ui) => {
             body[key] = encrypt(body[key].toString(), project.passphrase);
         });
 
-        const url = `${project.origin}/projects/${project.id}/environments/${env}/config/${configName}/${tag}`;
+        const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}`;
 
         try {
             yield client.post(url, body);
@@ -31,7 +31,7 @@ module.exports = (client, ui) => {
     };
 
     const get = function* (project, env, tag, { configName }) {
-        const url = `${project.origin}/projects/${project.id}/environments/${env}/config/${configName}/${tag}`;
+        const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}`;
 
         let response;
         try {
