@@ -72,11 +72,11 @@ module.exports = (ui, modules) => function* () {
 ${bold(green('comfy is now configured!'))} Here are what you need to know about your project:
 
 Project name: ${cyan(project.name)}
-Environments: ${cyan(project.environments.join(', '))}
+Environments: ${cyan(project.environments.map(env => env.name).join(', '))}
 
-Access Token: ${project.access_key}
-Secret Read Token: ${project.read_token}
-Secret Write Token: ${project.write_token}
+Access Token: ${project.accessKey}
+Secret Read Token: ${project.readToken}
+Secret Write Token: ${project.writeToken}
 
 Passphrase to decrypt your configs:
 ${passphrase}

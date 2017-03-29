@@ -60,15 +60,19 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
     const file = fs.readFileSync(filename, 'utf-8');
 
     let parsedContent;
+    let defaultFormat;
     const isYAML = ['.yml', '.yaml'].includes(path.extname(filename));
 
     try {
         if (options.json) {
             parsedContent = parseJSON(file);
+            defaultFormat = 'json';
         } else if (options.yml) {
             parsedContent = parseYAML(file);
+            defaultFormat = 'yml';
         } else {
             parsedContent = isYAML ? parseYAML(file) : parseJSON(file);
+            defaultFormat = isYAML ? 'yml' : 'json';
         }
     } catch (err) {
         ui.error(`Failed to parse ${red(options.f)}.`);
@@ -78,7 +82,8 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
     const project = yield modules.project.retrieveFromConfig();
     yield modules.config.add(project, env, parsedContent, {
         tag: options.t || 'next',
-        configName: options.c,
+        configName: options.c || 'default',
+        defaultFormat,
     });
 
     ui.print(`${bold('Great!')} Your configuration was successfuly saved.`);

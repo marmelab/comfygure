@@ -10,6 +10,14 @@ module.exports = (request) => {
             return;
         }
 
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+            const error = new Error(`The API call returned a ${response.statusCode} HTTP error code`);
+            error.code = response.statusCode;
+            error.body = response.body;
+            callback(error);
+            return;
+        }
+
         callback(null, JSON.parse(response.body));
     };
 
