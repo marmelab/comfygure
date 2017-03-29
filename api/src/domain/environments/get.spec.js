@@ -1,8 +1,30 @@
-import { describe, it } from 'mocha';
+/* eslint no-unused-expressions: ["off"]*/
+
+import { describe, it, beforeEach, afterEach } from 'mocha';
 import { expect } from 'chai';
 
+import mock from '../../mocks';
+
+import get from './get';
+
 describe('domain/environments/get', () => {
-    it('should work', () => {
-        expect(true).to.be.true;
+    let environmentsQueries;
+
+    beforeEach(() => {
+        const queries = mock.queries();
+        environmentsQueries = queries.environmentsQueries;
+    });
+
+    it('should call the  query with the right arguments', async () => {
+        const projectId = 1;
+
+        await get(projectId);
+
+        expect(environmentsQueries.selectByProject.calledOnce).to.be.true;
+        expect(environmentsQueries.selectByProject.firstCall.calledWith(projectId)).to.be.true;
+    });
+
+    afterEach(() => {
+        mock.restore();
     });
 });
