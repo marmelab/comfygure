@@ -14,11 +14,7 @@ export const get = async (projectId, environmentName, configName, tagName) => {
         version = await versionsQueries.findOneByTag(configuration.id, tag.id);
     }
 
-    return {
-        configuration,
-        tag,
-        version,
-    };
+    return version;
 };
 
 export const getDefault = async (projectId, configName, tagName) => {
