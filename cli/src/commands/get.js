@@ -35,12 +35,14 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
 
     const tag = options.t || 'stable';
     const hash = options.hash;
-    const configName = options.c;
+    const configName = options.c || 'default';
 
     const project = yield modules.project.retrieveFromConfig();
     let config;
     if (hash) {
-        config = yield modules.config.getFromHash(project, env, hash, { configName });
+        const error = new Error('Retrieve configuration by hash is not available for now.');
+        ui.printRequestError(error);
+        process.exit(1);
     } else {
         config = yield modules.config.get(project, env, tag, { configName });
     }

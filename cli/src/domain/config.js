@@ -13,7 +13,8 @@ module.exports = (client, ui) => {
         }
     };
 
-    const add = function* (project, env, content, { configName, tag }) {
+    const add = function* (project, env, content, { configName, tag, defaultFormat }) {
+        // TODO: Send the default format to the API
         const body = toFlat(content);
 
         Object.keys(body).forEach((key) => {
@@ -50,19 +51,5 @@ module.exports = (client, ui) => {
         return { body };
     };
 
-    const getFromHash = function* (project, env, hash, { configName }) {
-        return {
-            name: 'api',
-            hash: '9cb5a5b31f8f01221ac35433146989d75e23e216',
-            previous: null,
-            tag: null,
-            defaultFormat: 'yml',
-            body: {
-                'api.url': 'http://perdu.com',
-                'list[0].truc': 42,
-            },
-        };
-    };
-
-    return { list, add, get, getFromHash };
+    return { list, add, get };
 };

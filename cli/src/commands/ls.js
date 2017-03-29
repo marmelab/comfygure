@@ -29,7 +29,7 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
     }
 
     const project = yield modules.project.retrieveFromConfig();
-    const configs = yield modules.config.list(project, env, options.c, !!options.a);
+    const configs = yield modules.config.list(project, env, options.c || 'default', !!options.a);
 
     const noTag = gray('no-tag');
 
