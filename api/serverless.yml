@@ -87,7 +87,7 @@ functions:
           cors: true
       - http:
           method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/history/
+          path: projects/{id}/environments/{environmentName}/configurations/history
           cors: true
 
   configurationGet:
