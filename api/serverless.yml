@@ -83,13 +83,21 @@ functions:
     events:
       - http:
           method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/history
+          cors: true
+      - http:
+          method: GET
+          path: projects/{id}/environments/{environmentName}/configurations/history/
           cors: true
 
   configurationGet:
     handler: configurations.get
     description: Get tag version of a configuration
     events:
+      - http:
+          method: GET
+          path: projects/{id}/environments/{environmentName}/configurations/{selector}
+          cors: true
       - http:
           method: GET
           path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagName}

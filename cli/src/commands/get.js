@@ -33,9 +33,9 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
         help(ui);
     }
 
-    const tag = options.t || 'stable';
+    const tag = options.t;
     const hash = options.hash;
-    const configName = options.c || 'default';
+    const configName = options.c;
 
     const project = yield modules.project.retrieveFromConfig();
     let config;
@@ -44,7 +44,7 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
         ui.printRequestError(error);
         process.exit(1);
     } else {
-        config = yield modules.config.get(project, env, tag, { configName });
+        config = yield modules.config.get(project, env, { configName, tag });
     }
 
     if (options.json && options.yml) {

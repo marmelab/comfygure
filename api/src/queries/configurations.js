@@ -45,6 +45,17 @@ const findOne = async (projectId, environmentName, configurationName) => {
     return result[0];
 };
 
+const findAllByEnvironmentName = async (projectId, environmentName) => {
+    const client = await db.link(query);
+    const result = await client.selectPage(undefined, undefined, {
+        project_id: projectId,
+        'environment.name': environmentName,
+    });
+    client.release();
+
+    return result;
+};
+
 const insertOne = async (configurationData) => {
     const client = await db.link(query);
     const configuration = await client.insertOne(configurationData);
@@ -54,5 +65,6 @@ const insertOne = async (configurationData) => {
 
 export default {
     findOne,
+    findAllByEnvironmentName,
     insertOne,
 };
