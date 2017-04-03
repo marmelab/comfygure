@@ -3,13 +3,15 @@ import hash from 'object-hash';
 import entriesQueries from '../../queries/entries';
 import versionsQueries from '../../queries/versions';
 import configurationsQueries from '../../queries/configurations';
-import tagsQueries from '../../queries/tags';
 import environmentsQueries from '../../queries/environments';
 import { ENVVARS } from '../common/formats';
+
 import { get as getVersion } from './version';
+import { add as addTag, get as getTag, update as updateTag } from './tag';
 
 export default async (projectId, environmentName, configurationName = 'default', tagName = null, entries = {}) => {
     let configuration = await configurationsQueries.findOne(projectId, environmentName, configurationName);
+    let configurationNewlyCreated = false;
 
     if (!configuration) {
         const environment = await environmentsQueries.findOne(projectId, environmentName);
@@ -20,6 +22,8 @@ export default async (projectId, environmentName, configurationName = 'default',
             name: configurationName,
             default_format: ENVVARS,
         });
+
+        configurationNewlyCreated = true;
     }
 
     const currentVersion = await getVersion(projectId, environmentName, configurationName, tagName);
@@ -37,23 +41,26 @@ export default async (projectId, environmentName, configurationName = 'default',
         previous: currentVersion ? currentVersion.hash : null,
     });
 
+    const newTagInfos = {
+        versionId: version.id,
+        configurationId: configuration.id,
+    };
+
+    if (configurationNewlyCreated) {
+        await [
+            { ...newTagInfos, name: 'stable' },
+            { ...newTagInfos, name: 'next' },
+        ].map(tag => addTag(tag.configurationId, tag.versionId, tag.name));
+    }
+
+    // Create or update the specified tag
     if (tagName) {
-        const tag = await tagsQueries.findOne(configuration.id, tagName);
+        const tag = await getTag(configuration.id, tagName);
 
         if (tag) {
-            await tagsQueries.updateOne(tag, {
-                version_id: version.id,
-            });
+            await updateTag(tag, { version_id: version.id });
         } else {
-            const newTag = {
-                version_id: version.id,
-                configuration_id: configuration.id,
-            };
-
-            await tagsQueries.batchInsert([
-                { ...newTag, name: 'stable' },
-                { ...newTag, name: 'next' },
-            ]);
+            await addTag(newTagInfos.configurationId, newTagInfos.versionId, tagName);
         }
     }
 
