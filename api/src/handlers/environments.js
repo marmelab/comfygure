@@ -1,5 +1,5 @@
 import λ from './utils/λ';
-import checkEventPermission from './utils/checkEventPermission';
+import { checkAuthorizationOr403, parseAuthorizationToken } from './utils/authorization';
 
 import addEnvironment from '../domain/environments/add';
 import getEnvironments from '../domain/environments/get';
@@ -8,7 +8,7 @@ import removeEnvironment from '../domain/environments/remove';
 
 const get = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
-    await checkEventPermission(event, projectId, 'read');
+    await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
 
     return getEnvironments(projectId);
 });
@@ -16,7 +16,7 @@ const get = λ(async (event) => {
 const create = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
     const { name: environmentName } = event.body;
-    await checkEventPermission(event, projectId, 'write');
+    await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     return addEnvironment(projectId, environmentName);
 });
@@ -24,14 +24,14 @@ const create = λ(async (event) => {
 const update = λ(async (event) => {
     const { id: projectId, environmentName } = event.pathParameters;
     const { name: newEnvironmentName } = event.body;
-    await checkEventPermission(event, projectId, 'write');
+    await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     return renameEnvironment(projectId, environmentName, newEnvironmentName);
 });
 
 const remove = λ(async (event) => {
     const { id: projectId, environmentName } = event.pathParameters;
-    await checkEventPermission(event, projectId, 'write');
+    await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
     return removeEnvironment(projectId, environmentName);
 });
 
