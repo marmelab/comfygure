@@ -64,11 +64,11 @@ export default async (projectId, environmentName, configurationName = 'default',
         }
     }
 
-    await Object.keys(entries).map(key => entriesQueries.insertOne({
+    await Promise.all(Object.keys(entries).map(key => entriesQueries.insertOne({
         key,
         value: entries[key],
         version_id: version.id,
-    }));
+    })));
 
     const { id, name, default_format: defaultFormat } = configuration;
 
