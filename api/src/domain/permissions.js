@@ -14,7 +14,7 @@ const checkPermission = async (projectId, token, level) => {
         permissionIsValid = token === project.writeToken;
         break;
     case 'read':
-        permissionIsValid = [project.writeToken, project.readToken].includes(token);
+        permissionIsValid = [project.writeToken, project.readToken].indexOf(token) !== -1;
         break;
     default:
         throw new Error(`Level "${level}" doesn't exists.`);
