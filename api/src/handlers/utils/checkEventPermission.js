@@ -1,15 +1,15 @@
 import { checkPermission } from '../../domain/authentication';
-import { AuthorizationError } from './errors';
+import { HttpError } from './errors';
 
 const parseHeader = (header) => {
     if (!header) {
-        throw AuthorizationError('Authorization header should be set.');
+        throw new HttpError('Authorization header should be set.', 403);
     }
 
     const [type, token] = header.split(' ');
 
     if (type !== 'Token' || !token) {
-        throw AuthorizationError('Authorization header format is invalid.');
+        throw new HttpError('Authorization header format is invalid.', 403);
     }
 
     return token;
@@ -22,6 +22,6 @@ export default async (event, projectId, level) => {
     try {
         await checkPermission(projectId, token, level);
     } catch (e) {
-        throw AuthorizationError(e.message);
+        throw new HttpError(e.message, 403);
     }
 };

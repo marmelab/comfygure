@@ -14,7 +14,7 @@ export default handler => (event, context) => {
     })
     .catch((error) => {
         context.succeed({
-            statusCode: error.code || 500,
+            statusCode: error.statusCode || 500,
             body: JSON.stringify({
                 message: error.toString(),
                 error,
