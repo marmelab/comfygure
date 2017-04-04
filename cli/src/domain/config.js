@@ -12,7 +12,7 @@ module.exports = (client, ui) => {
         }
 
         try {
-            return yield client.get(url);
+            return yield client.get(url, client.buildAuthorization(project));
         } catch (error) {
             ui.printRequestError(error);
             ui.exit(1);
@@ -30,7 +30,7 @@ module.exports = (client, ui) => {
         const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}`;
 
         try {
-            yield client.post(url, body);
+            yield client.post(url, body, client.buildAuthorization(project));
         } catch (error) {
             ui.printRequestError(error);
             ui.exit(1);
@@ -44,7 +44,7 @@ module.exports = (client, ui) => {
 
         let response;
         try {
-            response = yield client.get(url);
+            response = yield client.get(url, client.buildAuthorization(project));
         } catch (error) {
             ui.printRequestError(error);
             ui.exit(1);
