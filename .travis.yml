@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - 6
+
+install: make install
+script: make test
+
+cache:
+  directories:
+    - api/node_modules
+    - cli/node_modules
+
+branches:
+  only:
+    - master

@@ -1,0 +1,11 @@
+{
+    "env": {
+        "node": true,
+        "mocha": true
+    },
+    "extends": "airbnb",
+    "rules": {
+        "indent": ["error", 4],
+        "import/no-extraneous-dependencies": "off",
+    }
+}
