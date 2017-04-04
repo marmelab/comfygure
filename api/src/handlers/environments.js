@@ -16,6 +16,7 @@ const get = λ(async (event) => {
 const create = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
     const { name: environmentName } = event.body;
+    await checkEventPermission(event, projectId, 'write');
 
     return addEnvironment(projectId, environmentName);
 });
@@ -23,12 +24,14 @@ const create = λ(async (event) => {
 const update = λ(async (event) => {
     const { id: projectId, environmentName } = event.pathParameters;
     const { name: newEnvironmentName } = event.body;
+    await checkEventPermission(event, projectId, 'write');
 
     return renameEnvironment(projectId, environmentName, newEnvironmentName);
 });
 
 const remove = λ(async (event) => {
     const { id: projectId, environmentName } = event.pathParameters;
+    await checkEventPermission(event, projectId, 'write');
     return removeEnvironment(projectId, environmentName);
 });
 
