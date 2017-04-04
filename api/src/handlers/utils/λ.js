@@ -13,6 +13,9 @@ export default handler => (event, context) => {
         });
     })
     .catch((error) => {
+        console.error('ERROR', error.message);
+        console.error('ERROR STACK', error.stack);
+
         context.succeed({
             statusCode: error.statusCode || 500,
             body: JSON.stringify({
