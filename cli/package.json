@@ -1,6 +1,6 @@
 {
   "name": "comfygure-cli",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Configuration without the pain",
   "bin": {
     "comfy": "bin/comfy.js"
@@ -8,8 +8,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marmelab/comfygure.git"
+  },
+  "author": "Marmelab",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marmelab/comfygure/issues"
+  },
+  "homepage": "https://github.com/marmelab/comfygure#readme",
   "dependencies": {
     "chalk": "^1.1.3",
     "co": "^4.6.0",
