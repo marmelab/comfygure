@@ -9,6 +9,7 @@ const link = async (query) => {
     return {
         ...crud,
         release: client.release,
+        query: client.query,
     };
 };
 

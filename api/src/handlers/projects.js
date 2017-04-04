@@ -1,4 +1,5 @@
 import λ from './utils/λ';
+import { checkAuthorizationOr403, parseAuthorizationToken } from './utils/authorization';
 
 import addProject from '../domain/projects/add';
 import renameProject from '../domain/projects/rename';
@@ -15,6 +16,7 @@ const create = λ(async (event) => {
 const update = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
     const { name: newProjectName } = event.body;
+    await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     const project = await renameProject(projectId, newProjectName);
 
@@ -23,6 +25,7 @@ const update = λ(async (event) => {
 
 const remove = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
+    await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     return removeProject(projectId);
 });
