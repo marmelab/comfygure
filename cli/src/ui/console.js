@@ -47,6 +47,9 @@ ${gray('-')} Issue: ${cyan('https://github.com/marmelab/comfygure/issues')}`;
     case 'ENETUNREACH':
         error(`${red('Unable to reach the server.')} Please check your connection and try again.\n\n${contactUs}`);
         break;
+    case 403:
+        error(`${red('You are not allowed to perform this action.')} Please check your read or write token.`);
+        break;
     default:
         error(`${red('An error occured.')} We are sorry. ${contactUs}
 

@@ -1,4 +1,5 @@
 import λ from './utils/λ';
+import checkEventPermission from './utils/checkEventPermission';
 
 import addEnvironment from '../domain/environments/add';
 import getEnvironments from '../domain/environments/get';
@@ -7,6 +8,7 @@ import removeEnvironment from '../domain/environments/remove';
 
 const get = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
+    await checkEventPermission(event, projectId, 'read');
 
     return getEnvironments(projectId);
 });

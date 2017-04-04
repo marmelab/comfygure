@@ -1,7 +1,6 @@
 const fs = require('fs');
 const ini = require('ini');
 const path = require('path');
-const uuid = require('uuid');
 const { CONFIG_FOLDER, CONFIG_PATH, DEFAULT_ORIGIN } = require('./constants');
 
 module.exports = (client, ui) => {
