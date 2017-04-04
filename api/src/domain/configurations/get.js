@@ -22,12 +22,12 @@ const findAloneConfiguration = async (projectId, environmentName) => {
     return configurations[0];
 };
 
-export default async (projectId, environmentName, selector, configName, pathTagName) => {
+export default async (projectId, environmentName, selector, pathTagName) => {
     let configuration;
     let tagName = pathTagName;
 
-    if (configName && tagName) { // /configurations/{configName}/{tagName}
-        configuration = await configurationsQueries.findOne(projectId, environmentName, configName);
+    if (selector && tagName) { // /configurations/{selector}/{tagName}
+        configuration = await configurationsQueries.findOne(projectId, environmentName, selector);
     } else if (!selector) {  // /configurations/
         configuration = await findAloneConfiguration(projectId, environmentName);
     } else { // /configurations/{selector} where selector is a configName
