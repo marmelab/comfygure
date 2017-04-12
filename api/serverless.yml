@@ -96,7 +96,7 @@ functions:
     events:
       - http:
           method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/{selector}
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}
           cors: true
       - http:
           method: GET

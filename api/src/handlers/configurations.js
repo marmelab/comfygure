@@ -22,10 +22,10 @@ const remove = λ(async (event) => {
 });
 
 const get = λ(async (event) => {
-    const { id: projectId, environmentName, selector, configName, tagName } = event.pathParameters;
+    const { id: projectId, environmentName, configName: selector, tagName } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
 
-    return getConfiguration(projectId, environmentName, selector, configName, tagName);
+    return getConfiguration(projectId, environmentName, selector, tagName);
 });
 
 const history = λ(async (event) => {

@@ -1,4 +1,5 @@
 import co from 'co';
+import logger from '../../logger';
 
 export default handler => (event, context) => {
     co(function* () {
@@ -13,6 +14,9 @@ export default handler => (event, context) => {
         });
     })
     .catch((error) => {
+        logger.error('ERROR', error.message);
+        logger.error('ERR. STACK', error.stack);
+
         context.succeed({
             statusCode: error.statusCode || 500,
             body: JSON.stringify({
