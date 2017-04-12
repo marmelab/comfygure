@@ -22,12 +22,10 @@ const remove = λ(async (event) => {
 });
 
 const get = λ(async (event) => {
-    const { id: projectId, environmentName, configName, tagName } = event.pathParameters;
+    const { id: projectId, environmentName, configName: selector, tagName } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
 
-    // Be aware, `configName` is `selector` in the handler
-    // @see http://forum.serverless.com/t/deployment-error-a-sibling-did-of-this-resource-already-has-a-variable-path-part-only-one-is-allowed/795
-    return getConfiguration(projectId, environmentName, configName, tagName);
+    return getConfiguration(projectId, environmentName, selector, tagName);
 });
 
 const history = λ(async (event) => {

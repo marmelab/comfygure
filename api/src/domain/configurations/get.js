@@ -23,18 +23,21 @@ const findAloneConfiguration = async (projectId, environmentName) => {
 };
 
 export default async (projectId, environmentName, selector, pathTagName) => {
+    // The `selector` argument can be a configName, a tag, or empty
+    // TODO (Kevin): If needed, move this selector intelligence into its own service
+
     let configuration;
     let tagName = pathTagName;
 
-    if (selector && tagName) { // /configurations/{selector}/{tagName}
+    if (selector && tagName) {
         configuration = await configurationsQueries.findOne(projectId, environmentName, selector);
-    } else if (!selector) {  // /configurations/
+    } else if (!selector) {
         configuration = await findAloneConfiguration(projectId, environmentName);
-    } else { // /configurations/{selector} where selector is a configName
+    } else {
         configuration = await configurationsQueries.findOne(projectId, environmentName, selector);
     }
 
-    if (!configuration) { // /configurations/{selector} where selector is not configName
+    if (!configuration) {
         configuration = await findAloneConfiguration(projectId, environmentName);
         tagName = pathTagName || selector;
     }

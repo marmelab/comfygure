@@ -14,6 +14,7 @@ const checkPermission = async (projectId, token, level) => {
         permissionIsValid = token === project.writeToken;
         break;
     case 'read':
+        // TODO (Kevin): Find out why `.includes` doesn't work here
         permissionIsValid = [project.writeToken, project.readToken].indexOf(token) !== -1;
         break;
     default:
