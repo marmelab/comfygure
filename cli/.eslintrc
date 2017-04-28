@@ -13,6 +13,7 @@
             "imports": "always-multiline",
             "exports": "always-multiline",
             "functions": "never",
-        }]
+        }],
+        "no-restricted-syntax": "off"
     }
 }
