@@ -10,7 +10,7 @@ export const get = async (projectId, environmentName, configName, tagName) => {
     if (!tag) {
         version = await versionsQueries.findOneByHash(configuration.id, tagName);
     } else {
-        version = await versionsQueries.findOneByTag(configuration.id, tag.id);
+        version = await versionsQueries.findOne({ id: tag.version_id });
     }
 
     return version;

@@ -6,24 +6,29 @@ const query = crudQueries(
     'version',
     ['id', 'configuration_id', 'hash', 'previous'],
     ['id'],
-    ['id', 'hash', 'previous'],
+    ['id', 'configuration_id', 'hash', 'previous'],
 );
 
 query.selectPage = query.selectPage
     .table('version LEFT JOIN tag on (version.id = tag.version_id)')
     .searchableFields(['version.configuration_id'])
     .returnFields([
+        'version.id',
         'hash',
         'previous',
+        'version.configuration_id',
         "case when count(tag.name) = 0 then '[]' else json_agg(tag.name) end as tags",
     ])
     .groupByFields(['version.id', 'version.hash', 'version.previous'])
 ;
 
-query.selectOne = query.selectPage
-    .table('version LEFT JOIN tag on (version.id = tag.version_id)')
-    .returnFields(['hash', 'previous', 'tag.name'])
-;
+const findOne = async (version) => {
+    const client = await db.link(query);
+    const result = await client.selectOne(version);
+    client.release();
+
+    return result;
+};
 
 const insertOne = async (version) => {
     const client = await db.link(query);
@@ -72,6 +77,7 @@ const findOneByTag = async (configurationId, tagId) => {
 };
 
 export default {
+    findOne,
     insertOne,
     find,
     findOneByHash,
