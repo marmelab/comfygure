@@ -37,7 +37,7 @@ By default, the server is comfy.marmelab.com (run by marmelab), but it can be a 
 ### Installing the Client
 
 ```sh
-npm install -g comfy
+> npm install -g comfy
 ```
 
 Now the `comfy` command is available on your system.
@@ -47,23 +47,23 @@ Now the `comfy` command is available on your system.
 Install the server if you don't want to use `confy.marmelab.com` to store your encrypted configuration.
 
 ```
-git clone git@github.com:marmelab/comfygure.git
-cd comfygure/api
-make install
+> git clone git@github.com:marmelab/comfygure.git
+> cd comfygure/api
+> make install
 ```
 
 To run the server locally (requires docker):
 
 ```sh
-make install-db
-make start-db
-make run
+> make install-db
+> make start-db
+> make run
 ```
 
 To run the server on AWS lambda, edit the `api/serverless.yml` fil with your AWS preferences, then run:
 
 ```
-make deploy
+> make deploy
 ```
 
 **Tip**: If you use a remote server, you must change the comfy configuration for your projects:
