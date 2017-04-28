@@ -120,7 +120,7 @@ export LOGIN='admin';
 export PASSWORD='S3cr3T';
 ```
 
-To store a remore configuration in the environment, use:
+To store a remote configuration in the environment, use:
 
 ```sh
 > comfy get development | source /dev/stdin
