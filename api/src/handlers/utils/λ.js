@@ -10,7 +10,10 @@ export default handler => (event, context) => {
 
         context.succeed({
             statusCode: 200,
-            headers: headers || {},
+            headers: {
+                ...headers,
+                'access-control-expose-headers': 'WWW-Authenticate,Server-Authorization,x-total-count',
+            },
             body: JSON.stringify(body),
         });
     })
