@@ -29,4 +29,7 @@ undeploy:
 	NODE_ENV=production $(SERVERLESS) remove
 
 test:
-	NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register --opts ./mocha.opts "src/**/*.spec.js"
+	NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register "src/**/*.spec.js"
+
+test-watch:
+	NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register "src/**/*.spec.js" --watch --min
