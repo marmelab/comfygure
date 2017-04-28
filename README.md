@@ -20,7 +20,7 @@ Ultimately, this lets you execute the following command from any server (develop
 
 ```sh
 > comfy get development --envvars
-LOGIN=admin
+export LOGIN='admin';
 PASSWORD=S3cr3T
 ```
 
