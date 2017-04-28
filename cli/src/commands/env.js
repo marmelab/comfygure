@@ -24,7 +24,7 @@ const ls = (ui, modules) => function* () {
 };
 
 const add = (ui, modules, options) => function* () {
-    const { red } = ui.colors;
+    const { red, bold } = ui.colors;
 
     if (!options.length) {
         ui.error(`${red('No environment specified.')}`);
@@ -38,8 +38,10 @@ const add = (ui, modules, options) => function* () {
 
     const project = yield modules.project.retrieveFromConfig();
     const environment = yield modules.environment.add(project, options[0]);
+    const addCommand = `comfy add ${environment.name}`;
 
-    ui.print(environment);
+    ui.print(`${bold('Cool!')} Your new environment "${bold(environment.name)}" was successfuly saved.`);
+    ui.print(`You can now add a configuration, try ${bold(addCommand)}`);
     ui.exit();
 };
 
