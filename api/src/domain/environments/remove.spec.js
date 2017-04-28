@@ -15,8 +15,7 @@ describe('domain/environments/remove', () => {
     let environmentsQueries;
 
     beforeEach(() => {
-        const queries = mock.queries();
-        environmentsQueries = queries.environmentsQueries;
+        environmentsQueries = mock.queries.environments();
     });
 
     it('should try to find the environment by project id and name', async () => {

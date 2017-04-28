@@ -7,7 +7,7 @@ import mock from '../../mocks';
 import add from './add';
 import { LIVE } from '../common/states';
 
-describe.only('domain/environments/add', () => {
+describe('domain/environments/add', () => {
     const projectId = 1;
     const environmentName = 'production';
     const configurationName = 'frontend';
@@ -16,9 +16,7 @@ describe.only('domain/environments/add', () => {
     let configurationsQueries;
 
     beforeEach(() => {
-        environmentsQueries = mock.queries.environments({
-            insertOne: ,
-        });
+        environmentsQueries = mock.queries.environments();
 
         mock.queries.entries();
         mock.queries.tags();
@@ -27,10 +25,8 @@ describe.only('domain/environments/add', () => {
 
     it('should create an environment for the project', async () => {
         configurationsQueries = mock.queries.configurations({
-            insertOne: ,
-            findOne: {
-                id: 1,
-            },
+            insertOne: () => ({ id: 1 }),
+            findOne: () => ({ id: 1 }),
         });
 
         const environment = await add(projectId, environmentName);
@@ -53,49 +49,38 @@ describe.only('domain/environments/add', () => {
     });
 
     it('should create a configuration for the project and the environment', async () => {
-        configurationsQueries = mock.queries.configurations({
-            insertOne: {
-                id: 1,
-            },
-            findOne: null,
-        });
+        configurationsQueries = mock.queries.configurations();
         const environment = await add(projectId, environmentName, configurationName);
-        console.log(configurationsQueries.insertOne.args);
+
         expect(configurationsQueries.insertOne)
             .to.have.been.calledWith({
-
+                default_format: 'envvars',
+                environment_id: 1,
+                name: 'frontend',
             });
 
         expect(environment.configurations.length).to.equal(1);
-
-        expect(environment.configurations[0]).to.equal(environmentName);
-    });
-
-    it('should create the environment as `default` if no name is provided', async () => {
-        const environment = await add(projectId);
-
-        expect(environmentsQueries.insertOne)
-            .to.have.been.calledWith({
-                name: 'default',
-            });
-
-        expect(environment.name).to.equal('default');
+        expect(environment.configurations[0].name).to.equal(configurationName);
     });
 
     it('should create the configuration as `default` if no name is provided', async () => {
+        configurationsQueries = mock.queries.configurations();
         const environment = await add(projectId, environmentName);
 
         expect(configurationsQueries.insertOne)
             .to.have.been.calledWith({
+                default_format: 'envvars',
+                environment_id: 1,
                 name: 'default',
             });
 
         expect(environment.configurations.length).to.equal(1);
 
-        expect(environment.configurations[0]).to.equal('default');
+        expect(environment.configurations[0].name).to.equal('default');
     });
 
     it('should return both environment and linked configurations', async () => {
+        configurationsQueries = mock.queries.configurations();
         const environment = await add(projectId, environmentName, configurationName);
 
         expect(environment).to.contain({
@@ -105,9 +90,7 @@ describe.only('domain/environments/add', () => {
             state: LIVE,
         });
 
-        expect(environment).to.contain({
-            configurations: [configurationName],
-        });
+        expect(environment.configurations[0].name).to.equal(configurationName);
     });
 
     afterEach(() => {

@@ -10,7 +10,7 @@ import versionsQueries from './versions';
 const sandbox = sinon.sandbox.create();
 
 const environments = (stubs = {}) => {
-    sandbox.stub(environmentsQueries, 'insertOne', stubs.insertOne || (entity => (entity)));
+    sandbox.stub(environmentsQueries, 'insertOne', stubs.insertOne || (entity => ({ id: 1, ...entity })));
     sandbox.stub(environmentsQueries, 'updateOne', stubs.updateOne || (entity => (entity)));
     sandbox.stub(environmentsQueries, 'findOne', stubs.findOne || (() => ({})));
     sandbox.stub(environmentsQueries, 'selectByProject', stubs.selectByProject || (() => ([])));
@@ -20,36 +20,36 @@ const environments = (stubs = {}) => {
 
 const configurations = (stubs = {}) => {
     sandbox.stub(configurationsQueries, 'findOne', stubs.findOne || (() => ({})));
-    sandbox.stub(configurationsQueries, 'insertOne', stubs.insertOne || (entity => (entity)));
+    sandbox.stub(configurationsQueries, 'insertOne', stubs.insertOne || (entity => ({ id: 1, ...entity })));
 
     return configurationsQueries;
 };
 
 const entries = (stubs = {}) => {
-    sandbox.stub(entriesQueries, 'insertOne', stubs.insertOne || (entity => (entity)));
+    sandbox.stub(entriesQueries, 'insertOne', stubs.insertOne || (entity => ({ id: 1, ...entity })));
     sandbox.stub(entriesQueries, 'findByVersion', stubs.findByVersion || (() => ([])));
 
     return entriesQueries;
 };
 
 const projects = (stubs = {}) => {
-    sandbox.stub(projectsQueries, 'insertOne', stubs.insertOne || (entity => (entity)));
+    sandbox.stub(projectsQueries, 'insertOne', stubs.insertOne || (entity => ({ id: 1, ...entity })));
     sandbox.stub(projectsQueries, 'updateOne', stubs.updateOne || (entity => (entity)));
 
     return projectsQueries;
 };
 
 const tags = (stubs = {}) => {
-    sandbox.stub(tagsQueries, 'insertOne', stubs.insertOne || (entity => (entity)));
+    sandbox.stub(tagsQueries, 'insertOne', stubs.insertOne || (entity => ({ id: 1, ...entity })));
     sandbox.stub(tagsQueries, 'updateOne', stubs.updateOne || (entity => (entity)));
-    sandbox.stub(tagsQueries, 'batchInsert', stubs.batchInsert || (() => ([])));
+    sandbox.stub(tagsQueries, 'batchInsert', stubs.batchInsert || (entities => (entities.map(entity => ({ id: 1, ...entity })))));
     sandbox.stub(tagsQueries, 'findOne', stubs.findOne || (() => ({})));
 
     return tagsQueries;
 };
 
 const versions = (stubs = {}) => {
-    sandbox.stub(versionsQueries, 'insertOne', stubs.insertOne || (entity => (entity)));
+    sandbox.stub(versionsQueries, 'insertOne', stubs.insertOne || (entity => ({ id: 1, ...entity })));
     sandbox.stub(versionsQueries, 'find', stubs.find || (() => ([])));
     sandbox.stub(versionsQueries, 'findOneByHash', stubs.findOneByHash || (() => ({})));
     sandbox.stub(versionsQueries, 'findOneByTag', stubs.findOneByTag || (() => ({})));

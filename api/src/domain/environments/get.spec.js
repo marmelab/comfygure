@@ -11,8 +11,7 @@ describe('domain/environments/get', () => {
     let environmentsQueries;
 
     beforeEach(() => {
-        const queries = mock.queries();
-        environmentsQueries = queries.environmentsQueries;
+        environmentsQueries = mock.queries.environments();
     });
 
     it('should call the  query with the right arguments', async () => {
