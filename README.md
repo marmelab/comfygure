@@ -117,7 +117,7 @@ Grab that configuration from any server using `comfy get`:
 {"login": "admin", "password": "S3cr3T"}
 > comfy get development --envvars
 export LOGIN='admin';
-PASSWORD=S3cr3T
+export PASSWORD='S3cr3T';
 ```
 
 To store a remore configuration in the environment, use:
