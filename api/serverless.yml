@@ -121,6 +121,21 @@ functions:
           path: projects/{id}/environments/{environmentName}/configurations/{configName}
           cors: true
 
+  tagAdd:
+    handler: tag.create
+    description: Add a new tag on a configuration
+    events:
+      - http:
+          method: POST
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
+
+  tagUpdate:
+    handler: tag.update
+    description: Update a tag
+    events:
+      - http:
+          method: POST
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
 plugins:
   - serverless-webpack
   - serverless-offline
