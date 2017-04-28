@@ -42,7 +42,8 @@ const findFromIdAndToken = async (id, token) => {
             SELECT ${readFields.join(', ')}
             FROM ${table}
             WHERE
-                id = $id
+                state = 'live'
+                AND id = $id
                 AND (write_token = $token OR read_token = $token)
         `,
         parameters: { id, token },
