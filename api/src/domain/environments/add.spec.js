@@ -17,15 +17,7 @@ describe.only('domain/environments/add', () => {
 
     beforeEach(() => {
         environmentsQueries = mock.queries.environments({
-            insertOne: {
-                id: 1,
-            },
-        });
-
-        configurationsQueries = mock.queries.configurations({
-            insertOne: {
-                id: 1,
-            },
+            insertOne: ,
         });
 
         mock.queries.entries();
@@ -34,6 +26,13 @@ describe.only('domain/environments/add', () => {
     });
 
     it('should create an environment for the project', async () => {
+        configurationsQueries = mock.queries.configurations({
+            insertOne: ,
+            findOne: {
+                id: 1,
+            },
+        });
+
         const environment = await add(projectId, environmentName);
 
         expect(environmentsQueries.insertOne)
@@ -54,6 +53,12 @@ describe.only('domain/environments/add', () => {
     });
 
     it('should create a configuration for the project and the environment', async () => {
+        configurationsQueries = mock.queries.configurations({
+            insertOne: {
+                id: 1,
+            },
+            findOne: null,
+        });
         const environment = await add(projectId, environmentName, configurationName);
         console.log(configurationsQueries.insertOne.args);
         expect(configurationsQueries.insertOne)
