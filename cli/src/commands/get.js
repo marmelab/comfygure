@@ -15,6 +15,11 @@ const help = (ui) => {
         --json      Display the configuration as a JSON file
         --yml       Display the configuration as a YAML file
         --envvars   Display the configuration as a sourceable bash file
+
+    ${dim('Examples')}
+        comfy get development
+        comfy get staging -t next --json > config/staging.json
+        comfy get production --envvars | source /dev/stdin
 `);
     ui.exit(0);
 };
