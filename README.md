@@ -116,7 +116,7 @@ Grab that configuration from any server using `comfy get`:
 > comfy get development
 {"login": "admin", "password": "S3cr3T"}
 > comfy get development --envvars
-LOGIN=admin
+export LOGIN='admin';
 PASSWORD=S3cr3T
 ```
 
