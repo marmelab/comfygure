@@ -33,6 +33,7 @@ const findOne = async (projectId, environmentName) => {
     const result = await client.selectPage(undefined, undefined, {
         project_id: projectId,
         'environment.name': environmentName,
+        state: 'live',
     });
     client.release();
 
@@ -45,7 +46,10 @@ const findOne = async (projectId, environmentName) => {
 
 const selectByProject = async (projectId) => {
     const client = await db.link(query);
-    const result = await client.selectPage(undefined, undefined, { project_id: projectId });
+    const result = await client.selectPage(undefined, undefined, {
+        project_id: projectId,
+        state: 'live',
+    });
     client.release();
 
     return result;

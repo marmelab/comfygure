@@ -36,6 +36,7 @@ const findOne = async (projectId, environmentName, configurationName) => {
         project_id: projectId,
         'environment.name': environmentName,
         'configuration.name': configurationName,
+        state: 'live',
     });
     client.release();
 
@@ -50,6 +51,7 @@ const findAllByEnvironmentName = async (projectId, environmentName) => {
     const result = await client.selectPage(undefined, undefined, {
         project_id: projectId,
         'environment.name': environmentName,
+        state: 'live',
     });
     client.release();
 
