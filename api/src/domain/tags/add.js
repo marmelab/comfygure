@@ -1,16 +1,14 @@
-import slug from 'slug';
-
 import { get as getVersion } from '../configurations/version';
 import tagsQueries from '../../queries/tags';
+import validateTag from './validator';
 
-export default async (projectId, environmentName, configName, selector, name) => {
-    if (slug(name) !== name) {
-        throw new Error(`Tag name "${name}" is not valid.`);
-    }
+export default async (projectId, environmentName, configName, selector, rawName) => {
+    const name = rawName.toLowerCase();
+    validateTag(name);
 
     const version = await getVersion(projectId, environmentName, configName, selector);
     if (!version) {
-        throw new Error(`No version found for selector "${selector}"`);
+        throw new Error(`No configuration found for selector "${selector}"`);
     }
 
     return tagsQueries.insertOne({

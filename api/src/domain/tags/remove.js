@@ -1,12 +1,10 @@
-import slug from 'slug';
-
 import tagsQueries from '../../queries/tags';
 import configurationsQueries from '../../queries/configurations';
+import validateTag from './validator';
 
-export default async (projectId, environmentName, configurationName, name) => {
-    if (slug(name) !== name) {
-        throw new Error(`Tag name "${name}" is not valid.`);
-    }
+export default async (projectId, environmentName, configurationName, rawName) => {
+    const name = rawName.toLowerCase();
+    validateTag(name);
 
     const configuration = await configurationsQueries.findOne(projectId, environmentName, configurationName);
     if (!configuration) {
