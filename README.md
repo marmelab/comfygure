@@ -21,7 +21,7 @@ Ultimately, this lets you execute the following command from any server (develop
 ```sh
 > comfy get development --envvars
 export LOGIN='admin';
-PASSWORD=S3cr3T
+export PASSWORD='S3cr3T';
 ```
 
 Developers store the decryption key locally, allowing them to decrypt and/or update the configuration. In a similar fashion, CI servers can also check out the configuration with a simple decryption key, then build an artifact to be deployed to production.
