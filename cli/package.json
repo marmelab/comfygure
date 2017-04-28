@@ -1,7 +1,9 @@
 {
-  "name": "comfygure-cli",
+  "name": "comfygure",
   "version": "0.0.1",
-  "description": "Configuration without the pain",
+  "description": "Configuration without pain",
+  "keywords": ["configuration", "deployment", "node", "bash", "continuous"],
+  "engines": { "node": ">6" },
   "bin": {
     "comfy": "bin/comfy.js"
   },
