@@ -37,7 +37,7 @@ By default, the server is comfy.marmelab.com (run by marmelab), but it can be a 
 ### Installing the Client
 
 ```sh
-> npm install -g comfy
+> npm install -g comfygure
 ```
 
 Now the `comfy` command is available on your system.
