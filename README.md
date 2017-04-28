@@ -26,7 +26,7 @@ export PASSWORD='S3cr3T';
 
 Developers store the decryption key locally, allowing them to decrypt and/or update the configuration. In a similar fashion, CI servers can also check out the configuration with a simple decryption key, then build an artifact to be deployed to production.
 
-Comfy handles environments (dev, test, staging, production, etc.), versioning, read/write premissions. It allows to dump the configuration to the format you like (env vars, json, yaml).
+Comfy handles environments (dev, test, staging, production, etc.), versioning, read/write permissions. It allows to dump the configuration to the format you like (env vars, json, yaml).
 
 From  security standpoint, if the remote server is owned, the attacker will only have the encrypted data. Since the server never stores the key, the attacker will not be able to decrypt it.
 
