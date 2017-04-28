@@ -4,7 +4,6 @@ import tagsQueries from '../../queries/tags';
 
 export const get = async (projectId, environmentName, configName, tagName) => {
     const configuration = await configurationsQueries.findOne(projectId, environmentName, configName);
-
     const tag = await tagsQueries.findOne(configuration.id, tagName);
 
     let version;

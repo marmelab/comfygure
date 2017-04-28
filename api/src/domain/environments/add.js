@@ -1,15 +1,44 @@
-import environmentsQueries from '../../queries/environments';
-import addConfiguration from '../configurations/add';
-import { LIVE } from '../common/states';
+import hash from 'object-hash';
 
-export default async (projectId, environmentName = 'default', configurationName = 'default') => {
+import environmentsQueries from '../../queries/environments';
+import configurationsQueries from '../../queries/configurations';
+import versionsQueries from '../../queries/versions';
+import { add as addTag } from '../configurations/tag';
+
+import { LIVE } from '../common/states';
+import { ENVVARS } from '../common/formats';
+
+export default async (projectId, environmentName, configName = 'default') => {
+    // TODO (Kevin): Check if the environment already exists and return a usable error if it's the case
+    // TODO (Kevin): Factorize the code with domain/configurations/add
+
     const environment = await environmentsQueries.insertOne({
         name: environmentName,
         project_id: projectId,
         state: LIVE,
     });
 
-    const configuration = await addConfiguration(projectId, environmentName, configurationName);
+    const configuration = await configurationsQueries.insertOne({
+        environment_id: environment.id,
+        name: configName,
+        default_format: ENVVARS,
+    });
+
+    const version = await versionsQueries.insertOne({
+        configuration_id: configuration.id,
+        hash: hash({ previous: null }),
+        previous: null,
+    });
+
+    const newTagInfos = {
+        versionId: version.id,
+        configurationId: configuration.id,
+    };
+
+    await [
+        { ...newTagInfos, name: 'stable' },
+        { ...newTagInfos, name: 'next' },
+    ].map(tag => addTag(tag.configurationId, tag.versionId, tag.name));
 
     return {
         ...environment,
