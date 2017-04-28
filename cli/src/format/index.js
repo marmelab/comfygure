@@ -29,14 +29,17 @@ const toEnvVars = (flatContent) => {
     let source = '';
 
     for (const key of Object.keys(flatContent).sort()) {
-        const value = flatContent[key];
+        // Replace each ' by '"'"' in the value
+        // @see http://stackoverflow.com/a/1250279/3868326
+        const value = flatContent[key].replace("'", "'\"'\"'");
+
         const envVar = key
             .replace('.', '_')
             .replace('[', '_')
             .replace(']', '')
             .toUpperCase();
 
-        source += `export ${envVar}="${value}";\n`;
+        source += `export ${envVar}='${value}';\n`;
     }
 
     return source;
