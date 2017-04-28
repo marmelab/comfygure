@@ -3,13 +3,14 @@ import logger from '../../logger';
 
 export default handler => (event, context) => {
     co(function* () {
-        const body = yield handler({
+        const { body, headers } = yield handler({
             ...event,
             body: JSON.parse(event.body),
         });
 
         context.succeed({
             statusCode: 200,
+            headers: headers || {},
             body: JSON.stringify(body),
         });
     })

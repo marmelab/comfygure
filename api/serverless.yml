@@ -47,6 +47,9 @@ functions:
           method: GET
           path: projects/{id}/environments
           cors: true
+          response:
+              headers:
+                  X-Total-Count: integration.response.header.X-Total-Count
 
   environmentCreate:
     handler: environments.create
@@ -85,10 +88,16 @@ functions:
           method: GET
           path: projects/{id}/environments/{environmentName}/configurations/{configName}/history
           cors: true
+          response:
+              headers:
+                  X-Total-Count: integration.response.header.X-Total-Count
       - http:
           method: GET
           path: projects/{id}/environments/{environmentName}/configurations/history
           cors: true
+          response:
+              headers:
+                  X-Total-Count: integration.response.header.X-Total-Count
 
   configurationGet:
     handler: configurations.get
