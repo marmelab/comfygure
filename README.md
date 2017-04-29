@@ -28,7 +28,7 @@ Developers store the decryption key locally, allowing them to decrypt and/or upd
 
 Comfy handles environments (dev, test, staging, production, etc.), versioning, read/write permissions. It allows to dump the configuration to the format you like (env vars, json, yaml).
 
-From  security standpoint, if the remote server is owned, the attacker will only have the encrypted data. Since the server never stores the key, the attacker will not be able to decrypt it.
+From a security standpoint, if the remote server is owned, the attacker can only access the encrypted data. Since the server never stores the decryption key, the attacker can't decrypt the configuration.
 
 By default, the server is comfy.marmelab.com (run by marmelab), but it can be a server that you host yourself (this repository contains the server code).
 
@@ -74,7 +74,7 @@ To run the server on AWS lambda, edit the `api/serverless.yml` fil with your AWS
 origin=http://my.custom.config.server.com  
 ``` 
 
-## Usage
+## Basic Usage
 
 In a project directory, initialize a new configuration with `comfy init`:
 
