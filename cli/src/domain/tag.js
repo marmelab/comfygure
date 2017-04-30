@@ -26,5 +26,16 @@ module.exports = (client, ui) => {
         }
     };
 
-    return { add, move };
+    const remove = function* (project, environment, configName, name) {
+        const url = `${project.origin}/projects/${project.id}/environments/${environment}/configurations/${configName}/tags/${name}`;
+
+        try {
+            return yield client.delete(url, client.buildAuthorization(project));
+        } catch (error) {
+            ui.printRequestError(error);
+            ui.exit(1);
+        }
+    };
+
+    return { add, move, remove };
 };

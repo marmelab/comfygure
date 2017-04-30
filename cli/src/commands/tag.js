@@ -66,6 +66,29 @@ const move = function* (ui, modules, options) {
     ui.exit();
 };
 
+const remove = function* (ui, modules, options) {
+    const { red, bold } = ui.colors;
+
+    const getOption = (option, name) => {
+        if (!options[option]) {
+            ui.error(`${red(`No ${name} specified.`)}`);
+            help(ui, 1);
+        }
+
+        return options[option];
+    };
+
+    const environment = getOption('e', 'environment');
+    const configuration = getOption('c', 'configuration');
+    const tag = getOption('t', 'tag');
+
+    const project = yield modules.project.retrieveFromConfig();
+    const removedTag = yield modules.tag.remove(project, environment, configuration, tag);
+
+    ui.print(`${bold('Okay.')} Your tag "${bold(removedTag.name)}" is now deleted.`);
+    ui.exit();
+};
+
 module.exports = (ui, modules) => function* ([command, ...rawOptions]) {
     const options = minimist(rawOptions);
 
@@ -79,6 +102,9 @@ module.exports = (ui, modules) => function* ([command, ...rawOptions]) {
         break;
     case 'move':
         yield move(ui, modules, options);
+        break;
+    case 'delete':
+        yield remove(ui, modules, options);
         break;
     default:
         help();

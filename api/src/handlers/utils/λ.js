@@ -5,7 +5,7 @@ export default handler => (event, context) => {
     co(function* () {
         const body = yield handler({
             ...event,
-            body: JSON.parse(event.body),
+            body: event.body ? JSON.parse(event.body) : null,
         });
 
         context.succeed({
