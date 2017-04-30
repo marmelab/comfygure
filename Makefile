@@ -5,3 +5,6 @@ install:
 test:
 	cd api && make test
 	cd cli && make test
+
+publish:
+	npm publish ./cli
