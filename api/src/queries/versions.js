@@ -11,7 +11,7 @@ const query = crudQueries(
 
 query.selectPage = query.selectPage
     .table('version LEFT JOIN tag on (version.id = tag.version_id)')
-    .searchableFields(['version.configuration_id'])
+    .searchableFields(['version.configuration_id', 'hash'])
     .returnFields([
         'version.id',
         'hash',
@@ -51,7 +51,7 @@ const find = async (configurationId) => {
 const findOneByHash = async (configurationId, hash) => {
     const client = await db.link(query);
     const result = await client.selectPage(undefined, undefined, {
-        configuration_id: configurationId,
+        'version.configuration_id': configurationId,
         hash,
     });
     client.release();

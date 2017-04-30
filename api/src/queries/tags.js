@@ -34,7 +34,11 @@ const updateOne = async (id, tag) => {
 
     client.release();
 
-    return result;
+    if (!result.length) {
+        return null;
+    }
+
+    return result[0];
 };
 
 const removeOne = async (id) => {

@@ -2,13 +2,13 @@ import configurationsQueries from '../../queries/configurations';
 import versionsQueries from '../../queries/versions';
 import tagsQueries from '../../queries/tags';
 
-export const get = async (projectId, environmentName, configName, tagName) => {
+export const get = async (projectId, environmentName, configName, selector) => {
     const configuration = await configurationsQueries.findOne(projectId, environmentName, configName);
-    const tag = await tagsQueries.findOne(configuration.id, tagName);
+    const tag = await tagsQueries.findOne(configuration.id, selector);
 
     let version;
     if (!tag) {
-        version = await versionsQueries.findOneByHash(configuration.id, tagName);
+        version = await versionsQueries.findOneByHash(configuration.id, selector);
     } else {
         version = await versionsQueries.findOne({ id: tag.version_id });
     }
