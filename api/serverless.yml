@@ -121,6 +121,35 @@ functions:
           path: projects/{id}/environments/{environmentName}/configurations/{configName}
           cors: true
 
+## TAGS
+
+  tagAdd:
+    handler: tags.create
+    description: Add a new tag on a configuration
+    events:
+      - http:
+          method: POST
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags
+          cors: true
+
+  tagUpdate:
+    handler: tags.update
+    description: Move a tag
+    events:
+      - http:
+          method: PUT
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
+          cors: true
+
+  tagRemove:
+    handler: tags.remove
+    description: Remove a tag
+    events:
+      - http:
+          method: DELETE
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
+          cors: true
+
 plugins:
   - serverless-webpack
   - serverless-offline

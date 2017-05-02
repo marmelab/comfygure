@@ -107,7 +107,7 @@ Add a configuration from a config file for a particular environment using `comfy
 ```sh
 > echo '{"login": "admin", "password": "S3cr3T"}' > config.json
 > comfy add development -f config.json
-Great! Your configuration was successfuly saved.
+Great! Your configuration was successfully saved.
 ```
 
 Grab that configuration from any server using `comfy get`:

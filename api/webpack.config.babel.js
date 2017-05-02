@@ -7,6 +7,7 @@ module.exports = {
         configurations: './src/handlers/configurations.js',
         environments: './src/handlers/environments.js',
         projects: './src/handlers/projects.js',
+        tags: './src/handlers/tags.js',
     },
     plugins: [
         new ConfigPlugin({ dir: path.resolve(__dirname, 'config') }),

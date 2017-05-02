@@ -13,7 +13,37 @@ query.updateOne = query.updateOne.allowPrimaryKeyUpdate(true);
 
 const updateOne = async (id, tag) => {
     const client = await db.link(query);
-    const result = await client.updateOne(id, tag);
+    const updateQuery = `
+        UPDATE tag
+            SET version_id=$version_id
+        WHERE configuration_id = $id_configuration_id
+            AND version_id = $id_version_id
+            AND name = $id_name
+        RETURNING configuration_id, version_id, name
+    `;
+
+    const result = await client.query({
+        sql: updateQuery,
+        parameters: {
+            id_configuration_id: id.configuration_id,
+            id_version_id: id.version_id,
+            id_name: id.name,
+            version_id: tag.version_id,
+        },
+    });
+
+    client.release();
+
+    if (!result.length) {
+        return null;
+    }
+
+    return result[0];
+};
+
+const removeOne = async (id) => {
+    const client = await db.link(query);
+    const result = await client.deleteOne(id);
     client.release();
 
     return result;
@@ -53,6 +83,7 @@ const findOne = async (configurationId, tagName) => {
 export default {
     updateOne,
     insertOne,
+    removeOne,
     batchInsert,
     findOne,
 };

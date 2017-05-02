@@ -1,7 +1,9 @@
+/* eslint-disable global-require */
 const clientFactory = require('./client');
 const projectModuleFactory = require('./domain/project');
 const environmentModuleFactory = require('./domain/environment');
 const configModuleFactory = require('./domain/config');
+const tagModuleFactory = require('./domain/tag');
 
 const main = (ui, evt) => {
     const commands = {
@@ -11,6 +13,7 @@ const main = (ui, evt) => {
         add: require('./commands/add'),
         get: require('./commands/get'),
         ls: require('./commands/ls'),
+        tag: require('./commands/tag'),
     };
 
     const run = function* () {
@@ -37,6 +40,7 @@ const main = (ui, evt) => {
             project: projectModuleFactory(client, ui),
             environment: environmentModuleFactory(client, ui),
             config: configModuleFactory(client, ui),
+            tag: tagModuleFactory(client, ui),
         };
 
         yield command(ui, modules)(request.arguments);

@@ -37,7 +37,26 @@ module.exports = (request) => {
         return request(url, options, parseResponse(cb));
     };
 
+    const put = (url, body, headers = {}) => (cb) => {
+        const options = {
+            method: 'PUT',
+            headers: Object.assign({}, defaultHeaders, headers),
+            body: JSON.stringify(body),
+        };
+
+        return request(url, options, parseResponse(cb));
+    };
+
+    const remove = (url, headers = {}) => (cb) => {
+        const options = {
+            method: 'DELETE',
+            headers: Object.assign({}, defaultHeaders, headers),
+        };
+
+        return request(url, options, parseResponse(cb));
+    };
+
     const buildAuthorization = project => ({ Authorization: `Token ${project.secretToken}` });
 
-    return { get, post, buildAuthorization };
+    return { get, post, put, delete: remove, buildAuthorization };
 };
