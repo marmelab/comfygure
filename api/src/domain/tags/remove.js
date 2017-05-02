@@ -2,8 +2,7 @@ import tagsQueries from '../../queries/tags';
 import configurationsQueries from '../../queries/configurations';
 import validateTag from './validator';
 
-export default async (projectId, environmentName, configurationName, rawName) => {
-    const name = rawName.toLowerCase();
+export default async (projectId, environmentName, configurationName, name) => {
     validateTag(name);
 
     const configuration = await configurationsQueries.findOne(projectId, environmentName, configurationName);
