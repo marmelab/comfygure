@@ -23,10 +23,10 @@ run:
 	$(SERVERLESS) offline --location=.webpack --host=0.0.0.0 --port=3000
 
 deploy:
-	NODE_ENV=production $(SERVERLESS) deploy
+	NODE_ENV=production $(SERVERLESS) deploy --stage beta
 
 undeploy:
-	NODE_ENV=production $(SERVERLESS) remove
+	NODE_ENV=production $(SERVERLESS) remove --stage beta
 
 test:
 	NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register "src/**/*.spec.js"

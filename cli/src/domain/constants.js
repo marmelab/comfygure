@@ -1,6 +1,6 @@
 const CONFIG_FOLDER = '.comfy';
 const CONFIG_PATH = '.comfy/config';
-const DEFAULT_ORIGIN = 'http://localhost:3000';
+const DEFAULT_ORIGIN = 'https://comfy.marmelab.com';
 
 module.exports = {
     CONFIG_FOLDER,
