@@ -38,7 +38,7 @@ const add = function* (ui, modules, options) {
     const project = yield modules.project.retrieveFromConfig();
     const newTag = yield modules.tag.add(project, environment, configuration, tag, hash);
 
-    ui.print(`${bold('Cool!')} Your new tag "${bold(newTag.name)}" was successfuly created.`);
+    ui.print(`${bold('Cool!')} Your new tag "${bold(newTag.name)}" was successfully created.`);
     ui.exit();
 };
 

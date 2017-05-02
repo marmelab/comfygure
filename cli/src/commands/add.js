@@ -86,6 +86,6 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
         defaultFormat,
     });
 
-    ui.print(`${bold('Great!')} Your configuration was successfuly saved.`);
+    ui.print(`${bold('Great!')} Your configuration was successfully saved.`);
     ui.exit();
 };

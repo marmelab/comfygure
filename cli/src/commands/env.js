@@ -40,7 +40,7 @@ const add = (ui, modules, options) => function* () {
     const environment = yield modules.environment.add(project, options[0]);
     const addCommand = `comfy add ${environment.name}`;
 
-    ui.print(`${bold('Cool!')} Your new environment "${bold(environment.name)}" was successfuly saved.`);
+    ui.print(`${bold('Cool!')} Your new environment "${bold(environment.name)}" was successfully saved.`);
     ui.print(`You can now add a configuration, try ${bold(addCommand)}`);
     ui.exit();
 };
