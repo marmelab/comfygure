@@ -62,7 +62,7 @@ const move = function* (ui, modules, options) {
     const project = yield modules.project.retrieveFromConfig();
     const movedTag = yield modules.tag.move(project, environment, configuration, tag, hash);
 
-    ui.print(`${bold('Cool!')} Your new tag "${bold(movedTag.name)}" was successfuly moved to the new configuration.`);
+    ui.print(`${bold('Cool!')} Your new tag "${bold(movedTag.name)}" was successfully moved to the new configuration.`);
     ui.exit();
 };
 
