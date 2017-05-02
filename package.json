@@ -1,6 +1,6 @@
 {
   "name": "comfygure",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Configure without the pain",
   "main": "index.js",
   "private": true,

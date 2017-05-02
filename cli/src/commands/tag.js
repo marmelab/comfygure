@@ -107,6 +107,6 @@ module.exports = (ui, modules) => function* ([command, ...rawOptions]) {
         yield remove(ui, modules, options);
         break;
     default:
-        help();
+        help(ui);
     }
 };
