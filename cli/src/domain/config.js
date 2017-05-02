@@ -37,10 +37,14 @@ module.exports = (client, ui) => {
         }
     };
 
-    const get = function* (project, env, { configName, tag }) {
-        const url = tag ?
-            `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}` :
-            `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}`;
+    const get = function* (project, env, { configName = 'default', tag }) {
+        let url = `${project.origin}/projects/${project.id}/environments/${env}/configurations`;
+
+        if (configName && tag) {
+            url += `/${configName}/${tag}`;
+        } else if (configName || tag) {
+            url += `/${configName || tag}`;
+        }
 
         let response;
         try {

@@ -6,7 +6,7 @@ const query = crudQueries(
     'entry',
     ['version_id', 'key', 'value'],
     ['version_id', 'key'],
-    ['key', 'value'],
+    ['version_id', 'key', 'value'],
 );
 
 const insertOne = async (entry) => {
