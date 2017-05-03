@@ -24,7 +24,9 @@ module.exports = (client, ui) => {
         const body = toFlat(content);
 
         Object.keys(body).forEach((key) => {
-            body[key] = encrypt(body[key].toString(), project.passphrase);
+            if (body[key]) { // Do not encrypt null values
+                body[key] = encrypt(body[key].toString(), project.passphrase);
+            }
         });
 
         const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}`;
@@ -57,7 +59,9 @@ module.exports = (client, ui) => {
         const { body } = response;
 
         Object.keys(body).forEach((key) => {
-            body[key] = decrypt(body[key].toString(), project.passphrase);
+            if (body[key]) {
+                body[key] = decrypt(body[key].toString(), project.passphrase);
+            }
         });
 
         return { body };
