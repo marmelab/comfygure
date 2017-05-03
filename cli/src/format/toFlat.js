@@ -10,7 +10,7 @@ const traverse = (obj, parentKey = '') => {
                 list.push(t);
             });
         });
-    } else if (obj.toString() === '[object Object]') {
+    } else if (obj && obj.toString() === '[object Object]') {
         for (const key of Object.keys(obj)) {
             const pKey = parentKey ? `${parentKey}.` : '';
             const objectList = traverse(obj[key], `${pKey}${key}`);
