@@ -56,10 +56,10 @@ module.exports = (ui, modules) => function* () {
     ui.print('We just need a few informations about your project:');
     const { projectName, environment, passphrase } = yield askProjectInfos();
 
-    ui.print('\nCreating your new project ...');
+    ui.print('\nInitializing project configuration...');
     const project = yield modules.project.create(projectName, environment);
 
-    ui.print(`\n${bold('Nice.')} We will save your credentials under ${dim(CONFIG_PATH)}.`);
+    ui.print(`\nConfiguration saved in ${dim(CONFIG_PATH)}.`);
     const isGitDirectory = fs.existsSync(`${process.cwd()}${path.sep}.git`);
 
     if (isGitDirectory) {
@@ -69,19 +69,7 @@ module.exports = (ui, modules) => function* () {
     yield modules.project.saveToConfig(project, passphrase);
 
     ui.print(`
-${bold(green('comfy is now configured!'))} Here are what you need to know about your project:
-
-Project name: ${cyan(project.name)}
-Environments: ${cyan(project.environments.map(env => env.name).join(', '))}
-
-Access Token: ${project.accessKey}
-Secret Read Token: ${project.readToken}
-Secret Write Token: ${project.writeToken}
-
-Passphrase to decrypt your configs:
-${passphrase}
-
-Keep these informations safe & secret!
+${bold(green('Successfully initialized comfy for this project'))}
 `);
 
     ui.exit();
