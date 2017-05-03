@@ -21,13 +21,13 @@ module.exports = (ui, modules) => function* () {
     const askProjectInfos = function* () {
         const folders = process.cwd().split(path.sep);
         const defaultProjectName = folders[folders.length - 1];
-        const projectName = yield ask(`- What is your project name? [${defaultProjectName}]`);
+        const projectName = yield ask(`- What is the project name? [${defaultProjectName}]`);
 
         const defaultEnvironment = process.env.NODE_ENV || 'development';
-        const environment = yield ask(`- What is your first environment? [${defaultEnvironment}]`);
+        const environment = yield ask(`- What is the first environment? [${defaultEnvironment}]`);
 
         const defaultPassphrase = crypto.randomBytes(256).toString('hex');
-        const passphrase = yield ask('- What is your encryption passphrase? [generated]');
+        const passphrase = yield ask('- What is the encryption passphrase? [generated]');
 
         return {
             projectName: projectName || defaultProjectName,
@@ -38,8 +38,7 @@ module.exports = (ui, modules) => function* () {
 
     const addConfigToGitignore = function* () {
         const gitIgnoreConfig = yield ask(
-            `${bold('You are in a git directory.')} ` +
-            `Would you add ${dim(CONFIG_PATH)} to the ${dim('.gitignore')}? [yes]`
+            `- Add the comfy config file to ${dim('.gitignore')}? [yes]`
         );
 
         if (!['n', 'no', 'No', 'NO'].includes(gitIgnoreConfig)) {
@@ -53,24 +52,21 @@ module.exports = (ui, modules) => function* () {
     // Starting
     checkAlreadyInitialized();
 
-    ui.print('We just need a few informations about your project:');
+    ui.print('To create a comfy project for this directory, please answer the following questions:');
     const { projectName, environment, passphrase } = yield askProjectInfos();
-
-    ui.print('\nInitializing project configuration...');
-    const project = yield modules.project.create(projectName, environment);
-
-    ui.print(`\nConfiguration saved in ${dim(CONFIG_PATH)}.`);
     const isGitDirectory = fs.existsSync(`${process.cwd()}${path.sep}.git`);
-
     if (isGitDirectory) {
         yield addConfigToGitignore();
     }
 
+    ui.print('\nInitializing project configuration...');
+    const project = yield modules.project.create(projectName, environment);
+
+    ui.print(`Configuration saved in ${dim(CONFIG_PATH)}`);
+
     yield modules.project.saveToConfig(project, passphrase);
 
-    ui.print(`
-${bold(green('Successfully initialized comfy for this project'))}
-`);
+    ui.print(`${bold(green('comfy project successfully created'))}`);
 
     ui.exit();
 };
