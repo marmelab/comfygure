@@ -37,7 +37,6 @@ const printRequestError = (err) => {
     const { red, cyan, gray, bold, dim } = colors;
 
     const contactUs = `If the error persist, please contact us:
-${gray('-')} Email: ${cyan('info@marmelab.com')}
 ${gray('-')} Issue: ${cyan('https://github.com/marmelab/comfygure/issues')}`;
 
     switch (err.code) {
