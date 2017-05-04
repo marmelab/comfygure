@@ -80,26 +80,11 @@ In a project directory, initialize a new configuration with `comfy init`:
 
 ```sh
 > comfy init
-We just need a few informations about your project:
-- What is your project name? [myproject]
-- What is your first environment? [development]
-- What is your encryption passphrase? [generated]
 
-Creating your new project ...
-
-Nice. We will save your credentials under .comfy/config.
-
-comfy is now configured! Here are what you need to know about your project:
-
-Project name: myproject
-Environments: development
-
-Access Token: QMOLAWWJCPPBOWAARHQP
-Secret Read Token: 6CJVFlieUCUqgiOBDWvkYDEASXkjtFEJs0EKIjTb
-Secret Write Token: QGBsW8e9m7MfTsvs8up3iazsc5TPYUbznS1HW7bV
-
-Passphrase to decrypt your configs:
-[...]
+Initializing project configuration...
+Project created on comfy server https://comfy.marmelab.com
+Configuration saved locally in .comfy/config
+comfy project successfully created
 ```
 
 Add a configuration from a config file for a particular environment using `comfy add`:

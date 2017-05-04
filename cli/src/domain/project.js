@@ -4,8 +4,8 @@ const path = require('path');
 const { CONFIG_FOLDER, CONFIG_PATH, DEFAULT_ORIGIN } = require('./constants');
 
 module.exports = (client, ui) => {
-    const create = function* (name, environment) {
-        const url = `${DEFAULT_ORIGIN}/projects`;
+    const create = function* (name, environment, origin = DEFAULT_ORIGIN) {
+        const url = `${origin}/projects`;
 
         try {
             return yield client.post(url, { name, environment });
