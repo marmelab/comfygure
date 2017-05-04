@@ -21,13 +21,13 @@ module.exports = (ui, modules) => function* () {
     const askProjectInfos = function* () {
         const folders = process.cwd().split(path.sep);
         const defaultProjectName = folders[folders.length - 1];
-        const projectName = yield ask(`- What is the project name? [${defaultProjectName}]`);
+        const projectName = yield ask(`- What is the project name? [${cyan(defaultProjectName)}]`);
 
         const defaultEnvironment = process.env.NODE_ENV || 'development';
-        const environment = yield ask(`- What is the first environment? [${defaultEnvironment}]`);
+        const environment = yield ask(`- What is the first environment? [${cyan(defaultEnvironment)}]`);
 
         const defaultPassphrase = crypto.randomBytes(256).toString('hex');
-        const passphrase = yield ask('- What is the encryption passphrase? [generated]');
+        const passphrase = yield ask(`- What is the encryption passphrase? [${cyan('generated')}]`);
 
         return {
             projectName: projectName || defaultProjectName,
@@ -38,7 +38,7 @@ module.exports = (ui, modules) => function* () {
 
     const addConfigToGitignore = function* () {
         const gitIgnoreConfig = yield ask(
-            `- Add the comfy config file to ${dim('.gitignore')}? [yes]`
+            `- Add the comfy config file to ${dim('.gitignore')}? [${cyan('yes')}]`
         );
 
         if (!['n', 'no', 'No', 'NO'].includes(gitIgnoreConfig)) {
@@ -60,12 +60,13 @@ module.exports = (ui, modules) => function* () {
     }
 
     ui.print('\nInitializing project configuration...');
+
     const project = yield modules.project.create(projectName, environment);
-
-    ui.print(`Configuration saved in ${dim(CONFIG_PATH)}`);
-
     yield modules.project.saveToConfig(project, passphrase);
+    const { origin } = yield modules.project.retrieveFromConfig();
 
+    ui.print(`Project created on comfy server ${dim(origin)}`);
+    ui.print(`Configuration saved locally in ${dim(CONFIG_PATH)}`);
     ui.print(`${bold(green('comfy project successfully created'))}`);
 
     ui.exit();
