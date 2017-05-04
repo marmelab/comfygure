@@ -35,10 +35,10 @@ export default async (projectId, environmentName, configName = 'default') => {
         configurationId: configuration.id,
     };
 
-    await [
+    await Promise.all([
         { ...newTagInfos, name: 'stable' },
         { ...newTagInfos, name: 'next' },
-    ].map(tag => addTag(tag.configurationId, tag.versionId, tag.name));
+    ].map(tag => addTag(tag.configurationId, tag.versionId, tag.name)));
 
     return {
         ...environment,

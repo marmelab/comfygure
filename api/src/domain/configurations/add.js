@@ -47,10 +47,10 @@ export default async (projectId, environmentName, configurationName = 'default',
     };
 
     if (configurationNewlyCreated) {
-        await [
+        await Promise.all([
             { ...newTagInfos, name: 'stable' },
             { ...newTagInfos, name: 'next' },
-        ].map(tag => addTag(tag.configurationId, tag.versionId, tag.name));
+        ].map(tag => addTag(tag.configurationId, tag.versionId, tag.name)));
     }
 
     // Create or update the specified tag
