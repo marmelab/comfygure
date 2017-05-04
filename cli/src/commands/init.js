@@ -1,69 +1,72 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const minimist = require('minimist');
 
-module.exports = (ui, modules) => function* () {
+const help = (ui, code = 0) => {
+    const { bold, dim } = ui.colors;
+
+    ui.print(`
+${bold('NAME')}
+        comfy init - Initialize a comfy configuration for the current directory
+
+${bold('SYNOPSIS')}
+        ${bold('comfy')} init [<options>]
+
+${bold('OPTIONS')}
+        --name=<name>      The configuration name (defaults to the current directory name)
+        --env=<env>        The first environment to create (defaults to 'development')
+        --origin=<origin>  URL of the comfy server (defaults to https://comfy.marmelab.com)
+        -p, --passphrase   Do not generate passphrase, ask for custom passphrase instead (defaults to false)
+        -g, --nogitignore  Do not add .comfy directory to .gitignore
+        -h, --help         Show this very help message
+
+${bold('EXAMPLES')}
+        comfy init
+        comfy init --name foo --env 'development' --origin 'http://mycomfy.mydomain.com'
+`);
+    ui.exit(code);
+};
+
+module.exports = (ui, modules) => function* (rawOptions) {
     const ask = ui.input.text;
-    const { bold, dim, yellow, green, cyan } = ui.colors;
+    const { bold, dim, yellow, green } = ui.colors;
+    const options = minimist(rawOptions);
+
+    if (options.help || options.h || options._.includes('help')) {
+        help(ui);
+        return ui.exit(0);
+    }
 
     const CONFIG_PATH = modules.project.CONFIG_PATH;
-
-    const checkAlreadyInitialized = () => {
-        if (fs.existsSync(`${process.cwd()}${path.sep}${CONFIG_PATH}`)) {
-            ui.error(
-                `${yellow('comfy is already initialized!')}` +
-                `\nYou can update your configuration by editing ${dim(CONFIG_PATH)}.`
-            );
-            ui.exit(1);
-        }
-    };
-
-    const askProjectInfos = function* () {
-        const folders = process.cwd().split(path.sep);
-        const defaultProjectName = folders[folders.length - 1];
-        const projectName = yield ask(`- What is the project name? [${cyan(defaultProjectName)}]`);
-
-        const defaultEnvironment = process.env.NODE_ENV || 'development';
-        const environment = yield ask(`- What is the first environment? [${cyan(defaultEnvironment)}]`);
-
-        const defaultPassphrase = crypto.randomBytes(256).toString('hex');
-        const passphrase = yield ask(`- What is the encryption passphrase? [${cyan('generated')}]`);
-
-        return {
-            projectName: projectName || defaultProjectName,
-            environment: environment || defaultEnvironment,
-            passphrase: passphrase || defaultPassphrase,
-        };
-    };
-
-    const addConfigToGitignore = function* () {
-        const gitIgnoreConfig = yield ask(
-            `- Add the comfy config file to ${dim('.gitignore')}? [${cyan('yes')}]`
-        );
-
-        if (!['n', 'no', 'No', 'NO'].includes(gitIgnoreConfig)) {
-            const gitignore = `${process.cwd()}${path.sep}.gitignore`;
-            const alreadyExist = fs.existsSync(gitignore);
-
-            yield cb => fs.writeFile(gitignore, `${CONFIG_PATH}\n`, { flag: alreadyExist ? 'a' : 'w' }, cb);
-        }
-    };
-
-    // Starting
-    checkAlreadyInitialized();
-
-    ui.print('To create a comfy project for this directory, please answer the following questions:');
-    const { projectName, environment, passphrase } = yield askProjectInfos();
+    const checkAlreadyInitialized = fs.existsSync(`${process.cwd()}${path.sep}${CONFIG_PATH}`);
     const isGitDirectory = fs.existsSync(`${process.cwd()}${path.sep}.git`);
-    if (isGitDirectory) {
-        yield addConfigToGitignore();
+    const gitignore = `${process.cwd()}${path.sep}.gitignore`;
+
+    if (checkAlreadyInitialized) {
+        ui.error(
+            `${yellow('comfy is already initialized!')}` +
+            `\nYou can update your configuration by editing ${dim(CONFIG_PATH)}.`
+        );
+        return ui.exit(1);
     }
+
+    const folders = process.cwd().split(path.sep);
+    const defaultProjectName = folders[folders.length - 1];
+    const projectName = options.name || defaultProjectName;
+    const environment = options.env || process.env.NODE_ENV || 'development';
+    const passphrase = (options.passphrase || options.p)
+        ? yield ask('- What is the encryption passphrase?')
+        : crypto.randomBytes(256).toString('hex');
 
     ui.print('\nInitializing project configuration...');
 
-    const project = yield modules.project.create(projectName, environment);
+    const project = yield modules.project.create(projectName, environment, options.origin);
     yield modules.project.saveToConfig(project, passphrase);
     const { origin } = yield modules.project.retrieveFromConfig();
+    if (isGitDirectory && !options.g) {
+        fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);
+    }
 
     ui.print(`Project created on comfy server ${dim(origin)}`);
     ui.print(`Configuration saved locally in ${dim(CONFIG_PATH)}`);
