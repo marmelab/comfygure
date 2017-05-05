@@ -4,7 +4,7 @@ const minimist = require('minimist');
 const { parseYAML } = require('../format');
 
 const help = (ui, code = 0) => {
-    const { bold, dim } = ui.colors;
+    const { bold } = ui.colors;
 
     ui.print(`
 ${bold('NAME')}
@@ -19,7 +19,7 @@ ${bold('OPTIONS')}
         -t, --tag=<tag>   Set a tag for this config version (default: stable)
         -h, --help        Show this very help message
 
-${dim('EXAMPLES')}
+${bold('EXAMPLES')}
         comfy setall development /config/comfy.json
         comfy setall production /config/api.yml -t next
 `);
@@ -28,11 +28,16 @@ ${dim('EXAMPLES')}
 
 
 module.exports = (ui, modules) => function* (rawOptions) {
-    const { red, dim, bold } = ui.colors;
+    const { red, bold } = ui.colors;
     const options = minimist(rawOptions);
     const env = options._[0];
     const configPath = options._[1];
     const tag = options.tag || options.t || 'stable';
+
+    if (options.help || options.h || options._.includes('help')) {
+        help(ui);
+        return ui.exit(0);
+    }
 
     if (!env) {
         ui.error(red('No environment specified.'));
@@ -42,11 +47,6 @@ module.exports = (ui, modules) => function* (rawOptions) {
     if (!configPath) {
         ui.error(red('No config file specified.'));
         help(ui, 1);
-    }
-
-    if (options.help || options.h || options._.includes('help')) {
-        help(ui);
-        return ui.exit(0);
     }
 
     const filename = path.normalize(`${process.cwd()}${path.sep}${configPath}`);
