@@ -7,7 +7,7 @@ const help = (ui, code = 0) => {
     const { bold, dim } = ui.colors;
 
     ui.print(`
-    ${bold('comfy')} add <environment> <options>
+    ${bold('comfy')} setall <environment> <options>
 
     ${dim('Options')}
         help        Show this very help message
@@ -18,8 +18,8 @@ const help = (ui, code = 0) => {
         --yml       Read the configuration file as a YAML file
 
     ${dim('Examples')}
-        comfy add development -f /config/comfy.json
-        comfy add production -c api -t stable -f /config/api.json
+        comfy setall development -f /config/comfy.json
+        comfy setall production -c api -t stable -f /config/api.json
 `);
     ui.exit(code);
 };

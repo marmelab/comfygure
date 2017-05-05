@@ -10,7 +10,7 @@ const main = (ui, evt) => {
         help: require('./commands/help'),
         init: require('./commands/init'),
         env: require('./commands/env'),
-        add: require('./commands/add'),
+        setall: require('./commands/setall'),
         get: require('./commands/get'),
         ls: require('./commands/ls'),
         tag: require('./commands/tag'),
