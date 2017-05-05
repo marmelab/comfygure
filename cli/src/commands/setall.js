@@ -20,15 +20,15 @@ ${bold('OPTIONS')}
         -h, --help        Show this very help message
 
 ${bold('EXAMPLES')}
-        comfy setall development /config/comfy.json
-        comfy setall production /config/api.yml -t next
+        comfy setall development config/comfy.json
+        comfy setall production config/api.yml -t next
 `);
     ui.exit(code);
 };
 
 
 module.exports = (ui, modules) => function* (rawOptions) {
-    const { red, bold } = ui.colors;
+    const { red, green, bold } = ui.colors;
     const options = minimist(rawOptions);
     const env = options._[0];
     const configPath = options._[1];
@@ -78,6 +78,6 @@ module.exports = (ui, modules) => function* (rawOptions) {
         configName: 'default',
     });
 
-    ui.print(`${bold('Great!')} Your configuration was successfully saved.`);
+    ui.print(`${bold(green('comfy configuration successfully saved'))}`);
     ui.exit();
 };
