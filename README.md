@@ -87,7 +87,7 @@ Configuration saved locally in .comfy/config
 comfy project successfully created
 ```
 
-Set the configuration for a particular environment based on the content of an existing file using `comfy seyall`:
+Set the configuration for a particular environment based on the content of an existing file using `comfy setall`:
 
 ```sh
 > echo '{"login": "admin", "password": "S3cr3T"}' > config.json
