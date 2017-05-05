@@ -87,11 +87,11 @@ Configuration saved locally in .comfy/config
 comfy project successfully created
 ```
 
-Add a configuration from a config file for a particular environment using `comfy add`:
+Set the configuration for a particular environment based on the content of an existing file using `comfy seyall`:
 
 ```sh
 > echo '{"login": "admin", "password": "S3cr3T"}' > config.json
-> comfy add development -f config.json
+> comfy setall development config.json
 Great! Your configuration was successfully saved.
 ```
 

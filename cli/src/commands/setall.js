@@ -1,50 +1,55 @@
 const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
-const { parseJSON, parseYAML } = require('../format');
+const { parseYAML } = require('../format');
 
 const help = (ui, code = 0) => {
     const { bold, dim } = ui.colors;
 
     ui.print(`
-    ${bold('comfy')} setall <environment> <options>
+${bold('NAME')}
+        comfy setall - Replace the configuration for a given environment
 
-    ${dim('Options')}
-        help        Show this very help message
-        -c          The configuration name (optional if you have only one config)
-        -f          Specify the file you want to upload
-        -t          Set a tag for this config version (default: next)
-        --json      Read the configuration file as a JSON file
-        --yml       Read the configuration file as a YAML file
+${bold('SYNOPSIS')}
+        ${bold('comfy')} setall <environment> <path> [<options>]
 
-    ${dim('Examples')}
-        comfy setall development -f /config/comfy.json
-        comfy setall production -c api -t stable -f /config/api.json
+${bold('OPTIONS')}
+        <environment>     Name of the environment (must already exist in project)
+        <path>            Path to a configuration file (accepts json and yml formats)
+        -t, --tag=<tag>   Set a tag for this config version (default: stable)
+        -h, --help        Show this very help message
+
+${dim('EXAMPLES')}
+        comfy setall development /config/comfy.json
+        comfy setall production /config/api.yml -t next
 `);
     ui.exit(code);
 };
 
 
-module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
+module.exports = (ui, modules) => function* (rawOptions) {
     const { red, dim, bold } = ui.colors;
+    const options = minimist(rawOptions);
+    const env = options._[0];
+    const configPath = options._[1];
+    const tag = options.tag || options.t || 'stable';
 
     if (!env) {
-        ui.error(`${red('No environment specified.')}`);
+        ui.error(red('No environment specified.'));
         help(ui, 1);
     }
 
-    const options = minimist(rawOptions);
+    if (!configPath) {
+        ui.error(red('No config file specified.'));
+        help(ui, 1);
+    }
 
-    if (env === 'help' || options._.includes('help')) {
+    if (options.help || options.h || options._.includes('help')) {
         help(ui);
+        return ui.exit(0);
     }
 
-    if (!options.f) {
-        ui.error(`${red('No config file is specified.')} You can specify it with the ${dim('-f')} option.`);
-        help(ui, 1);
-    }
-
-    const filename = path.normalize(`${process.cwd()}${path.sep}${options.f}`);
+    const filename = path.normalize(`${process.cwd()}${path.sep}${configPath}`);
 
     if (!fs.existsSync(filename)) {
         ui.error(`The file ${red(options.f)} doesn't exist.`);
@@ -60,30 +65,17 @@ module.exports = (ui, modules) => function* ([env, ...rawOptions]) {
     const file = fs.readFileSync(filename, 'utf-8');
 
     let parsedContent;
-    let defaultFormat;
-    const isYAML = ['.yml', '.yaml'].includes(path.extname(filename));
 
     try {
-        if (options.json) {
-            parsedContent = parseJSON(file);
-            defaultFormat = 'json';
-        } else if (options.yml) {
-            parsedContent = parseYAML(file);
-            defaultFormat = 'yml';
-        } else {
-            parsedContent = isYAML ? parseYAML(file) : parseJSON(file);
-            defaultFormat = isYAML ? 'yml' : 'json';
-        }
+        parsedContent = parseYAML(file);
     } catch (err) {
-        ui.error(`Failed to parse ${red(options.f)}.`);
-        ui.exit(1);
+        ui.error(red(`Failed to parse ${options.f}`));
     }
 
     const project = yield modules.project.retrieveFromConfig();
     yield modules.config.add(project, env, parsedContent, {
-        tag: options.t || 'next',
-        configName: options.c || 'default',
-        defaultFormat,
+        tag,
+        configName: 'default',
     });
 
     ui.print(`${bold('Great!')} Your configuration was successfully saved.`);
