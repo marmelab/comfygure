@@ -3,7 +3,7 @@ const path = require('path');
 const minimist = require('minimist');
 const { parseYAML } = require('../format');
 
-const help = (ui, code = 0) => {
+const help = (ui) => {
     const { bold } = ui.colors;
 
     ui.print(`
@@ -23,7 +23,6 @@ ${bold('EXAMPLES')}
         comfy setall development config/comfy.json
         comfy setall production config/api.yml -t next
 `);
-    ui.exit(code);
 };
 
 
