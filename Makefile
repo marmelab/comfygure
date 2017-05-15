@@ -10,7 +10,8 @@ test:
 deploy:
 	cd api && NODE_ENV=production make deploy
 
-publish:
-	cd admin && make build
-	mv admin/build cli/admin
+publish-cli:
 	npm publish ./cli
+
+publish-admin:
+	npm publish ./admin

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "freactal": "1.0.0",
+    "http-server": "0.10.0",
     "material-ui": "0.18.1",
     "react": "15.5.4",
     "react-dom": "15.5.4"
@@ -11,7 +12,11 @@
   "devDependencies": {
     "react-scripts": "0.9.5"
   },
+  "bin": {
+    "comfy": "bin/comfy.js"
+  },
   "scripts": {
+    "prepublish": "make build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
