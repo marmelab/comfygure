@@ -14,6 +14,7 @@ const main = (ui, evt) => {
         get: require('./commands/get'),
         ls: require('./commands/ls'),
         tag: require('./commands/tag'),
+        admin: require('./commands/admin'),
     };
 
     const run = function* () {
