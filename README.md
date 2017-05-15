@@ -4,7 +4,7 @@ Store encrypted project configuration in a centralised place, then check it out 
 
 ## The Problem: Managing Application Configuration
 
-How do you store the configuration for a web application? 
+How do you store the configuration for a web application?
 
 Most developers use configuration files (`config.json`, `parameters.yaml`, `root.xml`, etc). But these files should not be committed to source control (git), because they contain sensible information (db passwords, service credentials, etc), and because they can change with each developer. So developers usually commit fake config files (like `parameters.yml-dist`) and keep a real config file locally (and ignored by source control). This leads to problems when one developer adds a new key to the configuration but another developer doesn't know about it.
 
@@ -71,8 +71,8 @@ To run the server on AWS lambda, edit the `api/serverless.yml` fil with your AWS
 ```config
 # in .comfy/config
 [project]
-origin=http://my.custom.config.server.com  
-``` 
+origin=http://my.custom.config.server.com
+```
 
 ## Basic Usage
 
@@ -109,4 +109,10 @@ To store a remote configuration in the environment, use:
 
 ```sh
 > comfy get development | source /dev/stdin
+```
+
+To launch admin webApp on localhost:3000:
+
+```sh
+> comfy admin
 ```

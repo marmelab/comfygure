@@ -1,6 +1,7 @@
 install:
 	cd api && make install
 	cd cli && make install
+	cd admin && make install
 
 test:
 	cd api && make test
@@ -9,5 +10,8 @@ test:
 deploy:
 	cd api && NODE_ENV=production make deploy
 
-publish:
+publish-cli:
 	npm publish ./cli
+
+publish-admin:
+	npm publish ./admin
