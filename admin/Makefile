@@ -1,10 +1,8 @@
 install:
 	npm install
 
-test-unit:
-	./node_modules/.bin/mocha './src/**/*.js'
-
-test: test-unit
+test:
+	node_modules/react-scripts/bin/react-scripts.js test --env=jsdom
 
 start:
 	node_modules/react-scripts/bin/react-scripts.js start
