@@ -1,0 +1,34 @@
+{
+	"idProject": "b72b57f9-c2ba-4514-adc4-2f1118fcf4a5",
+	"token" : "Iwh5q4MsrykkYQrxsd8B1BKhx4lsUJ3syyr7ndG9",
+	"res": 
+		[
+		  {
+		    "id": "241675ab-32a4-4de0-a255-950aa3b6bceb",
+		    "name": "default",
+		    "configurations": [
+		      {
+		        "id": "d9cb3b0d-7273-4cb6-8358-87f217bbcebf",
+		        "name": "default",
+		        "defaultFormat": "envvars"
+		      },
+		      {
+		        "id": "0ebe9617-17af-4046-876d-aed916fdc1ef",
+		        "name": "confTest",
+		        "defaultFormat": "envvars"
+		      }
+		    ]
+		  },
+		  {
+		    "id": "63125398-6375-445f-8972-3004b497eeba",
+		    "name": "testEnv",
+		    "configurations": [
+		      {
+		        "id": "9f88f885-cdf7-4a0e-8b62-6347e95e45e6",
+		        "name": "default",
+		        "defaultFormat": "envvars"
+		      }
+		    ]
+		  }
+		]
+}
