@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'proptypes';
+import JsonView from 'react-pretty-json';
 
 const styles = {
     container: {
@@ -9,13 +10,16 @@ const styles = {
         flexGrow: 2,
     },
 }
-const Environment = ({ environment }) => (
+
+const Environment = ({ environment: { name }, config }) => (
     <div style={styles.container}>
-        <h1>{environment.name}</h1>
+        <h1>{name}</h1>
+        <JsonView json={config} spaces={4} />
     </div>
 );
 
 Environment.propTypes = {
+    config: PropTypes.object,
     environment: PropTypes.object,
 };
 

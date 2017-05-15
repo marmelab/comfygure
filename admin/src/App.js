@@ -29,7 +29,19 @@ const environments = [{ name: 'development' }, { name: 'production' }, { name: '
 
 const environment = environments[0];
 
-const App = ({ isLoggedIn }) => (
+const config = {
+    database: {
+        host: 'foo',
+        port: 5000,
+        user: 'toto',
+        password: 'oh damn',
+    },
+    api: {
+        url: 'http://api.com',
+    },
+};
+
+const App = ({ isLoggedIn = true }) => (
     <MuiThemeProvider>
         <div style={styles.root}>
             <AppBar title="Comfy" />
@@ -37,7 +49,7 @@ const App = ({ isLoggedIn }) => (
             {isLoggedIn &&
                 <div style={styles.container}>
                     <Sidebar environments={environments} />
-                    <Environment environment={environment} />
+                    <Environment environment={environment} config={config} />
                 </div>}
         </div>
     </MuiThemeProvider>
