@@ -14,6 +14,7 @@ const Sidebar = ({ environments, onEnvironmentSelected }) => (
     <Paper style={styles}>
         {environments.map(environment => (
             <SidebarItem
+                key={environment.name}
                 onSelected={onEnvironmentSelected}
                 text={environment.name}
                 value={environment.name}
