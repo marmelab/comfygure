@@ -6,6 +6,7 @@ install:
 test:
 	cd api && make test
 	cd cli && make test
+	cd admin && make test
 
 deploy:
 	cd api && NODE_ENV=production make deploy
