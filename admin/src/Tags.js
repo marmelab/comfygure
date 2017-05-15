@@ -6,9 +6,12 @@ import MenuItem from 'material-ui/MenuItem';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 
 const styles = {
+    environment: {
+        paddingRight: 0,
+    },
     tag: {
         lineHeight: '48px',
-        fontSize: '20px',
+        fontSize: 20,
         fontFamily: 'Roboto, sans-serif',
         position: 'relative',
         textOverflow: 'ellipsis',
@@ -33,7 +36,7 @@ class Tags extends Component {
         return (
             <Toolbar>
                 <ToolbarGroup>
-                    <ToolbarTitle text={environment.name} />
+                    <ToolbarTitle text={environment.name} style={styles.environment} />
                     <ToolbarSeparator />
                     <DropDownMenu
                         value={currentTag.name}
