@@ -9,7 +9,8 @@
     "proptypes": "1.0.0",
     "react": "15.5.4",
     "react-dom": "15.5.4",
-    "react-pretty-json": "2.0.2"
+    "react-pretty-json": "2.0.2",
+    "react-tap-event-plugin": "2.0.1"
   },
   "devDependencies": {
     "babel-eslint": "7.2.3",

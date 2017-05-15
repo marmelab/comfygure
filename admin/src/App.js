@@ -4,10 +4,12 @@ import PropTypes from 'proptypes';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { injectState } from 'freactal';
 import AppBar from 'material-ui/AppBar';
+
 import provideAppState from './provideAppState';
-import Sidebar from './Sidebar';
 import Environment from './Environment';
 import Login from './Login';
+import Sidebar from './Sidebar';
+import Tags from './Tags';
 
 const styles = {
     root: {
@@ -21,6 +23,11 @@ const styles = {
     },
     container: {
         display: 'flex',
+        flexGrow: 2,
+    },
+    environmentContainer: {
+        display: 'flex',
+        flexDirection: 'column',
         flexGrow: 2,
     },
 };
@@ -41,6 +48,10 @@ const config = {
     },
 };
 
+const tags = [{ name: 'latest' }, { name: '1.0.0' }, { name: '0.0.1' }];
+
+const tag = tags[0];
+
 const App = ({ isLoggedIn = true }) => (
     <MuiThemeProvider>
         <div style={styles.root}>
@@ -49,7 +60,10 @@ const App = ({ isLoggedIn = true }) => (
             {isLoggedIn &&
                 <div style={styles.container}>
                     <Sidebar environments={environments} />
-                    <Environment environment={environment} config={config} />
+                    <div style={styles.environmentContainer}>
+                        <Tags environment={environment} tags={tags} tag={tag} />
+                        <Environment environment={environment} config={config} />
+                    </div>
                 </div>}
         </div>
     </MuiThemeProvider>
