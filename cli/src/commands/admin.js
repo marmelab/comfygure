@@ -1,18 +1,16 @@
-const exec = require('child_process').exec;
+const HttpServer = require('http-server');
 
 module.exports = ui => () =>
     new Promise((resolve, reject) => {
-        exec('cd ../admin && make start', (error) => {
+        const server = HttpServer.createServer({ root: './admin' });
+        server.listen(3000, (error) => {
             if (error) {
                 reject(error);
-                ui.error(error.message);
-                return;
             }
-
+            ui.print(`
+    launching admin on http://localhost:3000
+    press Ctrl+C to end`
+            );
             resolve();
         });
-        ui.print(
-`launching on localhost:3000
-press Ctrl+C to end`
-        );
     });
