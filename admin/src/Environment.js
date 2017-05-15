@@ -13,7 +13,6 @@ const styles = {
 
 const Environment = ({ environment: { name }, config }) => (
     <div style={styles.container}>
-        <h1>{name}</h1>
         <JsonView json={config} spaces={4} />
     </div>
 );
