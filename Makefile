@@ -1,6 +1,7 @@
 install:
 	cd api && make install
 	cd cli && make install
+	cd admin && make install
 
 test:
 	cd api && make test
