@@ -1,12 +1,13 @@
 const exec = require('child_process').exec;
+const minimist = require('minimist');
 
-function moduleAvailable(name) {
+const moduleAvailable = (name) => {
     try {
         require.resolve(name);
         return true;
     } catch (e) {} // eslint-disable-line no-empty
     return false;
-}
+};
 
 const runCommand = cmd =>
     new Promise((resolve, reject) => {
@@ -20,9 +21,33 @@ const runCommand = cmd =>
         });
     });
 
-module.exports = ui => function* () {
+const help = (ui, code = 0) => {
+
+    const { bold, dim } = ui.colors;
+
+    ui.print(`
+    ${bold('comfy')} admin <environment> <options>
+
+    ${dim('Options')}
+        help        Show this very help message
+        -p          The port used to serve the admin, default to 3000
+
+    ${dim('Example')}
+        comfy admin -p 8080
+`);
+    ui.exit(code);
+};
+
+module.exports = ui => function* admin([env, ...rawOptions]) {
+    const options = minimist(rawOptions);
+    const port = options.p || 3000;
+
+    if (env === 'help' || options._.includes('help')) {
+        help(ui);
+    }
+
     if (moduleAvailable('comfy-admin')) {
-        yield runCommand('comfy-admin');
+        yield runCommand(`comfy-admin -p ${port}`);
         return;
     }
     ui.print('You need to install comfy-admin: npm install -g comfy-admin');
@@ -45,5 +70,5 @@ module.exports = ui => function* () {
         }
         throw error;
     }
-    yield runCommand('comfy-admin');
+    yield runCommand(`comfy-admin -p ${port}`);
 };
