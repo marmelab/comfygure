@@ -1,0 +1,31 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "es6": true,
+        "mocha": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:react/recommended",
+        "prettier",
+        "prettier/react"
+    ],
+    "plugins": [
+        "react",
+        "prettier"
+    ],
+    "rules": {
+        "prettier/prettier": ["error", {
+            "printWidth": 120,
+            "singleQuote": true,
+            "tabWidth": 4,
+            "trailingComma": "all"
+        }],
+        "import/no-extraneous-dependencies": "off",
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+    }
+}
