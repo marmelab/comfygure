@@ -5,6 +5,7 @@
   "dependencies": {
     "freactal": "1.0.0",
     "http-server": "0.10.0",
+    "isomorphic-fetch": "^2.2.1",
     "material-ui": "0.18.1",
     "proptypes": "1.0.0",
     "react": "15.5.4",
