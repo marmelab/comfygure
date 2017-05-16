@@ -1,4 +1,4 @@
-import { provideState, softUpdate } from "freactal";
+import { provideState, softUpdate } from 'freactal';
 
 export const state = {
     initialState: () => ({
