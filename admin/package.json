@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
     "freactal": "1.0.0",
     "http-server": "0.10.0",
     "isomorphic-fetch": "^2.2.1",
@@ -11,7 +12,8 @@
     "react": "15.5.4",
     "react-dom": "15.5.4",
     "react-pretty-json": "2.0.2",
-    "react-tap-event-plugin": "2.0.1"
+    "react-tap-event-plugin": "2.0.1",
+    "sg.js": "^0.1.0"
   },
   "devDependencies": {
     "babel-eslint": "7.2.3",

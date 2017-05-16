@@ -20,13 +20,7 @@ export const Login = ({ token, secret, projectId, onSecretChange, onTokenChange,
                     fullWidth
                     onChange={onProjectIdChange}
                 />
-                <TextField
-                    name="token"
-                    value={token}
-                    floatingLabelText="token"
-                    fullWidth
-                    onChange={onTokenChange}
-                />
+                <TextField name="token" value={token} floatingLabelText="token" fullWidth onChange={onTokenChange} />
                 <TextField
                     name="secret"
                     value={secret}
@@ -43,18 +37,17 @@ export const Login = ({ token, secret, projectId, onSecretChange, onTokenChange,
 );
 
 Login.propTypes = {
+    projectId: PropTypes.string,
     token: PropTypes.string,
     secret: PropTypes.string,
+    onProjectIdChange: PropTypes.func.isRequired,
     onSecretChange: PropTypes.func.isRequired,
     onTokenChange: PropTypes.func.isRequired,
     submit: PropTypes.func.isRequired,
 };
 
 export default provideLoginState(
-        injectState(({
-        state: { projectId, token, secret },
-        effects,
-    }) => (
+    injectState(({ state: { projectId, token, secret }, effects }) => (
         <Login
             projectId={projectId}
             token={token}

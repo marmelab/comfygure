@@ -1,4 +1,6 @@
-import expect, { createSpy } from 'expect';
+import 'babel-polyfill';
+import expect from 'expect';
+import { call } from 'sg.js/dist/effects';
 
 import provideLoginState, { submit } from './provideLoginState';
 
@@ -23,11 +25,29 @@ describe('provideLoginState', () => {
             .then(() => expect(getState().secret).toBe('secret'));
     });
 
-    it('should trigger setLogin and setToken with submit', async () => {
-        const setToken = createSpy().andReturn(Promise.resolve());
-        const setSecret = createSpy().andReturn(Promise.resolve());
-        await submit({ setToken, setSecret })({ token: 'token', secret: 'secret' });
-        expect(setToken).toHaveBeenCalledWith('token');
-        expect(setSecret).toHaveBeenCalledWith('secret');
+    describe('submit', () => {
+        let iterator;
+
+        beforeAll(() => {
+            iterator = submit(
+                {
+                    setPending: 'setPending',
+                    unsetPending: 'unsetPending',
+                    setEnvironments: 'setEnvironments',
+                    setToken: 'setToken',
+                    setSecret: 'setSecret',
+                    setProjectId: 'setProjectId',
+                },
+                {
+                    projectId: 'projectId',
+                    token: 'token',
+                    secret: 'secret',
+                },
+            );
+        });
+
+        it('should call effects.setPending', () => {
+            expect(iterator.next().value).toEqual(call('setPending'));
+        });
     });
 });
