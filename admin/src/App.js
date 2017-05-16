@@ -36,18 +36,6 @@ const environments = [{ name: 'development' }, { name: 'production' }, { name: '
 
 const environment = environments[0];
 
-const config = {
-    database: {
-        host: 'foo',
-        port: 5000,
-        user: 'toto',
-        password: 'oh damn',
-    },
-    api: {
-        url: 'http://api.com',
-    },
-};
-
 const tags = [{ name: 'latest' }, { name: '1.0.0' }, { name: '0.0.1' }];
 
 const tag = tags[0];
@@ -62,7 +50,7 @@ const App = ({ isLoggedIn = true }) => (
                     <Sidebar environments={environments} />
                     <div style={styles.environmentContainer}>
                         <Tags environment={environment} tags={tags} tag={tag} />
-                        <Environment environment={environment} config={config} />
+                        <Environment environment={environment} />
                     </div>
                 </div>}
         </div>
