@@ -15,12 +15,12 @@ module.exports = (client, ui) => {
         }
     };
 
-    const saveToConfig = function* (project, passphrase) {
+    const saveToConfig = function* (project, passphrase, origin = DEFAULT_ORIGIN) {
         const config = ini.stringify({
             projectId: project.id,
             accessKey: project.accessKey,
             secretToken: project.writeToken,
-            origin: DEFAULT_ORIGIN,
+            origin,
             passphrase,
         }, { section: 'project' });
 
