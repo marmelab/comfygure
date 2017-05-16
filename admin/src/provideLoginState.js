@@ -1,30 +1,38 @@
-import { provideState, softUpdate, hardUpdate } from "freactal";
+import 'babel-polyfill';
+import sg from 'sg.js';
+import { call } from 'sg.js/dist/effects';
+import { provideState, softUpdate } from 'freactal';
 import fetch from 'isomorphic-fetch';
 import handleFetchResponse from './utils/handleFetchResponse';
+import pipeAsync from './utils/pipeAsync';
 
-export const submit = (effects, { projectId, token, secret }) =>
-    effects.setPending()
-        .then(() => new Request(`http://localhost:3000/projects/${projectId}/environments`, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Token ${token}`,
-            },
-        }))
-        .then(fetch)
-        .then(handleFetchResponse)
-        .then(
-            response =>
-                effects.setEnvironments(response)
-                    .then(effects.unsetPending())
-                    .then(effects.setProjectId(projectId))
-                    .then(effects.setToken(token))
-                    .then(effects.setSecret(secret)),
-            error =>
-                effects.setError(error)
-                    .then(effects.unsetPending),
-        );
+export const getEnvironmentRequest = ({ projectId, token }) =>
+    new Request(`http://localhost:3000/projects/${projectId}/environments`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Token ${token}`,
+        },
+    });
+
+export const fetchEnvironments = (projectId, token) =>
+    pipeAsync(getEnvironmentRequest, fetch, handleFetchResponse)({ projectId, token });
+
+export function* submit(effects, { projectId, token, secret }) {
+    try {
+        yield call(effects.setPending);
+        const environments = yield call(fetchEnvironments, projectId, token);
+        yield call(effects.unsetPending);
+        yield call(effects.setEnvironments, environments);
+        yield call(effects.setProjectId, projectId);
+        yield call(effects.setToken, token);
+        yield call(effects.setSecret, secret);
+    } catch (error) {
+        yield call(effects.unsetPending);
+        yield call(effects.setError, error.message);
+    }
+}
 
 export const state = {
     initialState: () => ({
@@ -34,12 +42,12 @@ export const state = {
         pending: false,
     }),
     effects: {
-        setPending: () => state => console.log('setPending') || ({ ...state,  pending: true }),
-        unsetPending: softUpdate(state => ({ pending: false })),
+        setPending: () => state => ({ ...state, pending: true }),
+        unsetPending: softUpdate(() => ({ pending: false })),
         onTokenChange: softUpdate((state, event, token) => ({ token })),
         onSecretChange: softUpdate((state, event, secret) => ({ secret })),
         onProjectIdChange: softUpdate((state, event, projectId) => ({ projectId })),
-        submit,
+        submit: sg(submit),
     },
 };
 
