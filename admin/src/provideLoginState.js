@@ -1,7 +1,6 @@
-import { provideState, softUpdate } from "freactal";
+import { provideState, softUpdate } from 'freactal';
 
-export const submit = effects => state => effects.setToken(state.token)
-    .then(effects.setSecret(state.secret));
+export const submit = effects => state => effects.setToken(state.token).then(effects.setSecret(state.secret));
 
 export const state = {
     initialState: () => ({
