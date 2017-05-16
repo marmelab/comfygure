@@ -62,7 +62,7 @@ module.exports = (ui, modules) => function* (rawOptions) {
     ui.print('\nInitializing project configuration...');
 
     const project = yield modules.project.create(projectName, environment, options.origin);
-    yield modules.project.saveToConfig(project, passphrase);
+    yield modules.project.saveToConfig(project, passphrase, options.origin);
     const { origin } = yield modules.project.retrieveFromConfig();
     if (isGitDirectory && !options.g) {
         fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);
