@@ -9,9 +9,9 @@ const styles = {
         flexDirection: 'column',
         flexGrow: 2,
     },
-}
+};
 
-const Environment = ({ environment: { name }, config }) => (
+const Environment = ({ config }) => (
     <div style={styles.container}>
         <JsonView json={config} spaces={4} />
     </div>

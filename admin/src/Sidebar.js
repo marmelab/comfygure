@@ -30,6 +30,6 @@ Sidebar.propTypes = {
 
 Sidebar.defaultProps = {
     environments: [],
-}
+};
 
 export default Sidebar;

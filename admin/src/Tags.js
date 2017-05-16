@@ -3,7 +3,6 @@ import PropTypes from 'proptypes';
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 
 const styles = {
     environment: {
@@ -28,7 +27,7 @@ const styles = {
 class Tags extends Component {
     handleChange = (event, index, value) => {
         this.props.onTagSelected(value);
-    }
+    };
 
     render() {
         const { environment, tag: currentTag, tags } = this.props;
@@ -44,9 +43,7 @@ class Tags extends Component {
                         labelStyle={styles.tag}
                         iconStyle={styles.icon}
                     >
-                        {tags.map(tag => (
-                            <MenuItem key={tag.name} value={tag.name} primaryText={tag.name} />
-                        ))}
+                        {tags.map(tag => <MenuItem key={tag.name} value={tag.name} primaryText={tag.name} />)}
                     </DropDownMenu>
                 </ToolbarGroup>
             </Toolbar>
@@ -59,6 +56,6 @@ Tags.propTypes = {
     onTagSelected: PropTypes.func.isRequired,
     tag: PropTypes.object,
     tags: PropTypes.arrayOf(PropTypes.object),
-}
+};
 
 export default Tags;
