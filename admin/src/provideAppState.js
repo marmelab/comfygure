@@ -6,10 +6,10 @@ export const state = {
         secret: '',
     }),
     effects: {
-        onTokenChange: softUpdate((state, event, token) => ({
+        setToken: softUpdate((state, token) => ({
             token,
         })),
-        onSecretChange: softUpdate((state, event, secret) => ({
+        setSecret: softUpdate((state, secret) => ({
             secret,
         })),
     },
