@@ -1,9 +1,8 @@
 import expect from 'expect';
 
-import provideAppState from './provideAppState'
+import provideAppState from './provideAppState';
 
 describe('provideAppState', () => {
-
     it('should update token', () => {
         const { effects, getState } = new (provideAppState())(null, {});
         expect(getState().token).toBe('');

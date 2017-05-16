@@ -1,9 +1,8 @@
 import expect, { createSpy } from 'expect';
 
-import provideLoginState, { submit } from './provideLoginState'
+import provideLoginState, { submit } from './provideLoginState';
 
 describe('provideLoginState', () => {
-
     it('should update token', () => {
         const { effects, getState } = new (provideLoginState())(null, {});
         expect(getState().token).toBe('');
