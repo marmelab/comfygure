@@ -8,12 +8,25 @@ import { injectState } from 'freactal';
 
 import provideLoginState from './provideLoginState';
 
-export const Login = ({ token, secret, onSecretChange, onTokenChange, submit }) => (
+export const Login = ({ token, secret, projectId, onSecretChange, onTokenChange, onProjectIdChange, submit }) => (
     <Card>
         <CardTitle title="comfy admin" subtitle="enter your token and secret" />
         <CardText>
             <form>
-                <TextField name="token" value={token} floatingLabelText="token" fullWidth onChange={onTokenChange} />
+                <TextField
+                    name="projectId"
+                    value={projectId}
+                    floatingLabelText="project id"
+                    fullWidth
+                    onChange={onProjectIdChange}
+                />
+                <TextField
+                    name="token"
+                    value={token}
+                    floatingLabelText="token"
+                    fullWidth
+                    onChange={onTokenChange}
+                />
                 <TextField
                     name="secret"
                     value={secret}
@@ -38,13 +51,18 @@ Login.propTypes = {
 };
 
 export default provideLoginState(
-    injectState(({ state, effects }) => (
+        injectState(({
+        state: { projectId, token, secret },
+        effects,
+    }) => (
         <Login
-            token={state.token}
-            secret={state.secret}
+            projectId={projectId}
+            token={token}
+            secret={secret}
             onSecretChange={effects.onSecretChange}
             onTokenChange={effects.onTokenChange}
-            submit={effects.submit}
+            onProjectIdChange={effects.onProjectIdChange}
+            submit={() => effects.submit({ projectId, token, secret })}
         />
     )),
 );
