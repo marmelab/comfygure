@@ -3,14 +3,16 @@ import PropTypes from 'proptypes';
 import JsonView from 'react-pretty-json';
 import { injectState } from 'freactal';
 import LinearProgress from 'material-ui/LinearProgress';
+
 import provideConfigState from './provideConfigState';
+import Alert from './components/Alert';
 
 const styles = {
     container: {
-        padding: '1em',
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 2,
+        padding: '1em',
     },
 };
 
@@ -25,7 +27,7 @@ class Environment extends Component {
         return (
             <div style={styles.container}>
                 {loading && <LinearProgress mode="indeterminate" />}
-                {!loading && !config && <div>{error}</div>}
+                {error && <Alert message={error} />}
                 {!loading && config && <JsonView json={config} spaces={4} />}
             </div>
         );

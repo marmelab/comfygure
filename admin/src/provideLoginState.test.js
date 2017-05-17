@@ -27,11 +27,10 @@ describe('provideLoginState', () => {
     });
 
     describe('submit', () => {
-        it('should call fetch environments and save environments and config', () => {
+        it('submit should call fetch environments and save environments and config', () => {
             const iterator = submit(
                 {
-                    setPending: 'setPending',
-                    unsetPending: 'unsetPending',
+                    setLoading: 'setLoading',
                     setEnvironments: 'setEnvironments',
                     setConfig: 'setConfig',
                 },
@@ -42,7 +41,7 @@ describe('provideLoginState', () => {
                     secret: 'secret',
                 },
             );
-            expect(iterator.next().value).toEqual(call('setPending'));
+            expect(iterator.next().value).toEqual(call('setLoading', true));
             expect(iterator.next().value).toEqual(
                 call(fetchEnvironments, {
                     origin: 'origin',
@@ -50,7 +49,7 @@ describe('provideLoginState', () => {
                     token: 'token',
                 }),
             );
-            expect(iterator.next('environments').value).toEqual(call('unsetPending'));
+            expect(iterator.next('environments').value).toEqual(call('setLoading', false));
             expect(iterator.next().value).toEqual(
                 call('setConfig', {
                     origin: 'origin',
@@ -65,8 +64,7 @@ describe('provideLoginState', () => {
         it('should set Error if fetchEnvironments fail', () => {
             const iterator = submit(
                 {
-                    setPending: 'setPending',
-                    unsetPending: 'unsetPending',
+                    setLoading: 'setLoading',
                     setError: 'setError',
                 },
                 {
@@ -76,7 +74,7 @@ describe('provideLoginState', () => {
                     secret: 'secret',
                 },
             );
-            expect(iterator.next().value).toEqual(call('setPending'));
+            expect(iterator.next().value).toEqual(call('setLoading', true));
             expect(iterator.next().value).toEqual(
                 call(fetchEnvironments, {
                     origin: 'origin',
@@ -84,7 +82,7 @@ describe('provideLoginState', () => {
                     token: 'token',
                 }),
             );
-            expect(iterator.throw(new Error('fetch error')).value).toEqual(call('unsetPending'));
+            expect(iterator.throw({ message: 'fetch error' }).value).toEqual(call('setLoading', false));
             expect(iterator.next().value).toEqual(call('setError', 'fetch error'));
         });
 

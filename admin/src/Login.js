@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'proptypes';
 
 import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
+import LinearProgress from 'material-ui/LinearProgress';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { injectState } from 'freactal';
@@ -16,6 +17,7 @@ export const Login = ({
     projectId,
     error,
     onOriginChange,
+    loading,
     onSecretChange,
     onTokenChange,
     onProjectIdChange,
@@ -51,36 +53,42 @@ export const Login = ({
             </form>
         </CardText>
         <CardActions>
-            <RaisedButton label="Submit" primary onClick={submit} />
+            <RaisedButton primary disabled={loading} onClick={submit}>
+                <div>Submit</div>
+                {loading ? <LinearProgress /> : null}
+            </RaisedButton>
         </CardActions>
     </Card>
 );
 
 Login.propTypes = {
-    origin: PropTypes.string,
-    projectId: PropTypes.string,
-    token: PropTypes.string,
-    secret: PropTypes.string,
     error: PropTypes.string,
+    loading: PropTypes.bool,
     onOriginChange: PropTypes.func.isRequired,
     onProjectIdChange: PropTypes.func.isRequired,
     onSecretChange: PropTypes.func.isRequired,
     onTokenChange: PropTypes.func.isRequired,
+    origin: PropTypes.string,
+    projectId: PropTypes.string,
+    secret: PropTypes.string,
     submit: PropTypes.func.isRequired,
+    token: PropTypes.string,
 };
 
 export default provideLoginState(
-    injectState(({ state: { origin, projectId, token, secret }, effects }) => (
+    injectState(({ state: { error, loading, origin, projectId, secret, token }, effects }) => (
         <Login
-            origin={origin}
-            projectId={projectId}
-            token={token}
-            secret={secret}
+            error={error}
+            loading={loading}
             onOriginChange={effects.onOriginChange}
+            onProjectIdChange={effects.onProjectIdChange}
             onSecretChange={effects.onSecretChange}
             onTokenChange={effects.onTokenChange}
-            onProjectIdChange={effects.onProjectIdChange}
+            origin={origin}
+            projectId={projectId}
+            secret={secret}
             submit={() => effects.submit({ origin, projectId, token, secret })}
+            token={token}
         />
     )),
 );
