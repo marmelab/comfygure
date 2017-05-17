@@ -4,18 +4,24 @@ import call from 'sg.js/dist/effects/call';
 
 export const parseResponse = response => {
     if (response.status === 404 || response.status === 204) {
-        return { error: 'Not found' };
+        return null;
     }
     if (response.status >= 200 && response.status < 300) {
-        return { data: response.json() };
+        return response.json();
     }
 
     return response.json().then(
         json => {
-            return { error: json.error };
+            const error = new Error(json.error);
+            error.response = response;
+            error.code = response.status;
+            throw error;
         },
         () => {
-            return { error: response.statusText };
+            const error = new Error(response.statusText);
+            error.response = response;
+            error.code = response.status;
+            throw error;
         },
     );
 };
@@ -38,22 +44,31 @@ export const fetchConfig = (projectId, environmentName, configName = 'default') 
 
 export const getConfigSaga = effects =>
     function*(state) {
-        // Store a reference to the environment name here as state is mutated later (don't know why)
-        const environmentName = state.environment.name;
-        const projectId = state.projectId;
-        const configName = state.configName;
+        try {
+            // Store a reference to the environment name here as state is mutated later (don't know why)
+            const environmentName = state.environment.name;
+            const projectId = state.projectId;
+            const configName = state.configName;
 
-        yield call(effects.setLoading, true);
-        const fetchResult = yield call(fetchConfig, projectId, environmentName, configName);
-        yield call(effects.setLoading, false);
+            yield call(effects.setLoading, true);
+            const config = yield call(fetchConfig, projectId, environmentName, configName);
+            yield call(effects.setLoading, false);
 
-        const newState = yield call(effects.setFetchResult, fetchResult);
-        return newState;
+            if (config) {
+                yield call(effects.setConfig, config);
+            } else {
+                yield call(effects.setError, 'Not found');
+            }
+        } catch (error) {
+            yield call(effects.setLoading, false);
+            yield call(effects.setError, error.message);
+        }
     };
 
 export const effects = {
     setLoading: softUpdate((state, loading) => ({ loading })),
-    setFetchResult: softUpdate((state, { data, error }) => ({ config: data, error })),
+    setConfig: softUpdate((state, config) => ({ config })),
+    setError: softUpdate((state, error) => ({ error })),
     getConfig: effects => sg(getConfigSaga(effects)),
 };
 
