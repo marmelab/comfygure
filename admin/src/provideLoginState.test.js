@@ -1,6 +1,9 @@
-import expect, { createSpy } from 'expect';
+import 'babel-polyfill';
+import expect from 'expect';
+import { call } from 'sg.js/dist/effects';
 
 import provideLoginState, { submit } from './provideLoginState';
+import fetchEnvironments from './fetch/fetchEnvironments';
 
 describe('provideLoginState', () => {
     it('should update token', () => {
@@ -23,11 +26,84 @@ describe('provideLoginState', () => {
             .then(() => expect(getState().secret).toBe('secret'));
     });
 
-    it('should trigger setLogin and setToken with submit', async () => {
-        const setToken = createSpy().andReturn(Promise.resolve());
-        const setSecret = createSpy().andReturn(Promise.resolve());
-        await submit({ setToken, setSecret })({ token: 'token', secret: 'secret' });
-        expect(setToken).toHaveBeenCalledWith('token');
-        expect(setSecret).toHaveBeenCalledWith('secret');
+    describe('submit', () => {
+        it('should call fetch environments and save environments and config', () => {
+            const iterator = submit(
+                {
+                    setPending: 'setPending',
+                    unsetPending: 'unsetPending',
+                    setEnvironments: 'setEnvironments',
+                    setConfig: 'setConfig',
+                },
+                {
+                    projectId: 'projectId',
+                    token: 'token',
+                    secret: 'secret',
+                },
+            );
+            expect(iterator.next().value).toEqual(call('setPending'));
+            expect(iterator.next().value).toEqual(
+                call(fetchEnvironments, {
+                    projectId: 'projectId',
+                    token: 'token',
+                }),
+            );
+            expect(iterator.next('environments').value).toEqual(call('unsetPending'));
+            expect(iterator.next().value).toEqual(
+                call('setConfig', {
+                    projectId: 'projectId',
+                    token: 'token',
+                    secret: 'secret',
+                }),
+            );
+            expect(iterator.next('').value).toEqual(call('setEnvironments', 'environments'));
+        });
+
+        it('should set Error if fetchEnvironments fail', () => {
+            const iterator = submit(
+                {
+                    setPending: 'setPending',
+                    unsetPending: 'unsetPending',
+                    setError: 'setError',
+                },
+                {
+                    projectId: 'projectId',
+                    token: 'token',
+                    secret: 'secret',
+                },
+            );
+            expect(iterator.next().value).toEqual(call('setPending'));
+            expect(iterator.next().value).toEqual(
+                call(fetchEnvironments, {
+                    projectId: 'projectId',
+                    token: 'token',
+                }),
+            );
+            expect(iterator.throw(new Error('fetch error')).value).toEqual(call('unsetPending'));
+            expect(iterator.next().value).toEqual(call('setError', 'fetch error'));
+        });
+
+        it('should default environments to [] if fetchEnvironments return null', () => {
+            const iterator = submit(
+                {
+                    setEnvironments: 'setEnvironments',
+                },
+                {
+                    projectId: 'projectId',
+                    token: 'token',
+                },
+            );
+            iterator.next();
+            expect(iterator.next().value).toEqual(
+                call(fetchEnvironments, {
+                    projectId: 'projectId',
+                    token: 'token',
+                }),
+            );
+
+            iterator.next(null);
+            iterator.next();
+            expect(iterator.next().value).toEqual(call('setEnvironments', []));
+        });
     });
 });

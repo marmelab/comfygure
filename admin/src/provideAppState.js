@@ -2,15 +2,19 @@ import { provideState, softUpdate } from 'freactal';
 
 export const state = {
     initialState: () => ({
+        projectId: '',
         token: '',
         secret: '',
+        environments: null,
     }),
     effects: {
-        setToken: softUpdate((state, token) => ({
+        setConfig: softUpdate((state, { projectId, token, secret }) => ({
+            projectId,
             token,
-        })),
-        setSecret: softUpdate((state, secret) => ({
             secret,
+        })),
+        setEnvironments: softUpdate((state, environments) => ({
+            environments,
         })),
     },
 };
