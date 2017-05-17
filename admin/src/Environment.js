@@ -1,25 +1,57 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'proptypes';
 import JsonView from 'react-pretty-json';
+import { injectState } from 'freactal';
+import LinearProgress from 'material-ui/LinearProgress';
+
+import provideConfigState from './provideConfigState';
+import Alert from './components/Alert';
 
 const styles = {
     container: {
-        padding: '1em',
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 2,
+        padding: '1em',
     },
 };
 
-const Environment = ({ config }) => (
-    <div style={styles.container}>
-        <JsonView json={config} spaces={4} />
-    </div>
-);
+class Environment extends Component {
+    componentWillMount() {
+        this.props.getConfig();
+    }
+
+    render() {
+        const { config, error, loading } = this.props;
+
+        return (
+            <div style={styles.container}>
+                {loading && <LinearProgress mode="indeterminate" />}
+                {error && <Alert message={error} />}
+                {!loading && config && <JsonView json={config} spaces={4} />}
+            </div>
+        );
+    }
+}
 
 Environment.propTypes = {
     config: PropTypes.object,
-    environment: PropTypes.object,
+    error: PropTypes.string,
+    getConfig: PropTypes.func.isRequired,
+    loading: PropTypes.bool,
 };
 
-export default Environment;
+Environment.defaultProps = {
+    loading: false,
+};
+
+export default provideConfigState(
+    injectState(({ state: { config, error, loading, environment, token, projectId }, effects: { getConfig } }) => (
+        <Environment
+            config={config}
+            error={error}
+            loading={loading}
+            getConfig={() => getConfig({ environmentName: environment.name, token, projectId })}
+        />
+    )),
+);
