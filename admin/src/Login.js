@@ -5,13 +5,31 @@ import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { injectState } from 'freactal';
+import { red400 } from 'material-ui/styles/colors';
 
 import provideLoginState from './provideLoginState';
 
-export const Login = ({ token, secret, projectId, onSecretChange, onTokenChange, onProjectIdChange, submit }) => (
+const styles = {
+    alert: {
+        display: 'inline-block',
+        color: red400,
+    },
+};
+
+export const Login = ({
+    token,
+    secret,
+    projectId,
+    error,
+    onSecretChange,
+    onTokenChange,
+    onProjectIdChange,
+    submit,
+}) => (
     <Card>
         <CardTitle title="comfy admin" subtitle="enter your token and secret" />
         <CardText>
+            <div style={styles.alert}>{error}</div>
             <form>
                 <TextField
                     name="projectId"
@@ -40,6 +58,7 @@ Login.propTypes = {
     projectId: PropTypes.string,
     token: PropTypes.string,
     secret: PropTypes.string,
+    error: PropTypes.string,
     onProjectIdChange: PropTypes.func.isRequired,
     onSecretChange: PropTypes.func.isRequired,
     onTokenChange: PropTypes.func.isRequired,
