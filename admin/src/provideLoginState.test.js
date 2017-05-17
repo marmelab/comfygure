@@ -36,6 +36,7 @@ describe('provideLoginState', () => {
                     setConfig: 'setConfig',
                 },
                 {
+                    origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
                     secret: 'secret',
@@ -44,6 +45,7 @@ describe('provideLoginState', () => {
             expect(iterator.next().value).toEqual(call('setPending'));
             expect(iterator.next().value).toEqual(
                 call(fetchEnvironments, {
+                    origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
                 }),
@@ -51,6 +53,7 @@ describe('provideLoginState', () => {
             expect(iterator.next('environments').value).toEqual(call('unsetPending'));
             expect(iterator.next().value).toEqual(
                 call('setConfig', {
+                    origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
                     secret: 'secret',
@@ -67,6 +70,7 @@ describe('provideLoginState', () => {
                     setError: 'setError',
                 },
                 {
+                    origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
                     secret: 'secret',
@@ -75,6 +79,7 @@ describe('provideLoginState', () => {
             expect(iterator.next().value).toEqual(call('setPending'));
             expect(iterator.next().value).toEqual(
                 call(fetchEnvironments, {
+                    origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
                 }),
@@ -89,6 +94,7 @@ describe('provideLoginState', () => {
                     setEnvironments: 'setEnvironments',
                 },
                 {
+                    origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
                 },
@@ -96,6 +102,7 @@ describe('provideLoginState', () => {
             iterator.next();
             expect(iterator.next().value).toEqual(
                 call(fetchEnvironments, {
+                    origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
                 }),
