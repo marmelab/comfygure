@@ -4,7 +4,7 @@ import { call } from 'sg.js/dist/effects';
 import { provideState, softUpdate } from 'freactal';
 
 import fetchEnvironments from './fetch/fetchEnvironments';
-import { DEFAULT_ORIGIN } from '../../cli/src/domain/constants';
+import { DEFAULT_ORIGIN } from './constants';
 export function* submit(effects, { origin, projectId, token, secret }) {
     try {
         yield call(effects.setPending);
