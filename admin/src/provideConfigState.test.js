@@ -5,16 +5,21 @@ import call from 'sg.js/dist/effects/call';
 import fetchConfig from './fetch/fetchConfig';
 import { getConfigSaga } from './provideConfigState';
 
+const args = {
+    projectId: 'foo',
+    configName: 'default',
+    environmentName: 'development',
+};
+
 const getSaga = () =>
-    getConfigSaga({
-        setLoading: 'setLoading',
-        setError: 'setError',
-        setConfig: 'setConfig',
-    })({
-        projectId: 'foo',
-        configName: 'default',
-        environment: { name: 'development' },
-    });
+    getConfigSaga(
+        {
+            setLoading: 'setLoading',
+            setError: 'setError',
+            setConfig: 'setConfig',
+        },
+        args,
+    );
 
 describe('getConfigSaga', () => {
     describe('successfully fetched config', () => {
@@ -27,7 +32,7 @@ describe('getConfigSaga', () => {
 
         it('fetches the config', () => {
             const effect = saga.next().value;
-            expect(effect).toEqual(call(fetchConfig, 'foo', 'development', 'default'));
+            expect(effect).toEqual(call(fetchConfig, args));
         });
 
         it('sets the loading state to false', () => {
@@ -51,7 +56,7 @@ describe('getConfigSaga', () => {
 
         it('fetches the config', () => {
             const effect = saga.next().value;
-            expect(effect).toEqual(call(fetchConfig, 'foo', 'development', 'default'));
+            expect(effect).toEqual(call(fetchConfig, args));
         });
 
         it('sets the loading state to false', () => {

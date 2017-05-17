@@ -30,7 +30,7 @@ export const state = {
     effects: {
         ...fetchState.effects,
         setConfig: softUpdate((state, config) => ({ config })),
-        getConfig: wrapWithLoading(wrapWithErrorHandling((effects, args) => sg(getConfigSaga)(effects, args))),
+        getConfig: wrapWithErrorHandling(wrapWithLoading((effects, args) => sg(getConfigSaga)(effects, args))),
     },
 };
 
