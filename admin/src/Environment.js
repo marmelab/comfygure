@@ -36,7 +36,11 @@ Environment.propTypes = {
     config: PropTypes.object,
     error: PropTypes.string,
     getConfig: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool,
+};
+
+Environment.defaultProps = {
+    loading: false,
 };
 
 export default provideConfigState(

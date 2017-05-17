@@ -61,4 +61,4 @@ App.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
 };
 
-export default provideAppState(injectState(({ state: { token, secret } }) => <App isLoggedIn={token && secret} />));
+export default provideAppState(injectState(({ state: { token, secret } }) => <App isLoggedIn={!!token && !!secret} />));
