@@ -10,10 +10,12 @@ import provideLoginState from './provideLoginState';
 import Alert from './components/Alert';
 
 export const Login = ({
+    origin,
     token,
     secret,
     projectId,
     error,
+    onOriginChange,
     onSecretChange,
     onTokenChange,
     onProjectIdChange,
@@ -24,6 +26,13 @@ export const Login = ({
         <CardText>
             <Alert message={error} />
             <form>
+                <TextField
+                    name="origin"
+                    value={origin}
+                    floatingLabelText="origin"
+                    fullWidth
+                    onChange={onOriginChange}
+                />
                 <TextField
                     name="projectId"
                     value={projectId}
@@ -48,10 +57,12 @@ export const Login = ({
 );
 
 Login.propTypes = {
+    origin: PropTypes.string,
     projectId: PropTypes.string,
     token: PropTypes.string,
     secret: PropTypes.string,
     error: PropTypes.string,
+    onOriginChange: PropTypes.func.isRequired,
     onProjectIdChange: PropTypes.func.isRequired,
     onSecretChange: PropTypes.func.isRequired,
     onTokenChange: PropTypes.func.isRequired,
@@ -59,15 +70,17 @@ Login.propTypes = {
 };
 
 export default provideLoginState(
-    injectState(({ state: { projectId, token, secret }, effects }) => (
+    injectState(({ state: { origin, projectId, token, secret }, effects }) => (
         <Login
+            origin={origin}
             projectId={projectId}
             token={token}
             secret={secret}
+            onOriginChange={effects.onOriginChange}
             onSecretChange={effects.onSecretChange}
             onTokenChange={effects.onTokenChange}
             onProjectIdChange={effects.onProjectIdChange}
-            submit={() => effects.submit({ projectId, token, secret })}
+            submit={() => effects.submit({ origin, projectId, token, secret })}
         />
     )),
 );
