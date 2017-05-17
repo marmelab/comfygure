@@ -1,4 +1,4 @@
-export default response => {
+export default async response => {
     if (response.status === 204) {
         return null;
     }
