@@ -82,5 +82,28 @@ describe('provideLoginState', () => {
             expect(iterator.throw(new Error('fetch error')).value).toEqual(call('unsetPending'));
             expect(iterator.next().value).toEqual(call('setError', 'fetch error'));
         });
+
+        it('should default environments to [] if fetchEnvironments return null', () => {
+            const iterator = submit(
+                {
+                    setEnvironments: 'setEnvironments',
+                },
+                {
+                    projectId: 'projectId',
+                    token: 'token',
+                },
+            );
+            iterator.next();
+            expect(iterator.next().value).toEqual(
+                call(fetchEnvironments, {
+                    projectId: 'projectId',
+                    token: 'token',
+                }),
+            );
+
+            iterator.next(null);
+            iterator.next();
+            expect(iterator.next().value).toEqual(call('setEnvironments', []));
+        });
     });
 });

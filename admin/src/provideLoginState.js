@@ -8,7 +8,7 @@ import fetchEnvironments from './fetch/fetchEnvironments';
 export function* submit(effects, { projectId, token, secret }) {
     try {
         yield call(effects.setPending);
-        const environments = yield call(fetchEnvironments, { projectId, token });
+        const environments = (yield call(fetchEnvironments, { projectId, token })) || [];
         yield call(effects.unsetPending);
         yield call(effects.setConfig, {
             projectId,
