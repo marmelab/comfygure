@@ -1,7 +1,7 @@
 import { Request } from './fetch';
 import fetchRequest from './fetchRequest';
 
-export const getEnvironmentRequest = ({ projectId, environmentName, configName = 'default', token } = {}) => {
+export const getConfigRequest = ({ projectId, environmentName, configName = 'default', token } = {}) => {
     if (typeof projectId !== 'string') {
         throw new Error(`Invalid projectId: expected a string but got: ${JSON.stringify(projectId)}`);
     }
@@ -31,4 +31,4 @@ export const getEnvironmentRequest = ({ projectId, environmentName, configName =
     );
 };
 
-export default fetchRequest(getEnvironmentRequest);
+export default fetchRequest(getConfigRequest);

@@ -19,7 +19,7 @@ describe('handleFetchResponse', () => {
     it('should reject to response.json() if response.status is 500', async () => {
         const response = {
             status: 500,
-            json: () => Promise.resolve({ error: 'error message' }),
+            json: () => Promise.resolve({ message: 'error message' }),
         };
 
         const error = await handleFetchResponse(response).catch(e => e);

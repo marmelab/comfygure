@@ -61,31 +61,6 @@ describe('provideLoginState', () => {
             expect(iterator.next('').value).toEqual(call('setEnvironments', 'environments'));
         });
 
-        it('should set Error if fetchEnvironments fail', () => {
-            const iterator = submit(
-                {
-                    setLoading: 'setLoading',
-                    setError: 'setError',
-                },
-                {
-                    origin: 'origin',
-                    projectId: 'projectId',
-                    token: 'token',
-                    secret: 'secret',
-                },
-            );
-            expect(iterator.next().value).toEqual(call('setLoading', true));
-            expect(iterator.next().value).toEqual(
-                call(fetchEnvironments, {
-                    origin: 'origin',
-                    projectId: 'projectId',
-                    token: 'token',
-                }),
-            );
-            expect(iterator.throw({ message: 'fetch error' }).value).toEqual(call('setLoading', false));
-            expect(iterator.next().value).toEqual(call('setError', 'fetch error'));
-        });
-
         it('should default environments to [] if fetchEnvironments return null', () => {
             const iterator = submit(
                 {

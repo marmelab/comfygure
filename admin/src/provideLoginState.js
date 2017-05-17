@@ -36,7 +36,7 @@ export const state = {
         onProjectIdChange: softUpdate((state, event, projectId) => ({ projectId })),
         onSecretChange: softUpdate((state, event, secret) => ({ secret })),
         onTokenChange: softUpdate((state, event, token) => ({ token })),
-        submit: wrapWithLoading(wrapWithErrorHandling((effects, args) => sg(submit)(effects, args))),
+        submit: wrapWithErrorHandling(wrapWithLoading((effects, args) => sg(submit)(effects, args))),
     },
 };
 
