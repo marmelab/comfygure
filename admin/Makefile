@@ -1,3 +1,5 @@
+.PHONY: build test
+
 install:
 	npm install
 
