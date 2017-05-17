@@ -28,8 +28,5 @@
         "import/no-extraneous-dependencies": "off",
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-unused-vars": ["error", { "ignoreRestSiblings": true }]
-    },
-    "globals": {
-        "beforeAll": true,
     }
 }
