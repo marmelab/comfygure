@@ -1,11 +1,6 @@
 export default cb => (effects, ...args) => {
     try {
-        const result = cb(effects, ...args);
-        if (result.then) {
-            return result.catch(error => effects.setError(error.message));
-        }
-
-        return result;
+        return Promise.resolve(cb(effects, ...args)).catch(error => effects.setError(error.message));
     } catch (error) {
         return effects.setError(error.message);
     }
