@@ -8,6 +8,7 @@
     "fetch-ponyfill": "4.0.0",
     "freactal": "1.0.0",
     "http-server": "0.10.0",
+    "lodash.merge": "^4.6.0",
     "material-ui": "0.18.1",
     "proptypes": "1.0.0",
     "react": "15.5.4",
@@ -36,7 +37,7 @@
   },
   "scripts": {
     "prepublish": "make build",
-    "start": "react-scripts start",
+    "start": "PORT=8080 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

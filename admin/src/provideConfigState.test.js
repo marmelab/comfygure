@@ -1,12 +1,16 @@
-import 'babel-core/register';
 import 'babel-polyfill';
-
 import expect from 'expect';
 import call from 'sg.js/dist/effects/call';
-import { getConfigSaga, effects, fetchConfig } from './provideConfigState';
+
+import fetchConfig from './fetch/fetchConfig';
+import { getConfigSaga } from './provideConfigState';
 
 const getSaga = () =>
-    getConfigSaga(effects)({
+    getConfigSaga({
+        setLoading: 'setLoading',
+        setError: 'setError',
+        setConfig: 'setConfig',
+    })({
         projectId: 'foo',
         configName: 'default',
         environment: { name: 'development' },
@@ -18,7 +22,7 @@ describe('getConfigSaga', () => {
 
         it('sets the loading state to true', () => {
             const effect = saga.next().value;
-            expect(effect).toEqual(call(effects.setLoading, true));
+            expect(effect).toEqual(call('setLoading', true));
         });
 
         it('fetches the config', () => {
@@ -28,12 +32,12 @@ describe('getConfigSaga', () => {
 
         it('sets the loading state to false', () => {
             const effect = saga.next('result').value;
-            expect(effect).toEqual(call(effects.setLoading, false));
+            expect(effect).toEqual(call('setLoading', false));
         });
 
         it('sets the config state to the fetched config', () => {
             const effect = saga.next().value;
-            expect(effect).toEqual(call(effects.setConfig, 'result'));
+            expect(effect).toEqual(call('setConfig', 'result'));
         });
     });
 
@@ -42,7 +46,7 @@ describe('getConfigSaga', () => {
 
         it('sets the loading state to true', () => {
             const effect = saga.next().value;
-            expect(effect).toEqual(call(effects.setLoading, true));
+            expect(effect).toEqual(call('setLoading', true));
         });
 
         it('fetches the config', () => {
@@ -52,31 +56,12 @@ describe('getConfigSaga', () => {
 
         it('sets the loading state to false', () => {
             const effect = saga.next(null).value;
-            expect(effect).toEqual(call(effects.setLoading, false));
+            expect(effect).toEqual(call('setLoading', false));
         });
 
         it('sets the error state if the fetched config is null', () => {
             const effect = saga.next().value;
-            expect(effect).toEqual(call(effects.setError, 'Not found'));
-        });
-    });
-
-    describe('could not fetch config with error', () => {
-        const saga = getSaga();
-
-        it('sets the loading state to true', () => {
-            const effect = saga.next().value;
-            expect(effect).toEqual(call(effects.setLoading, true));
-        });
-
-        it('sets the loading state to false if an error is thrown', () => {
-            const effect = saga.throw({ message: 'Run you fools!' }).value;
-            expect(effect).toEqual(call(effects.setLoading, false));
-        });
-
-        it('sets the error state if an error is thrown', () => {
-            const effect = saga.next().value;
-            expect(effect).toEqual(call(effects.setError, 'Run you fools!'));
+            expect(effect).toEqual(call('setError', 'Not found'));
         });
     });
 });
