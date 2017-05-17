@@ -3,23 +3,18 @@ import expect from 'expect';
 import provideAppState from './provideAppState';
 
 describe('provideAppState', () => {
-    it('should update token', () => {
-        const { effects, getState } = new (provideAppState())(null, {});
-        expect(getState().token).toBe('');
-        expect(getState().secret).toBe('');
+    describe('setConfig', () => {
+        it('should update token, secret and projectId', () => {
+            const { effects, getState } = new (provideAppState())(null, {});
+            expect(getState().token).toBe('');
+            expect(getState().secret).toBe('');
+            expect(getState().projectId).toBe('');
 
-        return Promise.resolve()
-            .then(() => effects.setToken('token'))
-            .then(() => expect(getState().token).toBe('token'));
-    });
-
-    it('should update secret', () => {
-        const { effects, getState } = new (provideAppState())(null, {});
-        expect(getState().token).toBe('');
-        expect(getState().secret).toBe('');
-
-        return Promise.resolve()
-            .then(() => effects.setSecret('secret'))
-            .then(() => expect(getState().secret).toBe('secret'));
+            return Promise.resolve()
+                .then(() => effects.setConfig({ token: 'token', projectId: 'projectId', secret: 'secret' }))
+                .then(() => expect(getState().token).toBe('token'))
+                .then(() => expect(getState().secret).toBe('secret'))
+                .then(() => expect(getState().projectId).toBe('projectId'));
+        });
     });
 });

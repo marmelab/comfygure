@@ -3,6 +3,7 @@ import expect from 'expect';
 import { call } from 'sg.js/dist/effects';
 
 import provideLoginState, { submit } from './provideLoginState';
+import fetchEnvironments from './fetch/fetchEnvironments';
 
 describe('provideLoginState', () => {
     it('should update token', () => {
@@ -26,17 +27,13 @@ describe('provideLoginState', () => {
     });
 
     describe('submit', () => {
-        let iterator;
-
-        beforeAll(() => {
-            iterator = submit(
+        it('should call fetch environments and save environments and config', () => {
+            const iterator = submit(
                 {
                     setPending: 'setPending',
                     unsetPending: 'unsetPending',
                     setEnvironments: 'setEnvironments',
-                    setToken: 'setToken',
-                    setSecret: 'setSecret',
-                    setProjectId: 'setProjectId',
+                    setConfig: 'setConfig',
                 },
                 {
                     projectId: 'projectId',
@@ -44,10 +41,46 @@ describe('provideLoginState', () => {
                     secret: 'secret',
                 },
             );
+            expect(iterator.next().value).toEqual(call('setPending'));
+            expect(iterator.next().value).toEqual(
+                call(fetchEnvironments, {
+                    projectId: 'projectId',
+                    token: 'token',
+                }),
+            );
+            expect(iterator.next('environments').value).toEqual(call('unsetPending'));
+            expect(iterator.next().value).toEqual(
+                call('setConfig', {
+                    projectId: 'projectId',
+                    token: 'token',
+                    secret: 'secret',
+                }),
+            );
+            expect(iterator.next('').value).toEqual(call('setEnvironments', 'environments'));
         });
 
-        it('should call effects.setPending', () => {
+        it('should set Error if fetchEnvironments fail', () => {
+            const iterator = submit(
+                {
+                    setPending: 'setPending',
+                    unsetPending: 'unsetPending',
+                    setError: 'setError',
+                },
+                {
+                    projectId: 'projectId',
+                    token: 'token',
+                    secret: 'secret',
+                },
+            );
             expect(iterator.next().value).toEqual(call('setPending'));
+            expect(iterator.next().value).toEqual(
+                call(fetchEnvironments, {
+                    projectId: 'projectId',
+                    token: 'token',
+                }),
+            );
+            expect(iterator.throw(new Error('fetch error')).value).toEqual(call('unsetPending'));
+            expect(iterator.next().value).toEqual(call('setError', 'fetch error'));
         });
     });
 });
