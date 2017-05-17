@@ -9,7 +9,6 @@ import provideAppState from './provideAppState';
 import Environment from './Environment';
 import Login from './Login';
 import Sidebar from './Sidebar';
-import Tags from './Tags';
 
 const styles = {
     root: {
@@ -32,15 +31,7 @@ const styles = {
     },
 };
 
-const environments = [{ name: 'development' }, { name: 'production' }, { name: 'staging' }];
-
-const environment = environments[0];
-
-const tags = [{ name: 'latest' }, { name: '1.0.0' }, { name: '0.0.1' }];
-
-const tag = tags[0];
-
-const App = ({ isLoggedIn = true }) => (
+const App = ({ environment = { name: 'development' }, environments = [], isLoggedIn = true }) => (
     <MuiThemeProvider>
         <div style={styles.root}>
             <AppBar title="Comfy" />
@@ -49,7 +40,6 @@ const App = ({ isLoggedIn = true }) => (
                 <div style={styles.container}>
                     <Sidebar environments={environments} />
                     <div style={styles.environmentContainer}>
-                        <Tags environment={environment} tags={tags} tag={tag} />
                         <Environment environment={environment} />
                     </div>
                 </div>}
@@ -58,7 +48,13 @@ const App = ({ isLoggedIn = true }) => (
 );
 
 App.propTypes = {
+    environments: PropTypes.arrayOf(PropTypes.object),
+    environment: PropTypes.object,
     isLoggedIn: PropTypes.bool.isRequired,
 };
 
-export default provideAppState(injectState(({ state: { token, secret } }) => <App isLoggedIn={!!token && !!secret} />));
+export default provideAppState(
+    injectState(({ state: { token, secret, environments } }) => (
+        <App environments={environments} isLoggedIn={!!token && !!secret} />
+    )),
+);

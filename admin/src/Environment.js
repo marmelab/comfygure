@@ -46,7 +46,12 @@ Environment.defaultProps = {
 };
 
 export default provideConfigState(
-    injectState(({ state: { config, error, loading }, effects: { getConfig } }) => (
-        <Environment config={config} error={error} loading={loading} getConfig={getConfig} />
+    injectState(({ state: { config, error, loading, environment, token, projectId }, effects: { getConfig } }) => (
+        <Environment
+            config={config}
+            error={error}
+            loading={loading}
+            getConfig={() => getConfig({ environmentName: environment.name, token, projectId })}
+        />
     )),
 );

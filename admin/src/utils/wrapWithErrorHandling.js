@@ -1,1 +1,3 @@
-export default cb => (effects, ...args) => cb(effects, ...args).catch(error => effects.setError(error.message));
+export default cb => (effects, ...args) => {
+    return cb(effects, ...args).then(value => value, error => effects.setError(error.message));
+};

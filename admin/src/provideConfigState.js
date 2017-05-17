@@ -3,25 +3,21 @@ import sg from 'sg.js';
 import call from 'sg.js/dist/effects/call';
 
 import fetchState from './fetch/state';
+import wrapWithLoading from './utils/wrapWithLoading';
+import wrapWithErrorHandling from './utils/wrapWithErrorHandling';
 import fetchConfig from './fetch/fetchConfig';
 
-export const getConfigSaga = effects =>
-    function*(state) {
-        // Store a reference to the environment name here as state is mutated later (don't know why)
-        const environmentName = state.environment.name;
-        const projectId = state.projectId;
-        const configName = state.configName;
+export const getConfigSaga = function*(effects, args) {
+    yield call(effects.setLoading, true);
+    const config = yield call(fetchConfig, args);
+    yield call(effects.setLoading, false);
 
-        yield call(effects.setLoading, true);
-        const config = yield call(fetchConfig, projectId, environmentName, configName);
-        yield call(effects.setLoading, false);
-
-        if (config) {
-            yield call(effects.setConfig, config);
-        } else {
-            yield call(effects.setError, 'Not found');
-        }
-    };
+    if (config) {
+        yield call(effects.setConfig, config);
+    } else {
+        yield call(effects.setError, 'Not found');
+    }
+};
 
 export const state = {
     initialState: ({ environment }) => ({
@@ -34,7 +30,7 @@ export const state = {
     effects: {
         ...fetchState.effects,
         setConfig: softUpdate((state, config) => ({ config })),
-        getConfig: effects => sg(getConfigSaga(effects)),
+        getConfig: wrapWithLoading(wrapWithErrorHandling((effects, args) => sg(getConfigSaga)(effects, args))),
     },
 };
 

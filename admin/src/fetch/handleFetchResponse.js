@@ -8,7 +8,7 @@ export default async response => {
 
     return response.json().then(
         json => {
-            const error = new Error(json.error);
+            const error = new Error(json.message);
             error.response = response;
             error.code = response.status;
             throw error;
