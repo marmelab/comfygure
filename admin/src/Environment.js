@@ -127,7 +127,7 @@ Environment.defaultProps = {
 export default provideConfigState(
     injectState(
         ({
-            state: { config, edition, environmentName, error, loading, newConfig, projectId, secret, token },
+            state: { config, edition, environmentName, error, loading, newConfig, origin, projectId, secret, token },
             effects: { getConfig, saveConfig, setNewConfig, toggleEdition },
         }) => (
             <Environment
@@ -135,10 +135,10 @@ export default provideConfigState(
                 edition={edition}
                 environmentName={environmentName}
                 error={error}
-                getConfig={environmentName => getConfig({ environmentName, projectId, secret, token })}
+                getConfig={environmentName => getConfig({ environmentName, origin, projectId, secret, token })}
                 loading={loading}
                 newConfig={newConfig}
-                saveConfig={config => saveConfig({ config, environmentName, projectId, secret, token })}
+                saveConfig={config => saveConfig({ config, environmentName, origin, projectId, secret, token })}
                 setNewConfig={setNewConfig}
                 toggleEdition={toggleEdition}
             />

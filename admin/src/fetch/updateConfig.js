@@ -1,7 +1,9 @@
 import { Request } from './fetch';
 import fetchRequest from './fetchRequest';
 
-export const updateConfigRequest = ({ config, configName = 'default', environmentName, projectId, token } = {}) => {
+export const updateConfigRequest = (
+    { config, configName = 'default', tagName = 'stable', environmentName, origin, projectId, token } = {},
+) => {
     if (typeof projectId !== 'string') {
         throw new Error(`Invalid projectId: expected a string but got: ${JSON.stringify(projectId)}`);
     }
@@ -19,9 +21,9 @@ export const updateConfigRequest = ({ config, configName = 'default', environmen
     }
 
     return new Request(
-        `http://localhost:3000/projects/${projectId}/environments/${environmentName}/configurations/${configName}`,
+        `${origin}/projects/${projectId}/environments/${environmentName}/configurations/${configName}/${tagName}`,
         {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',

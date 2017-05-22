@@ -8,6 +8,7 @@ import wrapWithErrorHandling from './utils/wrapWithErrorHandling';
 import fetchConfig from './fetch/fetchConfig';
 import updateConfig from './fetch/updateConfig';
 import { decrypt, encrypt } from './utils/crypto';
+import toFlat from './utils/toFlat';
 
 // `null` and `undefined` are the only types that we cannot stringify
 const isNullValue = value => value === null || value === undefined;
@@ -54,7 +55,8 @@ export const getConfigSaga = function*(effects, { secret, ...args }) {
 
 export const updateConfigSaga = function*(effects, { secret, config, ...args }) {
     yield call(effects.setLoading, true);
-    const encryptedConfig = yield call(encryptConfig, config, secret);
+    const flatConfig = yield call(toFlat, config);
+    const encryptedConfig = yield call(encryptConfig, flatConfig, secret);
     yield call(updateConfig, { ...args, config: encryptedConfig });
     yield call(effects.setLoading, false);
 };

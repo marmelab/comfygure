@@ -12,6 +12,7 @@
     "freactal": "1.0.0",
     "http-server": "0.10.0",
     "ini": "1.3.4",
+    "lodash.get": "^4.4.2",
     "lodash.merge": "4.6.0",
     "material-ui": "0.18.1",
     "proptypes": "1.0.0",

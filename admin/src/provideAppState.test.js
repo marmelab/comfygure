@@ -9,7 +9,7 @@ describe('provideAppState', () => {
         };
 
         it('should update token, secret and projectId', () => {
-            const { effects, getState } = new (provideAppState())(null, {});
+            const { effects, getState } = new (provideAppState())({}, {});
             expect(getState().origin).toBe('');
             expect(getState().token).toBe('');
             expect(getState().secret).toBe('');

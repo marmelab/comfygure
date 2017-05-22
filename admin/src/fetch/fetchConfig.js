@@ -1,7 +1,7 @@
 import { Request } from './fetch';
 import fetchRequest from './fetchRequest';
 
-export const getConfigRequest = ({ projectId, environmentName, configName = 'default', token } = {}) => {
+export const getConfigRequest = ({ origin, projectId, environmentName, configName = 'default', token } = {}) => {
     if (typeof projectId !== 'string') {
         throw new Error(`Invalid projectId: expected a string but got: ${JSON.stringify(projectId)}`);
     }
@@ -18,17 +18,14 @@ export const getConfigRequest = ({ projectId, environmentName, configName = 'def
         throw new Error(`Invalid configName: expected a string but got: ${JSON.stringify(configName)}`);
     }
 
-    return new Request(
-        `http://localhost:3000/projects/${projectId}/environments/${environmentName}/configurations/${configName}`,
-        {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: `Token ${token}`,
-            },
+    return new Request(`${origin}/projects/${projectId}/environments/${environmentName}/configurations/${configName}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Token ${token}`,
         },
-    );
+    });
 };
 
 export default fetchRequest(getConfigRequest);
