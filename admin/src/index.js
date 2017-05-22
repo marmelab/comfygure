@@ -7,5 +7,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import App from './App';
 
 injectTapEventPlugin();
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <App projectId={config.projectId} token={config.token} secret={config.secret} />,
+    document.getElementById('root'),
+);

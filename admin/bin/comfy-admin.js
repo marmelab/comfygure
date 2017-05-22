@@ -1,21 +1,25 @@
 #!/usr/bin/env node
 
-const HttpServer = require('http-server');
-const path = require('path');
 const minimist = require('minimist');
-
-const server = HttpServer.createServer({ root: path.resolve(__dirname, '../build') });
+const webpack = require('webpack');
+const webpackDevServer = require('webpack-dev-server');
+const webpackConfig = require('../config/webpack.config.cmd');
 
 const options = minimist(process.argv.slice(2));
 const port = options.p || 3000;
 
-server.listen(port, (error) => {
+let compiler = webpack(webpackConfig);
+let webpackServer = new webpackDevServer(compiler, {
+    clientLogLevel: 'error',
+    quiet: true,
+});
+
+webpackServer.listen(port, error => {
     if (error) {
         console.error(error.message);
         process.exit(1);
     }
-    console.log(`
+    global.console.log(`
     launching admin on http://localhost:${port}
-    press Ctrl+C to end`
-    );
+    press Ctrl+C to end`);
 });

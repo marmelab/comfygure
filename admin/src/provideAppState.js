@@ -1,11 +1,11 @@
 import { provideState, softUpdate } from 'freactal';
 
 export const state = {
-    initialState: () => ({
-        origin: '',
-        projectId: '',
-        token: '',
-        secret: '',
+    initialState: ({ origin = '', projectId = '', secret = '', token = '' }) => ({
+        origin,
+        projectId,
+        token,
+        secret,
         environments: undefined,
         environmentName: 'development',
     }),
