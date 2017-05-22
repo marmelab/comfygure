@@ -8,7 +8,7 @@ import AppBar from 'material-ui/AppBar';
 import provideAppState from './provideAppState';
 import Environment from './Environment';
 import Login from './Login';
-import Sidebar from './Sidebar';
+import Sidebar from './components/Sidebar';
 
 const styles = {
     root: {
@@ -31,14 +31,18 @@ const styles = {
     },
 };
 
-const App = ({ environments = [], isLoggedIn = true, setEnvironment }) => (
+export const App = ({ environmentName, environments = [], isLoggedIn = true, setEnvironment }) => (
     <MuiThemeProvider>
         <div style={styles.root}>
             <AppBar title="Comfy" />
             {!isLoggedIn && <Login />}
             {isLoggedIn &&
                 <div style={styles.container}>
-                    <Sidebar environments={environments} onEnvironmentSelected={setEnvironment} />
+                    <Sidebar
+                        activeEnvironment={environmentName}
+                        environments={environments}
+                        onEnvironmentSelected={setEnvironment}
+                    />
                     <div style={styles.environmentContainer}>
                         <Environment />
                     </div>
@@ -48,13 +52,19 @@ const App = ({ environments = [], isLoggedIn = true, setEnvironment }) => (
 );
 
 App.propTypes = {
+    environmentName: PropTypes.string,
     environments: PropTypes.arrayOf(PropTypes.object),
     isLoggedIn: PropTypes.bool.isRequired,
     setEnvironment: PropTypes.func.isRequired,
 };
 
 export default provideAppState(
-    injectState(({ state: { token, secret, environments }, effects: { setEnvironment } }) => (
-        <App environments={environments} isLoggedIn={!!token && !!secret} setEnvironment={setEnvironment} />
+    injectState(({ state: { environmentName, environments, secret, token }, effects: { setEnvironment } }) => (
+        <App
+            environments={environments}
+            environmentName={environmentName}
+            isLoggedIn={!!token && !!secret}
+            setEnvironment={setEnvironment}
+        />
     )),
 );

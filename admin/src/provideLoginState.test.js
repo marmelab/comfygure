@@ -1,15 +1,19 @@
 import 'babel-polyfill';
-import expect from 'expect';
+import expect, { createSpy } from 'expect';
 import { call } from 'sg.js/dist/effects';
 
 import provideLoginState, { submit } from './provideLoginState';
 import fetchEnvironments from './fetch/fetchEnvironments';
 
 describe('provideLoginState', () => {
+    global.sessionStorage = {
+        getItem: createSpy(),
+    };
+
     it('should update token', () => {
         const { effects, getState } = new (provideLoginState())(null, {});
-        expect(getState().token).toBe('');
-        expect(getState().secret).toBe('');
+        expect(getState().token).toBe(undefined);
+        expect(getState().secret).toBe(undefined);
 
         return Promise.resolve()
             .then(() => effects.onTokenChange(null, 'token'))
@@ -18,8 +22,8 @@ describe('provideLoginState', () => {
 
     it('should update secret', () => {
         const { effects, getState } = new (provideLoginState())(null, {});
-        expect(getState().token).toBe('');
-        expect(getState().secret).toBe('');
+        expect(getState().token).toBe(undefined);
+        expect(getState().secret).toBe(undefined);
 
         return Promise.resolve()
             .then(() => effects.onSecretChange(null, 'secret'))

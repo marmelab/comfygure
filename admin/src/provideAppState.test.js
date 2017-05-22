@@ -1,9 +1,13 @@
-import expect from 'expect';
+import expect, { createSpy } from 'expect';
 
 import provideAppState from './provideAppState';
 
 describe('provideAppState', () => {
     describe('setConfig', () => {
+        global.sessionStorage = {
+            setItem: createSpy(),
+        };
+
         it('should update token, secret and projectId', () => {
             const { effects, getState } = new (provideAppState())(null, {});
             expect(getState().origin).toBe('');
