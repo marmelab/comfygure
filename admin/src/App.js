@@ -31,7 +31,7 @@ const styles = {
     },
 };
 
-const App = ({ environmentName, environments = [], isLoggedIn = true, setEnvironment }) => (
+export const App = ({ environmentName, environments = [], isLoggedIn = true, setEnvironment }) => (
     <MuiThemeProvider>
         <div style={styles.root}>
             <AppBar title="Comfy" />

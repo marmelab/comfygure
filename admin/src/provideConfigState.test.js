@@ -3,12 +3,13 @@ import expect from 'expect';
 import call from 'sg.js/dist/effects/call';
 
 import fetchConfig from './fetch/fetchConfig';
-import { getConfigSaga } from './provideConfigState';
+import { decryptConfig, getConfigSaga } from './provideConfigState';
 
 const args = {
     projectId: 'foo',
     configName: 'default',
     environmentName: 'development',
+    secret: 'big_secret',
 };
 
 const getSaga = () =>
@@ -31,8 +32,9 @@ describe('getConfigSaga', () => {
         });
 
         it('fetches the config', () => {
+            const { secret, ...fetchArgs } = args;
             const effect = saga.next().value;
-            expect(effect).toEqual(call(fetchConfig, args));
+            expect(effect).toEqual(call(fetchConfig, fetchArgs));
         });
 
         it('sets the loading state to false', () => {
@@ -40,9 +42,14 @@ describe('getConfigSaga', () => {
             expect(effect).toEqual(call('setLoading', false));
         });
 
-        it('sets the config state to the fetched config', () => {
+        it('decrypt the fetched config', () => {
             const effect = saga.next().value;
-            expect(effect).toEqual(call('setConfig', 'result'));
+            expect(effect).toEqual(call(decryptConfig, 'result', 'big_secret'));
+        });
+
+        it('sets the config state to the decrypted config', () => {
+            const effect = saga.next('decrypted').value;
+            expect(effect).toEqual(call('setConfig', 'decrypted'));
         });
     });
 
@@ -55,8 +62,9 @@ describe('getConfigSaga', () => {
         });
 
         it('fetches the config', () => {
+            const { secret, ...fetchArgs } = args;
             const effect = saga.next().value;
-            expect(effect).toEqual(call(fetchConfig, args));
+            expect(effect).toEqual(call(fetchConfig, fetchArgs));
         });
 
         it('sets the loading state to false', () => {

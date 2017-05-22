@@ -10,19 +10,22 @@ export const state = {
         environmentName: 'development',
     }),
     effects: {
-        setConfig: softUpdate((state, { origin, projectId, token, secret }) => {
+        persistConfig: (effects, { origin, projectId, token, secret }) => {
             sessionStorage.setItem('comfy.origin', origin);
             sessionStorage.setItem('comfy.projectId', projectId);
             sessionStorage.setItem('comfy.token', token);
             sessionStorage.setItem('comfy.secret', secret);
-
-            return {
-                origin,
-                projectId,
-                token,
-                secret,
-            };
-        }),
+            return Promise.resolve();
+        },
+        setConfig: (effects, config) =>
+            effects.persistConfig(config).then(
+                softUpdate(() => ({
+                    origin: config.origin,
+                    projectId: config.projectId,
+                    token: config.token,
+                    secret: config.secret,
+                })),
+            ),
         setEnvironments: softUpdate((state, environments) => ({
             environments,
         })),

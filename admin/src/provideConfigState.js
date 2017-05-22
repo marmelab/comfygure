@@ -11,21 +11,23 @@ import { decrypt } from './utils/crypto';
 // `null` and `undefined` are the only types that we cannot stringify
 const isNullValue = value => value === null || value === undefined;
 
+export const decryptConfig = (config, secret) =>
+    Object.keys(config).reduce((acc, key) => {
+        const value = config[key];
+
+        if (!isNullValue(value)) {
+            acc[key] = decrypt(value.toString(), secret);
+        }
+    }, {});
+
 export const getConfigSaga = function*(effects, { secret, ...args }) {
     yield call(effects.setLoading, true);
-    const { body: config } = yield call(fetchConfig, args);
+    const config = yield call(fetchConfig, args);
     yield call(effects.setLoading, false);
 
     if (config) {
-        Object.keys(config).forEach(key => {
-            const value = config[key];
-
-            if (!isNullValue(value)) {
-                config[key] = decrypt(value.toString(), secret);
-            }
-        });
-
-        yield call(effects.setConfig, config);
+        const decryptedConfig = yield call(decryptConfig, config.body, secret);
+        yield call(effects.setConfig, decryptedConfig);
         yield call(effects.setError, undefined);
     } else {
         yield call(effects.setError, 'Not found');
