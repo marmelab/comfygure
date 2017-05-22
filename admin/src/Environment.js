@@ -18,7 +18,13 @@ const styles = {
 
 class Environment extends Component {
     componentWillMount() {
-        this.props.getConfig();
+        this.props.getConfig(this.props.environmentName);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.environmentName !== this.props.environmentName) {
+            this.props.getConfig(nextProps.environmentName);
+        }
     }
 
     render() {
@@ -36,6 +42,7 @@ class Environment extends Component {
 
 Environment.propTypes = {
     config: PropTypes.object,
+    environmentName: PropTypes.string,
     error: PropTypes.string,
     getConfig: PropTypes.func.isRequired,
     loading: PropTypes.bool,
@@ -46,12 +53,13 @@ Environment.defaultProps = {
 };
 
 export default provideConfigState(
-    injectState(({ state: { config, error, loading, environment, token, projectId }, effects: { getConfig } }) => (
+    injectState(({ state: { config, error, loading, environmentName, token, projectId }, effects: { getConfig } }) => (
         <Environment
+            environmentName={environmentName}
             config={config}
             error={error}
             loading={loading}
-            getConfig={() => getConfig({ environmentName: environment.name, token, projectId })}
+            getConfig={environmentName => getConfig({ environmentName, token, projectId })}
         />
     )),
 );

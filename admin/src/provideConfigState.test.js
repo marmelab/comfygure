@@ -36,7 +36,7 @@ describe('getConfigSaga', () => {
         });
 
         it('sets the loading state to false', () => {
-            const effect = saga.next('result').value;
+            const effect = saga.next({ body: 'result' }).value;
             expect(effect).toEqual(call('setLoading', false));
         });
 

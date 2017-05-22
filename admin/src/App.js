@@ -31,16 +31,16 @@ const styles = {
     },
 };
 
-const App = ({ environment = { name: 'development' }, environments = [], isLoggedIn = true }) => (
+const App = ({ environments = [], isLoggedIn = true, setEnvironment }) => (
     <MuiThemeProvider>
         <div style={styles.root}>
             <AppBar title="Comfy" />
             {!isLoggedIn && <Login />}
             {isLoggedIn &&
                 <div style={styles.container}>
-                    <Sidebar environments={environments} />
+                    <Sidebar environments={environments} onEnvironmentSelected={setEnvironment} />
                     <div style={styles.environmentContainer}>
-                        <Environment environment={environment} />
+                        <Environment />
                     </div>
                 </div>}
         </div>
@@ -49,12 +49,12 @@ const App = ({ environment = { name: 'development' }, environments = [], isLogge
 
 App.propTypes = {
     environments: PropTypes.arrayOf(PropTypes.object),
-    environment: PropTypes.object,
     isLoggedIn: PropTypes.bool.isRequired,
+    setEnvironment: PropTypes.func.isRequired,
 };
 
 export default provideAppState(
-    injectState(({ state: { token, secret, environments } }) => (
-        <App environments={environments} isLoggedIn={!!token && !!secret} />
+    injectState(({ state: { token, secret, environments }, effects: { setEnvironment } }) => (
+        <App environments={environments} isLoggedIn={!!token && !!secret} setEnvironment={setEnvironment} />
     )),
 );

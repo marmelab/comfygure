@@ -7,6 +7,7 @@ export const state = {
         token: '',
         secret: '',
         environments: undefined,
+        environmentName: 'development',
     }),
     effects: {
         setConfig: softUpdate((state, { origin, projectId, token, secret }) => ({
@@ -17,6 +18,9 @@ export const state = {
         })),
         setEnvironments: softUpdate((state, environments) => ({
             environments,
+        })),
+        setEnvironment: softUpdate((state, environmentName) => ({
+            environmentName,
         })),
     },
 };

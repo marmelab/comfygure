@@ -13,18 +13,18 @@ export const getConfigSaga = function*(effects, args) {
     yield call(effects.setLoading, false);
 
     if (config) {
-        yield call(effects.setConfig, config);
+        yield call(effects.setConfig, config.body);
+        yield call(effects.setError, undefined);
     } else {
         yield call(effects.setError, 'Not found');
     }
 };
 
 export const state = {
-    initialState: ({ environment }) => ({
+    initialState: () => ({
         ...fetchState.state,
-        config: null,
-        error: null,
-        environment,
+        config: undefined,
+        error: undefined,
         loading: false,
     }),
     effects: {
