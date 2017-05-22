@@ -191,7 +191,7 @@ module.exports = {
         // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
         // It is absolutely essential that NODE_ENV was set to production here.
         // Otherwise React will be compiled in the very slow development mode.
-        new webpack.DefinePlugin(env.stringified),
+        new webpack.DefinePlugin(Object.assign({}, env.stringified, { config: {} })),
         // This helps ensure the builds are consistent if source hasn't changed:
         new webpack.optimize.OccurrenceOrderPlugin(),
         // Try to dedupe duplicated modules, if any:
