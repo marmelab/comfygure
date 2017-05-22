@@ -41,9 +41,7 @@ export const encryptConfig = (config, secret) =>
     }, {});
 
 export const getConfigSaga = function*(effects, { secret, ...args }) {
-    yield call(effects.setLoading, true);
     const config = yield call(fetchConfig, args);
-    yield call(effects.setLoading, false);
 
     if (config) {
         const decryptedConfig = yield call(decryptConfig, config.body, secret);
