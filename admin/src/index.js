@@ -8,9 +8,9 @@ import App from './App';
 
 injectTapEventPlugin();
 
-const config = config || {};
+const localeConfig = config || {};
 
 ReactDOM.render(
-    <App projectId={config.projectId} token={config.token} secret={config.secret} />,
+    <App projectId={localeConfig.projectId} token={localeConfig.token} secret={localeConfig.secret} />,
     document.getElementById('root'),
 );
