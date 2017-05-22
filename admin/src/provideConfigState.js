@@ -16,8 +16,13 @@ export const decryptConfig = (config, secret) =>
         const value = config[key];
 
         if (!isNullValue(value)) {
-            acc[key] = decrypt(value.toString(), secret);
+            return {
+                ...acc,
+                [key]: decrypt(value.toString(), secret),
+            };
         }
+
+        return acc;
     }, {});
 
 export const getConfigSaga = function*(effects, { secret, ...args }) {

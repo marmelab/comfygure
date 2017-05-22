@@ -15,7 +15,6 @@ export const state = {
             sessionStorage.setItem('comfy.projectId', projectId);
             sessionStorage.setItem('comfy.token', token);
             sessionStorage.setItem('comfy.secret', secret);
-            return Promise.resolve();
         },
         setConfig: (effects, config) =>
             effects.persistConfig(config).then(
