@@ -8,9 +8,9 @@ import App from './App';
 
 injectTapEventPlugin();
 
-const localeConfig = config || {};
+const config = config || {}; // config get remplaced by webpack when launched in command
 
 ReactDOM.render(
-    <App projectId={localeConfig.projectId} token={localeConfig.token} secret={localeConfig.secret} />,
+    <App projectId={config.projectId} token={config.token} secret={config.secret} />,
     document.getElementById('root'),
 );
