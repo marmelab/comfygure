@@ -58,7 +58,6 @@ export const updateConfigSaga = function*(effects, { secret, config, ...args }) 
     yield call(effects.setLoading, true);
     const encryptedConfig = yield call(encryptConfig, config, secret);
     yield call(updateConfig, { ...args, config: encryptedConfig });
-    yield call(effects.setConfig, encryptedConfig);
     yield call(effects.setLoading, false);
 };
 
