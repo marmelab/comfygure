@@ -4,13 +4,10 @@ install:
 	npm install
 
 test:
-	node_modules/react-scripts/bin/react-scripts.js test --env=jsdom
+	node ./scripts/test.js --env=jsdom
 
 start:
-	PORT=3006 node_modules/react-scripts/bin/react-scripts.js start
+	PORT=3006 node ./scripts/start.js
 
 build:
-	node_modules/react-scripts/bin/react-scripts.js build
-
-eject:
-	node_modules/react-scripts/bin/react-scripts.js eject
+	node scripts/build.js

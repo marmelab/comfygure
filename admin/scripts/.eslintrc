@@ -1,0 +1,10 @@
+{
+    "rules": {
+        "no-console": ["error", { "allow": ["log", "warn", "error"] }],
+        "comma-dangle": ["error", "never"],
+        "prettier/prettier": ["error", {
+            "trailingComma": "never",
+            "tabWidth": 4
+        }]
+    }
+}

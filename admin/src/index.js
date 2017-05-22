@@ -8,4 +8,9 @@ import App from './App';
 
 injectTapEventPlugin();
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const config = config || {}; // config get remplaced by webpack when launched in command
+
+ReactDOM.render(
+    <App projectId={config.projectId} token={config.token} secret={config.secret} />,
+    document.getElementById('root'),
+);

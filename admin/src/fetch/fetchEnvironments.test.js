@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import expect from 'expect';
 
 import { getEnvironmentRequest } from './fetchEnvironments';
