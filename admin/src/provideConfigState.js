@@ -6,14 +6,26 @@ import fetchState from './fetch/state';
 import wrapWithLoading from './utils/wrapWithLoading';
 import wrapWithErrorHandling from './utils/wrapWithErrorHandling';
 import fetchConfig from './fetch/fetchConfig';
+import { decrypt } from './utils/crypto';
 
-export const getConfigSaga = function*(effects, args) {
+// `null` and `undefined` are the only types that we cannot stringify
+const isNullValue = value => value === null || value === undefined;
+
+export const getConfigSaga = function*(effects, { secret, ...args }) {
     yield call(effects.setLoading, true);
-    const config = yield call(fetchConfig, args);
+    const { body: config } = yield call(fetchConfig, args);
     yield call(effects.setLoading, false);
 
     if (config) {
-        yield call(effects.setConfig, config.body);
+        Object.keys(config).forEach(key => {
+            const value = config[key];
+
+            if (!isNullValue(value)) {
+                config[key] = decrypt(value.toString(), secret);
+            }
+        });
+
+        yield call(effects.setConfig, config);
         yield call(effects.setError, undefined);
     } else {
         yield call(effects.setError, 'Not found');

@@ -8,13 +8,15 @@ const styles = {
     flexDirection: 'column',
     flexGrow: 0,
     order: -1,
+    flexBasis: 256,
 };
 
-const Sidebar = ({ environments, onEnvironmentSelected }) => (
+const Sidebar = ({ activeEnvironment, environments, onEnvironmentSelected }) => (
     <Paper style={styles}>
         {environments.map(environment => (
             <SidebarItem
                 key={environment.name}
+                active={activeEnvironment === environment.name}
                 onSelected={onEnvironmentSelected}
                 text={environment.name}
                 value={environment.name}
@@ -24,6 +26,7 @@ const Sidebar = ({ environments, onEnvironmentSelected }) => (
 );
 
 Sidebar.propTypes = {
+    activeEnvironment: PropTypes.string,
     environments: PropTypes.arrayOf(PropTypes.object),
     onEnvironmentSelected: PropTypes.func,
 };

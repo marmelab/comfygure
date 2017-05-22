@@ -25,10 +25,10 @@ export function* submit(effects, { origin, projectId, token, secret }) {
 export const state = {
     initialState: () => ({
         ...fetchState.state,
-        origin: DEFAULT_ORIGIN,
-        projectId: '',
-        secret: '',
-        token: '',
+        origin: sessionStorage.getItem('comfy.origin') || DEFAULT_ORIGIN,
+        projectId: sessionStorage.getItem('comfy.projectId'),
+        secret: sessionStorage.getItem('comfy.secret'),
+        token: sessionStorage.getItem('comfy.token'),
     }),
     effects: {
         ...fetchState.effects,
