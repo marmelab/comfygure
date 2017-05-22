@@ -9,14 +9,14 @@ import wrapWithErrorHandling from './utils/wrapWithErrorHandling';
 import fetchEnvironments from './fetch/fetchEnvironments';
 import { DEFAULT_ORIGIN } from './constants';
 
-export function* submit(effects, { origin, projectId, token, secret }) {
+export function* submit(effects, { origin, projectId, token, passphrase }) {
     yield call(effects.setLoading, true);
     const environments = (yield call(fetchEnvironments, { origin, projectId, token })) || [];
     yield call(effects.setLoading, false);
     yield call(effects.setConfig, {
         origin,
         projectId,
-        secret,
+        passphrase,
         token,
     });
     yield call(effects.setEnvironments, environments);
@@ -27,14 +27,14 @@ export const state = {
         ...fetchState.state,
         origin: sessionStorage.getItem('comfy.origin') || DEFAULT_ORIGIN,
         projectId: sessionStorage.getItem('comfy.projectId'),
-        secret: sessionStorage.getItem('comfy.secret'),
+        passphrase: sessionStorage.getItem('comfy.passphrase'),
         token: sessionStorage.getItem('comfy.token'),
     }),
     effects: {
         ...fetchState.effects,
         onOriginChange: softUpdate((state, event, origin) => ({ origin })),
         onProjectIdChange: softUpdate((state, event, projectId) => ({ projectId })),
-        onSecretChange: softUpdate((state, event, secret) => ({ secret })),
+        onpassphraseChange: softUpdate((state, event, passphrase) => ({ passphrase })),
         onTokenChange: softUpdate((state, event, token) => ({ token })),
         submit: wrapWithErrorHandling(wrapWithLoading((effects, args) => sg(submit)(effects, args))),
     },

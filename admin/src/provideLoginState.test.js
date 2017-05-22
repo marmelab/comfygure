@@ -13,21 +13,21 @@ describe('provideLoginState', () => {
     it('should update token', () => {
         const { effects, getState } = new (provideLoginState())(null, {});
         expect(getState().token).toBe(undefined);
-        expect(getState().secret).toBe(undefined);
+        expect(getState().passphrase).toBe(undefined);
 
         return Promise.resolve()
             .then(() => effects.onTokenChange(null, 'token'))
             .then(() => expect(getState().token).toBe('token'));
     });
 
-    it('should update secret', () => {
+    it('should update passphrase', () => {
         const { effects, getState } = new (provideLoginState())(null, {});
         expect(getState().token).toBe(undefined);
-        expect(getState().secret).toBe(undefined);
+        expect(getState().passphrase).toBe(undefined);
 
         return Promise.resolve()
-            .then(() => effects.onSecretChange(null, 'secret'))
-            .then(() => expect(getState().secret).toBe('secret'));
+            .then(() => effects.onpassphraseChange(null, 'passphrase'))
+            .then(() => expect(getState().passphrase).toBe('passphrase'));
     });
 
     describe('submit', () => {
@@ -42,7 +42,7 @@ describe('provideLoginState', () => {
                     origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
-                    secret: 'secret',
+                    passphrase: 'passphrase',
                 },
             );
             expect(iterator.next().value).toEqual(call('setLoading', true));
@@ -59,7 +59,7 @@ describe('provideLoginState', () => {
                     origin: 'origin',
                     projectId: 'projectId',
                     token: 'token',
-                    secret: 'secret',
+                    passphrase: 'passphrase',
                 }),
             );
             expect(iterator.next('').value).toEqual(call('setEnvironments', 'environments'));

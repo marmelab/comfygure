@@ -12,7 +12,7 @@ describe('getConfigSaga', () => {
         projectId: 'foo',
         configName: 'default',
         environmentName: 'development',
-        secret: 'big_secret',
+        passphrase: 'big_passphrase',
     };
 
     const getSaga = () =>
@@ -29,14 +29,14 @@ describe('getConfigSaga', () => {
         const saga = getSaga();
 
         it('fetches the config', () => {
-            const { secret, ...fetchArgs } = args;
+            const { passphrase, ...fetchArgs } = args;
             const effect = saga.next().value;
             expect(effect).toEqual(call(fetchConfig, fetchArgs));
         });
 
         it('decrypt the fetched config', () => {
             const effect = saga.next({ body: 'result' }).value;
-            expect(effect).toEqual(call(decryptConfig, 'result', 'big_secret'));
+            expect(effect).toEqual(call(decryptConfig, 'result', 'big_passphrase'));
         });
 
         it('sets the config state to the decrypted config', () => {
@@ -49,7 +49,7 @@ describe('getConfigSaga', () => {
         const saga = getSaga();
 
         it('fetches the config', () => {
-            const { secret, ...fetchArgs } = args;
+            const { passphrase, ...fetchArgs } = args;
             const effect = saga.next().value;
             expect(effect).toEqual(call(fetchConfig, fetchArgs));
         });
@@ -66,7 +66,7 @@ describe('updateConfigSaga', () => {
         projectId: 'foo',
         configName: 'default',
         environmentName: 'development',
-        secret: 'big_secret',
+        passphrase: 'big_passphrase',
         config: { foo: 'bar' },
     };
 
@@ -94,11 +94,11 @@ describe('updateConfigSaga', () => {
 
     it('encrypts the new config', () => {
         const effect = saga.next({ foo: 'flatten' }).value;
-        expect(effect).toEqual(call(encryptConfig, { foo: 'flatten' }, 'big_secret'));
+        expect(effect).toEqual(call(encryptConfig, { foo: 'flatten' }, 'big_passphrase'));
     });
 
     it('calls the api to update the new config', () => {
-        const { secret, config, ...fetchArgs } = args;
+        const { passphrase, config, ...fetchArgs } = args;
         const effect = saga.next('encrypted').value;
         expect(effect).toEqual(call(updateConfig, { ...fetchArgs, config: 'encrypted' }));
     });

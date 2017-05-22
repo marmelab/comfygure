@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'proptypes';
-
+import compose from 'recompose/compose';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { injectState } from 'freactal';
 import AppBar from 'material-ui/AppBar';
@@ -31,7 +31,10 @@ const styles = {
     },
 };
 
-export const App = ({ environmentName, environments = [], isLoggedIn = true, setEnvironment }) => (
+export const App = ({
+    state: { environmentName, environments = [], isLoggedIn = true },
+    effects: { setEnvironment },
+}) => (
     <MuiThemeProvider>
         <div style={styles.root}>
             <AppBar title="Comfy" />
@@ -52,19 +55,16 @@ export const App = ({ environmentName, environments = [], isLoggedIn = true, set
 );
 
 App.propTypes = {
-    environmentName: PropTypes.string,
-    environments: PropTypes.arrayOf(PropTypes.object),
-    isLoggedIn: PropTypes.bool.isRequired,
-    setEnvironment: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+        environmentName: PropTypes.string,
+        environments: PropTypes.arrayOf(PropTypes.object),
+        isLoggedIn: PropTypes.bool.isRequired,
+    }).isRequired,
+    effects: PropTypes.shape({
+        setEnvironment: PropTypes.func.isRequired,
+    }).isRequired,
 };
 
-export default provideAppState(
-    injectState(({ state: { environmentName, environments, secret, token }, effects: { setEnvironment } }) => (
-        <App
-            environments={environments}
-            environmentName={environmentName}
-            isLoggedIn={!!token && !!secret}
-            setEnvironment={setEnvironment}
-        />
-    )),
-);
+const enhance = compose(provideAppState, injectState);
+
+export default enhance(App);
