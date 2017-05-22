@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import expect, { createSpy } from 'expect';
 
 import { fetchRequestFactory } from './fetchRequest';
