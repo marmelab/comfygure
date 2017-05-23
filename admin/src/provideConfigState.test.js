@@ -10,6 +10,7 @@ import {
     getConfigSaga,
     removeConfigKeySaga,
     updateConfigSaga,
+    updateConfigKeySaga,
 } from './provideConfigState';
 import toFlat from './utils/toFlat';
 
@@ -100,6 +101,45 @@ describe('updateConfigSaga', () => {
 
     it('calls the api to update the new config', () => {
         const { passphrase, config, ...fetchArgs } = args;
+        const effect = saga.next('encrypted').value;
+        expect(effect).toEqual(call(updateConfig, { ...fetchArgs, config: 'encrypted' }));
+    });
+});
+
+describe('updateConfigKeySaga', () => {
+    const args = {
+        projectId: 'foo',
+        configName: 'default',
+        environmentName: 'development',
+        passphrase: 'big_passphrase',
+        config: { foo: 'bar' },
+        key: { name: 'bar', value: 'foo' },
+    };
+
+    const getSaga = () =>
+        updateConfigKeySaga(
+            {
+                setLoading: 'setLoading',
+                setError: 'setError',
+                setConfig: 'setConfig',
+            },
+            args,
+        );
+
+    const saga = getSaga();
+
+    it('flattens the new config', () => {
+        const effect = saga.next().value;
+        expect(effect).toEqual(call(toFlat, { foo: 'bar', bar: 'foo' }));
+    });
+
+    it('encrypts the new config', () => {
+        const effect = saga.next({ foo: 'flatten' }).value;
+        expect(effect).toEqual(call(encryptConfig, { foo: 'flatten' }, 'big_passphrase'));
+    });
+
+    it('calls the api to update the new config', () => {
+        const { passphrase, config, key, ...fetchArgs } = args;
         const effect = saga.next('encrypted').value;
         expect(effect).toEqual(call(updateConfig, { ...fetchArgs, config: 'encrypted' }));
     });

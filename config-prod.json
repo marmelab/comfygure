@@ -1,0 +1,7 @@
+{
+    "mode": "production",
+    "foo": "bar",
+    "bar": {
+        "baz": "foo"
+    }
+}

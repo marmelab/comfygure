@@ -28,12 +28,19 @@ export class EnvironmentItemComponent extends Component {
 
     static propTypes = {
         name: PropTypes.string.isRequired,
+        onEdit: PropTypes.func.isRequired,
         onRemove: PropTypes.func.isRequired,
         value: PropTypes.string.isRequired,
     };
 
-    toggleShowDecrypted = () => {
+    toggleShowDecrypted = event => {
+        event.preventDefault();
+        event.stopPropagation();
         this.setState({ showEncryted: !this.state.showEncryted });
+    };
+
+    handleEdit = () => {
+        this.props.onEdit({ name: this.props.name, value: this.props.value });
     };
 
     handleRemove = () => {
@@ -66,7 +73,7 @@ export class EnvironmentItemComponent extends Component {
 
         return (
             <ListItem
-                onClick={this.toggleShowDecrypted}
+                onClick={this.handleEdit}
                 onMouseEnter={this.toggleHover}
                 onMouseLeave={this.toggleHover}
                 primaryText={

@@ -63,6 +63,15 @@ export const removeConfigKeySaga = function*(effects, { passphrase, config, key,
     yield call(effects.cancelRemoveKey);
 };
 
+export const updateConfigKeySaga = function*(effects, { passphrase, config, key, ...args }) {
+    const newConfig = { ...config, [key.name]: key.value };
+    console.log({ newConfig }); // eslint-disable-line
+    const flatConfig = yield call(toFlat, newConfig);
+    const encryptedConfig = yield call(encryptConfig, flatConfig, passphrase);
+    yield call(updateConfig, { ...args, config: encryptedConfig });
+    yield call(effects.setConfig, newConfig);
+};
+
 export const updateConfigSaga = function*(effects, { passphrase, config, ...args }) {
     const flatConfig = yield call(toFlat, config);
     const encryptedConfig = yield call(encryptConfig, flatConfig, passphrase);
@@ -92,6 +101,9 @@ export const state = {
         ),
         saveConfig: wrapWithErrorHandling(wrapWithLoading((effects, args) => sg(updateConfigSaga)(effects, args))),
         setNewConfig: softUpdate((state, newConfig) => ({ newConfig: JSON.parse(newConfig) })),
+        updateConfigKey: wrapWithErrorHandling(
+            wrapWithLoading((effects, args) => sg(updateConfigKeySaga)(effects, args)),
+        ),
     },
 };
 
