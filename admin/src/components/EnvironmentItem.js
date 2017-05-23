@@ -75,7 +75,7 @@ export class EnvironmentItemComponent extends Component {
         );
 
         const editButton = (
-            <IconButton tooltip="Edit" tooltipPosition="top-center" onClick={this.handleEdit} primary>
+            <IconButton tooltip="Edit" tooltipPosition="top-center" onClick={this.handleEdit}>
                 <EditIcon />}
             </IconButton>
         );
