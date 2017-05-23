@@ -8,7 +8,7 @@ import 'brace/theme/github';
 import { injectState } from 'freactal';
 import { List, ListItem } from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardText, CardActions } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -29,6 +29,7 @@ const styles = {
         padding: '1em',
         backgroundColor: 'rgb(232, 232, 232)',
     },
+<<<<<<< HEAD
     card: {
         position: 'relative',
     },
@@ -36,6 +37,13 @@ const styles = {
         position: 'absolute',
         bottom: -28,
         right: 0,
+=======
+    actions: {
+        display: 'flex',
+    },
+    search: {
+        marginLeft: 'auto',
+>>>>>>> better style for search input
     },
 };
 
@@ -60,7 +68,11 @@ class Environment extends Component {
             toggleEdition: PropTypes.func.isRequired,
         }).isRequired,
         loadConfig: PropTypes.func.isRequired,
+<<<<<<< HEAD
         saveConfig: PropTypes.func.isRequired,
+=======
+        setSearch: PropTypes.func.isRequired,
+>>>>>>> better style for search input
     };
 
     static defaultProps = {
@@ -84,19 +96,21 @@ class Environment extends Component {
     render() {
         const {
             state: { edition, error, loading, newConfig, filteredConfig },
-            effects: { requestToEditKey, requestToRemoveKey, setNewConfig, toggleEdition, setSearch },
+            effects: { requestToEditKey, requestToRemoveKey, setNewConfig, toggleEdition },
+            setSearch,
         } = this.props;
 
         return (
             <div style={styles.container}>
-                <Card style={styles.card}>
-                    <CardText>
-                        {!edition && <RaisedButton label="Edit" primary onClick={toggleEdition} />}
-                        {edition && <RaisedButton label="Save" primary onClick={this.handleSaveClick} />}
-                        {edition && <RaisedButton label="Cancel" onClick={toggleEdition} />}
-                        {!edition &&
-                            <TextField floatingLabelText="search" onChange={(event, value) => setSearch(value)} />}
-                    </CardText>
+                <Card>
+                    <CardActions style={styles.actions}>
+                        <div>
+                            {!edition && <RaisedButton label="Edit" primary onClick={toggleEdition} />}
+                            {edition && <RaisedButton label="Save" primary onClick={this.handleSaveClick} />}
+                            {edition && <RaisedButton label="Cancel" onClick={toggleEdition} />}
+                        </div>
+                        {!edition && <TextField style={styles.search} hintText="search" onChange={setSearch} />}
+                    </CardActions>
                     <Divider />
                     {loading && <LinearProgress mode="indeterminate" />}
                     {error && <Alert message={error} />}
