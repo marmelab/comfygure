@@ -5,7 +5,6 @@ import withHandlers from 'recompose/withHandlers';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
-
 import { injectState } from 'freactal';
 import { List, ListItem } from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
@@ -14,6 +13,7 @@ import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import TextField from 'material-ui/TextField';
 
 import provideConfigState from './provideConfigState';
 import Alert from './components/Alert';
@@ -83,8 +83,8 @@ class Environment extends Component {
 
     render() {
         const {
-            state: { config, edition, error, loading, newConfig },
-            effects: { requestToEditKey, requestToRemoveKey, setNewConfig, toggleEdition },
+            state: { edition, error, loading, newConfig, filteredConfig },
+            effects: { requestToEditKey, requestToRemoveKey, setNewConfig, toggleEdition, setSearch },
         } = this.props;
 
         return (
@@ -94,21 +94,23 @@ class Environment extends Component {
                         {!edition && <RaisedButton label="Edit" primary onClick={toggleEdition} />}
                         {edition && <RaisedButton label="Save" primary onClick={this.handleSaveClick} />}
                         {edition && <RaisedButton label="Cancel" onClick={toggleEdition} />}
+                        {!edition &&
+                            <TextField floatingLabelText="search" onChange={(event, value) => setSearch(value)} />}
                     </CardText>
                     <Divider />
                     {loading && <LinearProgress mode="indeterminate" />}
                     {error && <Alert message={error} />}
                     {!loading &&
-                        config &&
+                        filteredConfig &&
                         !edition &&
                         <CardText>
                             <List>
                                 <ListItem disabled rightIconButton={<span>Unlock</span>} />
-                                {Object.keys(config).map(key => (
+                                {Object.keys(filteredConfig).map(key => (
                                     <EnvironmentItem
                                         key={key}
                                         name={key}
-                                        value={config[key]}
+                                        value={filteredConfig[key]}
                                         onRemove={requestToRemoveKey}
                                         onEdit={requestToEditKey}
                                     />
@@ -147,6 +149,7 @@ const enhance = compose(
     provideConfigState,
     injectState,
     withHandlers({
+        setSearch: ({ effects: { setSearch } }) => (event, value) => setSearch(value),
         loadConfig: ({ state: { origin, projectId, passphrase, token }, effects: { loadConfig } }) => environmentName =>
             loadConfig({ environmentName, origin, projectId, passphrase, token }),
         saveConfig: ({

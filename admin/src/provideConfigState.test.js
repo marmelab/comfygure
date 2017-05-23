@@ -11,6 +11,7 @@ import {
     removeConfigKeySaga,
     updateConfigSaga,
     updateConfigKeySaga,
+    state,
 } from './provideConfigState';
 import toFlat from './utils/toFlat';
 
@@ -181,5 +182,35 @@ describe('removeConfigKeySaga', () => {
         const { passphrase, config, key, ...fetchArgs } = args;
         const effect = saga.next('encrypted').value;
         expect(effect).toEqual(call(updateConfig, { ...fetchArgs, config: 'encrypted' }));
+    });
+});
+
+describe('state.computed.filteredConfig', () => {
+    const filteredConfigSelector = state.computed.filteredConfig;
+
+    it('should return config if search is an empty string', () => {
+        expect(filteredConfigSelector({ config: { foo: 1, bar: 2, baz: 3 }, search: '' })).toEqual({
+            foo: 1,
+            bar: 2,
+            baz: 3,
+        });
+    });
+
+    it('should return only key matching search', () => {
+        expect(filteredConfigSelector({ config: { foo: 1, bar: 2, baz: 3 }, search: 'ba' })).toEqual({
+            bar: 2,
+            baz: 3,
+        });
+    });
+
+    it('should return empty object if no key match search', () => {
+        expect(filteredConfigSelector({ config: { foo: 1, bar: 2, baz: 3 }, search: 'bam' })).toEqual({});
+    });
+
+    it('should ignore the case', () => {
+        expect(filteredConfigSelector({ config: { foo: 1, bar: 2, baz: 3, BAR: 4 }, search: 'bar' })).toEqual({
+            bar: 2,
+            BAR: 4,
+        });
     });
 });
