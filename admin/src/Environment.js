@@ -15,6 +15,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import provideConfigState from './provideConfigState';
 import Alert from './components/Alert';
+import ConfirmDialog from './components/ConfirmDialog';
 import EnvironmentItem from './components/EnvironmentItem';
 
 const styles = {
@@ -33,6 +34,32 @@ const aceOptions = {
 };
 
 class Environment extends Component {
+    static propTypes = {
+        state: PropTypes.shape({
+            config: PropTypes.object,
+            edition: PropTypes.bool.isRequired,
+            environmentName: PropTypes.string,
+            error: PropTypes.string,
+            loading: PropTypes.bool,
+            newConfig: PropTypes.object,
+        }).isRequired,
+        effects: PropTypes.shape({
+            setNewConfig: PropTypes.func.isRequired,
+            toggleEdition: PropTypes.func.isRequired,
+        }).isRequired,
+        removeConfigKey: PropTypes.func.isRequired,
+        saveConfig: PropTypes.func.isRequired,
+        loadConfig: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        loading: false,
+    };
+
+    state = {
+        keyToRemove: null,
+    };
+
     componentWillMount() {
         this.props.loadConfig(this.props.state.environmentName);
     }
@@ -47,11 +74,26 @@ class Environment extends Component {
         this.props.saveConfig(this.props.state.newConfig);
     };
 
+    handleRemove = key => {
+        this.setState({ keyToRemove: key });
+    };
+
+    handleRemoveCancel = () => {
+        this.setState({ keyToRemove: undefined });
+    };
+
+    handleRemoveConfirm = () => {
+        this.props.removeConfigKey(this.state.keyToRemove);
+        this.setState({ keyToRemove: undefined });
+    };
+
     render() {
         const {
             state: { config, edition, error, loading, newConfig },
             effects: { setNewConfig, toggleEdition },
         } = this.props;
+
+        const { keyToRemove } = this.state;
 
         return (
             <div style={styles.container}>
@@ -71,7 +113,12 @@ class Environment extends Component {
                             <List>
                                 <ListItem disabled rightIconButton={<span>Unlock</span>} />
                                 {Object.keys(config).map(key => (
-                                    <EnvironmentItem key={key} name={key} value={config[key]} />
+                                    <EnvironmentItem
+                                        key={key}
+                                        name={key}
+                                        value={config[key]}
+                                        onRemove={this.handleRemove}
+                                    />
                                 ))}
                             </List>
                         </CardText>}
@@ -92,31 +139,16 @@ class Environment extends Component {
                             />
                         </div>}
                 </Card>
+                <ConfirmDialog
+                    onCancel={this.handleRemoveCancel}
+                    onConfirm={this.handleRemoveConfirm}
+                    open={!!keyToRemove}
+                    text={<span>Do you really want to remove key <b>{keyToRemove}</b> ?</span>}
+                />
             </div>
         );
     }
 }
-
-Environment.propTypes = {
-    state: PropTypes.shape({
-        config: PropTypes.object,
-        edition: PropTypes.bool.isRequired,
-        environmentName: PropTypes.string,
-        error: PropTypes.string,
-        loading: PropTypes.bool,
-        newConfig: PropTypes.object,
-    }).isRequired,
-    effects: PropTypes.shape({
-        setNewConfig: PropTypes.func.isRequired,
-        toggleEdition: PropTypes.func.isRequired,
-    }).isRequired,
-    saveConfig: PropTypes.func.isRequired,
-    loadConfig: PropTypes.func.isRequired,
-};
-
-Environment.defaultProps = {
-    loading: false,
-};
 
 const enhance = compose(
     provideConfigState,
@@ -128,6 +160,10 @@ const enhance = compose(
             state: { environmentName, origin, projectId, passphrase, token },
             effects: { saveConfig },
         }) => config => saveConfig({ config, environmentName, origin, projectId, passphrase, token }),
+        removeConfigKey: ({
+            state: { config, environmentName, origin, projectId, passphrase, token },
+            effects: { removeConfigKey },
+        }) => key => removeConfigKey({ config, environmentName, key, origin, projectId, passphrase, token }),
     }),
 );
 

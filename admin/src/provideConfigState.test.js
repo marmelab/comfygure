@@ -4,7 +4,13 @@ import call from 'sg.js/dist/effects/call';
 
 import fetchConfig from './fetch/fetchConfig';
 import updateConfig from './fetch/updateConfig';
-import { decryptConfig, encryptConfig, getConfigSaga, updateConfigSaga } from './provideConfigState';
+import {
+    decryptConfig,
+    encryptConfig,
+    getConfigSaga,
+    removeConfigKeySaga,
+    updateConfigSaga,
+} from './provideConfigState';
 import toFlat from './utils/toFlat';
 
 describe('getConfigSaga', () => {
@@ -94,6 +100,45 @@ describe('updateConfigSaga', () => {
 
     it('calls the api to update the new config', () => {
         const { passphrase, config, ...fetchArgs } = args;
+        const effect = saga.next('encrypted').value;
+        expect(effect).toEqual(call(updateConfig, { ...fetchArgs, config: 'encrypted' }));
+    });
+});
+
+describe('removeConfigKeySaga', () => {
+    const args = {
+        key: 'bar',
+        projectId: 'foo',
+        configName: 'default',
+        environmentName: 'development',
+        passphrase: 'big_passphrase',
+        config: { foo: 'bar', bar: 'foo' },
+    };
+
+    const getSaga = () =>
+        removeConfigKeySaga(
+            {
+                setLoading: 'setLoading',
+                setError: 'setError',
+                setConfig: 'setConfig',
+            },
+            args,
+        );
+
+    const saga = getSaga();
+
+    it('flattens the new config', () => {
+        const effect = saga.next().value;
+        expect(effect).toEqual(call(toFlat, { foo: 'bar' }));
+    });
+
+    it('encrypts the new config', () => {
+        const effect = saga.next({ foo: 'flatten' }).value;
+        expect(effect).toEqual(call(encryptConfig, { foo: 'flatten' }, 'big_passphrase'));
+    });
+
+    it('calls the api to update the new config', () => {
+        const { passphrase, config, key, ...fetchArgs } = args;
         const effect = saga.next('encrypted').value;
         expect(effect).toEqual(call(updateConfig, { ...fetchArgs, config: 'encrypted' }));
     });

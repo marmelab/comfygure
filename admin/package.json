@@ -14,6 +14,7 @@
     "ini": "1.3.4",
     "lodash.get": "4.4.2",
     "lodash.merge": "4.6.0",
+    "lodash.omit": "4.5.0",
     "material-ui": "0.18.1",
     "proptypes": "1.0.0",
     "react": "15.5.4",
@@ -82,7 +83,7 @@
     "lint": "eslint --fix ./src"
   },
   "lint-staged": {
-    "*.js": [
+    "admin/**/*.js": [
       "eslint --fix ./src",
       "git add"
     ],

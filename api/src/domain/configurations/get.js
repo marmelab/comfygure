@@ -51,10 +51,6 @@ export default async (projectId, environmentName, selector, pathTagName) => {
         tag = await getTag(configuration.id, 'stable');
     }
 
-    const defaultVersion = await versionsQueries.findOneByTag(configuration.id, tag.id);
-
-    const defaultEntries = entriesToDictionary(await entriesQueries.findByVersion(defaultVersion.id));
-
     const version = await getVersion(projectId, environmentName, configuration.name, tag.name);
 
     const entries = entriesToDictionary(await entriesQueries.findByVersion(version.id));
@@ -66,10 +62,7 @@ export default async (projectId, environmentName, selector, pathTagName) => {
         hash: version.hash,
         previous: version.previous,
         defaultFormat: configuration.defaultFormat,
-        body: {
-            ...defaultEntries,
-            ...entries,
-        },
+        body: entries,
         state: configuration.state,
     };
 };
