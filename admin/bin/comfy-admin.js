@@ -3,6 +3,20 @@
 const minimist = require('minimist');
 const webpack = require('webpack');
 const webpackDevServer = require('webpack-dev-server');
+const exec = require('child_process').exec;
+
+const runCommand = cmd =>
+    new Promise((resolve, reject) => {
+        exec(cmd, error => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve();
+        });
+    });
+
 const webpackConfig = require('../config/webpack.config.cmd');
 
 const options = minimist(process.argv.slice(2));
@@ -22,4 +36,8 @@ webpackServer.listen(port, error => {
     global.console.log(`
     launching admin on http://localhost:${port}
     press Ctrl+C to end`);
+
+    runCommand(`python -m webbrowser http://localhost:${port}`).catch(() => {
+        // python -m webbrowser is not supported (rare), the user will just need to open the browser by hand
+    });
 });

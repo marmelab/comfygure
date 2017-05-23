@@ -23,12 +23,12 @@ export function* submit(effects, { origin, projectId, token, passphrase }) {
 }
 
 export const state = {
-    initialState: () => ({
+    initialState: ({ origin, projectId, passphrase, token }) => ({
         ...fetchState.state,
-        origin: sessionStorage.getItem('comfy.origin') || DEFAULT_ORIGIN,
-        projectId: sessionStorage.getItem('comfy.projectId'),
-        passphrase: sessionStorage.getItem('comfy.passphrase'),
-        token: sessionStorage.getItem('comfy.token'),
+        origin: sessionStorage.getItem('comfy.origin') || origin || DEFAULT_ORIGIN,
+        projectId: sessionStorage.getItem('comfy.projectId') || projectId,
+        passphrase: sessionStorage.getItem('comfy.passphrase') || passphrase,
+        token: sessionStorage.getItem('comfy.token') || token,
     }),
     effects: {
         ...fetchState.effects,
