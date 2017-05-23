@@ -8,7 +8,7 @@ import 'brace/theme/github';
 import { injectState } from 'freactal';
 import { List, ListItem } from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
-import { Card, CardText, CardActions } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -103,14 +103,20 @@ class Environment extends Component {
         return (
             <div style={styles.container}>
                 <Card>
-                    <CardActions style={styles.actions}>
-                        <div>
-                            {!edition && <RaisedButton label="Edit" primary onClick={toggleEdition} />}
-                            {edition && <RaisedButton label="Save" primary onClick={this.handleSaveClick} />}
-                            {edition && <RaisedButton label="Cancel" onClick={toggleEdition} />}
-                        </div>
-                        {!edition && <TextField style={styles.search} hintText="search" onChange={setSearch} />}
-                    </CardActions>
+                    <CardText>
+                        {edition &&
+                            <div>
+                                <RaisedButton label="Save" primary onClick={this.handleSaveClick} />
+                                <RaisedButton label="Cancel" onClick={toggleEdition} />
+                            </div>}
+                        {!edition &&
+                            <div style={styles.actions}>
+                                <TextField hintText="search" onChange={setSearch} />
+                                <div style={styles.search}>
+                                    <RaisedButton label="Edit" primary onClick={toggleEdition} />
+                                </div>
+                            </div>}
+                    </CardText>
                     <Divider />
                     {loading && <LinearProgress mode="indeterminate" />}
                     {error && <Alert message={error} />}
