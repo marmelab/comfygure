@@ -32,13 +32,13 @@ const styles = {
 };
 
 export const AppComponent = ({
-    state: { environmentName, environments = [], isLoggedIn = true },
+    state: { environmentName, environments = [], isLoggedIn = true, origin, projectId, passphrase, token },
     effects: { setEnvironment },
 }) => (
     <MuiThemeProvider>
         <div style={styles.root}>
             <AppBar title="Comfy" />
-            {!isLoggedIn && <Login />}
+            {!isLoggedIn && <Login origin={origin} projectId={projectId} passphrase={passphrase} token={token} />}
             {isLoggedIn &&
                 <div style={styles.container}>
                     <Sidebar

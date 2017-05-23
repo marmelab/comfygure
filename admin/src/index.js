@@ -8,6 +8,6 @@ import App from './App';
 
 injectTapEventPlugin();
 ReactDOM.render(
-    <App projectId={config.projectId} token={config.token} passphrase={config.passphrase} />,
+    <App origin={config.origin} projectId={config.projectId} token={config.token} passphrase={config.passphrase} />,
     document.getElementById('root'),
 );

@@ -128,7 +128,7 @@ module.exports = {
                 projectId: JSON.stringify(config.project.projectId),
                 token: JSON.stringify(config.project.secretToken),
                 origin: JSON.stringify(config.project.origin),
-                secret: JSON.stringify(config.project.passphrase),
+                passphrase: JSON.stringify(config.project.passphrase),
             },
         }),
     ],
