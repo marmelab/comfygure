@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'proptypes';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 import JSONTree from 'react-json-tree';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
@@ -53,21 +55,24 @@ const aceOptions = {
 
 class Environment extends Component {
     componentWillMount() {
-        this.props.getConfig(this.props.environmentName);
+        this.props.loadConfig(this.props.state.environmentName);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.environmentName !== this.props.environmentName) {
-            this.props.getConfig(nextProps.environmentName);
+        if (nextProps.state.environmentName !== this.props.state.environmentName) {
+            this.props.loadConfig(nextProps.state.environmentName);
         }
     }
 
     handleSaveClick = () => {
-        this.props.saveConfig(this.props.newConfig);
+        this.props.saveConfig(this.props.state.newConfig);
     };
 
     render() {
-        const { config, edition, error, loading, newConfig, setNewConfig, toggleEdition } = this.props;
+        const {
+            state: { config, edition, error, loading, newConfig },
+            effects: { setNewConfig, toggleEdition },
+        } = this.props;
 
         return (
             <div style={styles.container}>
@@ -108,40 +113,37 @@ class Environment extends Component {
 }
 
 Environment.propTypes = {
-    config: PropTypes.object,
-    edition: PropTypes.bool.isRequired,
-    environmentName: PropTypes.string,
-    error: PropTypes.string,
-    getConfig: PropTypes.func.isRequired,
-    loading: PropTypes.bool,
-    newConfig: PropTypes.object,
+    state: PropTypes.shape({
+        config: PropTypes.object,
+        edition: PropTypes.bool.isRequired,
+        environmentName: PropTypes.string,
+        error: PropTypes.string,
+        loading: PropTypes.bool,
+        newConfig: PropTypes.object,
+    }).isRequired,
+    effects: PropTypes.shape({
+        setNewConfig: PropTypes.func.isRequired,
+        toggleEdition: PropTypes.func.isRequired,
+    }).isRequired,
     saveConfig: PropTypes.func.isRequired,
-    setNewConfig: PropTypes.func.isRequired,
-    toggleEdition: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
 };
 
 Environment.defaultProps = {
     loading: false,
 };
 
-export default provideConfigState(
-    injectState(
-        ({
-            state: { config, edition, environmentName, error, loading, newConfig, origin, projectId, secret, token },
-            effects: { getConfig, saveConfig, setNewConfig, toggleEdition },
-        }) => (
-            <Environment
-                config={config}
-                edition={edition}
-                environmentName={environmentName}
-                error={error}
-                getConfig={environmentName => getConfig({ environmentName, origin, projectId, secret, token })}
-                loading={loading}
-                newConfig={newConfig}
-                saveConfig={config => saveConfig({ config, environmentName, origin, projectId, secret, token })}
-                setNewConfig={setNewConfig}
-                toggleEdition={toggleEdition}
-            />
-        ),
-    ),
+const enhance = compose(
+    provideConfigState,
+    injectState,
+    withHandlers({
+        loadConfig: ({ state: { origin, projectId, passphrase, token }, effects: { loadConfig } }) => environmentName =>
+            loadConfig({ environmentName, origin, projectId, passphrase, token }),
+        saveConfig: ({
+            state: { environmentName, origin, projectId, passphrase, token },
+            effects: { saveConfig },
+        }) => config => saveConfig({ config, environmentName, origin, projectId, passphrase, token }),
+    }),
 );
+
+export default enhance(Environment);

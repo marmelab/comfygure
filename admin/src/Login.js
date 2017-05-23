@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'proptypes';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 
 import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
@@ -11,20 +13,12 @@ import provideLoginState from './provideLoginState';
 import Alert from './components/Alert';
 
 export const Login = ({
-    origin,
-    token,
-    secret,
-    projectId,
-    error,
-    onOriginChange,
-    loading,
-    onSecretChange,
-    onTokenChange,
-    onProjectIdChange,
+    state: { error, loading, origin, projectId, passphrase, token },
+    effects: { onOriginChange, onpassphraseChange, onTokenChange, onProjectIdChange },
     submit,
 }) => (
     <Card>
-        <CardTitle title="comfy admin" subtitle="enter your token and secret" />
+        <CardTitle title="comfy admin" subtitle="enter your token and passphrase" />
         <CardText>
             <Alert message={error} />
             <form>
@@ -44,11 +38,11 @@ export const Login = ({
                 />
                 <TextField name="token" value={token} floatingLabelText="token" fullWidth onChange={onTokenChange} />
                 <TextField
-                    name="secret"
-                    value={secret}
-                    floatingLabelText="secret"
+                    name="passphrase"
+                    value={passphrase}
+                    floatingLabelText="passphrase"
                     fullWidth
-                    onChange={onSecretChange}
+                    onChange={onpassphraseChange}
                 />
             </form>
         </CardText>
@@ -62,33 +56,29 @@ export const Login = ({
 );
 
 Login.propTypes = {
-    error: PropTypes.string,
-    loading: PropTypes.bool,
-    onOriginChange: PropTypes.func.isRequired,
-    onProjectIdChange: PropTypes.func.isRequired,
-    onSecretChange: PropTypes.func.isRequired,
-    onTokenChange: PropTypes.func.isRequired,
-    origin: PropTypes.string,
-    projectId: PropTypes.string,
-    secret: PropTypes.string,
+    state: PropTypes.shape({
+        error: PropTypes.string,
+        loading: PropTypes.bool,
+        origin: PropTypes.string,
+        projectId: PropTypes.string,
+        passphrase: PropTypes.string,
+        token: PropTypes.string,
+    }),
+    effects: PropTypes.shape({
+        onOriginChange: PropTypes.func.isRequired,
+        onProjectIdChange: PropTypes.func.isRequired,
+        onpassphraseChange: PropTypes.func.isRequired,
+        onTokenChange: PropTypes.func.isRequired,
+    }),
     submit: PropTypes.func.isRequired,
-    token: PropTypes.string,
 };
 
-export default provideLoginState(
-    injectState(({ state: { error, loading, origin, projectId, secret, token }, effects }) => (
-        <Login
-            error={error}
-            loading={loading}
-            onOriginChange={effects.onOriginChange}
-            onProjectIdChange={effects.onProjectIdChange}
-            onSecretChange={effects.onSecretChange}
-            onTokenChange={effects.onTokenChange}
-            origin={origin}
-            projectId={projectId}
-            secret={secret}
-            submit={() => effects.submit({ origin, projectId, token, secret })}
-            token={token}
-        />
-    )),
+const enhance = compose(
+    provideLoginState,
+    injectState,
+    withHandlers({
+        submit: ({ state: { origin, projectId, token, passphrase }, effects: { submit } }) => () =>
+            submit({ origin, projectId, token, passphrase }),
+    }),
 );
+export default enhance(Login);

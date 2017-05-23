@@ -1,20 +1,20 @@
 import { provideState, softUpdate } from 'freactal';
 
 export const state = {
-    initialState: ({ origin = '', projectId = '', secret = '', token = '' }) => ({
+    initialState: ({ origin = '', projectId = '', passphrase = '', token = '' }) => ({
         origin,
         projectId,
         token,
-        secret,
+        passphrase,
         environments: undefined,
         environmentName: 'development',
     }),
     effects: {
-        persistConfig: (effects, { origin, projectId, token, secret }) => {
+        persistConfig: (effects, { origin, projectId, token, passphrase }) => {
             sessionStorage.setItem('comfy.origin', origin);
             sessionStorage.setItem('comfy.projectId', projectId);
             sessionStorage.setItem('comfy.token', token);
-            sessionStorage.setItem('comfy.secret', secret);
+            sessionStorage.setItem('comfy.passphrase', passphrase);
         },
         setConfig: (effects, config) =>
             effects.persistConfig(config).then(
@@ -22,7 +22,7 @@ export const state = {
                     origin: config.origin,
                     projectId: config.projectId,
                     token: config.token,
-                    secret: config.secret,
+                    passphrase: config.passphrase,
                 })),
             ),
         setEnvironments: softUpdate((state, environments) => ({
@@ -31,6 +31,9 @@ export const state = {
         setEnvironment: softUpdate((state, environmentName) => ({
             environmentName,
         })),
+    },
+    computed: {
+        isLoggedIn: ({ token, passphrase }) => !!token && !!passphrase,
     },
 };
 
