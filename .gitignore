@@ -1,1 +1,4 @@
+admin/build/
+admin/node_modules/
 cli/node_modules/
+.comfy/config

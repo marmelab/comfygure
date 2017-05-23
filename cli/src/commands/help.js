@@ -1,4 +1,4 @@
-module.exports = ui => function* () {
+module.exports = ui => function* help() {
     const { bold, dim, gray, cyan } = ui.colors;
 
     ui.print(`
@@ -11,6 +11,7 @@ module.exports = ui => function* () {
         ls          List all configurations
         add         Add a new configuration
         get         Retrieve a configuration
+        admin       Launch the admin interface on port 3000 by default
 
     ${dim('Examples:')}
         ${gray('-')} Display the help
@@ -23,6 +24,8 @@ module.exports = ui => function* () {
             ${cyan('comfy add development -f /config/api.json')}
         ${gray('-')} Retrieve the latest staging stable configuration
             ${cyan('comfy get staging')}
+        ${gray('-')} Launch the admin on the port 8080
+            ${cyan('comfy admin -p 8080')}
 
     ${dim('About')}
         ${bold('comfy')} is licensed under the MIT Licence, sponsored and supported by marmelab.
