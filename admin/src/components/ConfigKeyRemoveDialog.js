@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'proptypes';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
+import { injectState } from 'freactal';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { injectState } from 'freactal';
 
-export const RemoveConfigKeyDialogComponent = ({
+export const ConfigKeyRemoveDialogComponent = ({
     state: { keyToRemove },
     effects: { cancelRemoveKey },
     removeConfigKey,
@@ -22,7 +22,7 @@ export const RemoveConfigKeyDialogComponent = ({
     </Dialog>
 );
 
-RemoveConfigKeyDialogComponent.propTypes = {
+ConfigKeyRemoveDialogComponent.propTypes = {
     effects: PropTypes.shape({
         cancelRemoveKey: PropTypes.func.isRequired,
     }),
@@ -41,4 +41,4 @@ export default compose(
         }) => () =>
             removeConfigKey({ config, environmentName, key: keyToRemove, origin, projectId, passphrase, token }),
     }),
-)(RemoveConfigKeyDialogComponent);
+)(ConfigKeyRemoveDialogComponent);

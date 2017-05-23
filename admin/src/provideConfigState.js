@@ -63,6 +63,15 @@ export const removeConfigKeySaga = function*(effects, { passphrase, config, key,
     yield call(effects.cancelRemoveKey);
 };
 
+export const updateConfigKeySaga = function*(effects, { passphrase, config, key, ...args }) {
+    const newConfig = { ...config, [key.name]: key.value };
+    const flatConfig = yield call(toFlat, newConfig);
+    const encryptedConfig = yield call(encryptConfig, flatConfig, passphrase);
+    yield call(updateConfig, { ...args, config: encryptedConfig });
+    yield call(effects.setConfig, newConfig);
+    yield call(effects.cancelEditKey);
+};
+
 export const updateConfigSaga = function*(effects, { passphrase, config, ...args }) {
     const flatConfig = yield call(toFlat, config);
     const encryptedConfig = yield call(encryptConfig, flatConfig, passphrase);
@@ -79,6 +88,7 @@ export const state = {
         error: undefined,
         loading: false,
         keyToRemove: undefined,
+        keyToEdit: undefined,
     }),
     effects: {
         ...fetchState.effects,
@@ -87,11 +97,17 @@ export const state = {
         loadConfig: wrapWithErrorHandling(wrapWithLoading((effects, args) => sg(getConfigSaga)(effects, args))),
         cancelRemoveKey: softUpdate(() => ({ keyToRemove: undefined })),
         requestToRemoveKey: softUpdate((state, keyToRemove) => ({ keyToRemove })),
+        cancelEditKey: softUpdate(() => ({ keyToEdit: undefined })),
+        updateEditedKey: softUpdate((state, keyToEdit) => ({ keyToEdit })),
+        requestToEditKey: softUpdate((state, keyToEdit) => ({ keyToEdit })),
         removeConfigKey: wrapWithErrorHandling(
             wrapWithLoading((effects, args) => sg(removeConfigKeySaga)(effects, args)),
         ),
         saveConfig: wrapWithErrorHandling(wrapWithLoading((effects, args) => sg(updateConfigSaga)(effects, args))),
         setNewConfig: softUpdate((state, newConfig) => ({ newConfig: JSON.parse(newConfig) })),
+        updateConfigKey: wrapWithErrorHandling(
+            wrapWithLoading((effects, args) => sg(updateConfigKeySaga)(effects, args)),
+        ),
     },
 };
 
