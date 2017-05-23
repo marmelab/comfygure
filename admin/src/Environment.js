@@ -138,7 +138,7 @@ class Environment extends Component {
                             </List>
                         </CardText>}
                     {!loading &&
-                        config &&
+                        filteredConfig &&
                         edition &&
                         <div style={styles.config}>
                             <AceEditor
