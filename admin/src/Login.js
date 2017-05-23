@@ -12,7 +12,7 @@ import { injectState } from 'freactal';
 import provideLoginState from './provideLoginState';
 import Alert from './components/Alert';
 
-export const Login = ({
+export const LoginComponent = ({
     state: { error, loading, origin, projectId, passphrase, token },
     effects: { onOriginChange, onpassphraseChange, onTokenChange, onProjectIdChange },
     submit,
@@ -55,7 +55,7 @@ export const Login = ({
     </Card>
 );
 
-Login.propTypes = {
+LoginComponent.propTypes = {
     state: PropTypes.shape({
         error: PropTypes.string,
         loading: PropTypes.bool,
@@ -81,4 +81,4 @@ const enhance = compose(
             submit({ origin, projectId, token, passphrase }),
     }),
 );
-export default enhance(Login);
+export default enhance(LoginComponent);

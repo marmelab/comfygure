@@ -31,7 +31,7 @@ const styles = {
     },
 };
 
-export const App = ({
+export const AppComponent = ({
     state: { environmentName, environments = [], isLoggedIn = true },
     effects: { setEnvironment },
 }) => (
@@ -54,7 +54,7 @@ export const App = ({
     </MuiThemeProvider>
 );
 
-App.propTypes = {
+AppComponent.propTypes = {
     state: PropTypes.shape({
         environmentName: PropTypes.string,
         environments: PropTypes.arrayOf(PropTypes.object),
@@ -67,4 +67,4 @@ App.propTypes = {
 
 const enhance = compose(provideAppState, injectState);
 
-export default enhance(App);
+export default enhance(AppComponent);
