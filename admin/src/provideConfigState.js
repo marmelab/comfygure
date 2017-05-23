@@ -60,6 +60,7 @@ export const removeConfigKeySaga = function*(effects, { passphrase, config, key,
     const encryptedConfig = yield call(encryptConfig, flatConfig, passphrase);
     yield call(updateConfig, { ...args, config: encryptedConfig });
     yield call(effects.setConfig, newConfig);
+    yield call(effects.cancelRemoveKey);
 };
 
 export const updateConfigSaga = function*(effects, { passphrase, config, ...args }) {
@@ -77,12 +78,15 @@ export const state = {
         edition: false,
         error: undefined,
         loading: false,
+        keyToRemove: undefined,
     }),
     effects: {
         ...fetchState.effects,
         setConfig: softUpdate((state, config) => ({ config, newConfig: config })),
         toggleEdition: softUpdate(({ edition }) => ({ edition: !edition })),
         loadConfig: wrapWithErrorHandling(wrapWithLoading((effects, args) => sg(getConfigSaga)(effects, args))),
+        cancelRemoveKey: softUpdate(() => ({ keyToRemove: undefined })),
+        requestToRemoveKey: softUpdate((state, keyToRemove) => ({ keyToRemove })),
         removeConfigKey: wrapWithErrorHandling(
             wrapWithLoading((effects, args) => sg(removeConfigKeySaga)(effects, args)),
         ),
