@@ -5,12 +5,13 @@ import IconButton from 'material-ui/IconButton';
 import LockOpen from 'material-ui/svg-icons/action/lock-open';
 import LockClose from 'material-ui/svg-icons/action/lock-outline';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 
 const styles = {
     container: {
         display: 'flex',
         justifyContent: 'space-between',
-        marginRight: '3rem',
+        marginRight: '6rem',
     },
     placeholder: {
         backgroundColor: 'rgb(208, 208, 208)',
@@ -44,6 +45,8 @@ export class EnvironmentItemComponent extends Component {
     };
 
     handleRemove = () => {
+        event.preventDefault();
+        event.stopPropagation();
         this.props.onRemove(this.props.name);
     };
 
@@ -71,9 +74,14 @@ export class EnvironmentItemComponent extends Component {
             </IconButton>
         );
 
+        const editButton = (
+            <IconButton tooltip="Edit" tooltipPosition="top-center" onClick={this.handleEdit} primary>
+                <EditIcon />}
+            </IconButton>
+        );
+
         return (
             <ListItem
-                onClick={this.handleEdit}
                 onMouseEnter={this.toggleHover}
                 onMouseLeave={this.toggleHover}
                 primaryText={
@@ -82,7 +90,7 @@ export class EnvironmentItemComponent extends Component {
                         {showEncryted ? <span>{value}</span> : <div style={styles.placeholder} />}
                     </div>
                 }
-                rightIconButton={hover ? <div>{removeButton}{lockButton}</div> : lockButton}
+                rightIconButton={hover ? <div>{editButton}{removeButton}{lockButton}</div> : lockButton}
             />
         );
     }

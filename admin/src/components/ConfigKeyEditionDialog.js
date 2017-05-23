@@ -1,66 +1,69 @@
 import React, { Component } from 'react';
 import PropTypes from 'proptypes';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import { injectState } from 'freactal';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
 export class ConfigKeyEditionDialogComponent extends Component {
     static propTypes = {
-        configKey: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-            value: PropTypes.string.isRequired,
+        state: PropTypes.shape({
+            keyToEdit: PropTypes.shape({
+                name: PropTypes.string,
+                value: PropTypes.string,
+            }),
         }),
-        onCancel: PropTypes.func.isRequired,
-        onSave: PropTypes.func.isRequired,
-        open: PropTypes.bool,
+        effects: PropTypes.shape({
+            cancelEditKey: PropTypes.func.isRequired,
+            updateEditedKey: PropTypes.func.isRequired,
+        }),
+        updateConfigKey: PropTypes.func.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            currentName: props.configKey ? props.configKey.name : undefined,
-            currentValue: props.configKey ? props.configKey.value : undefined,
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.configKey) {
-            this.setState({
-                currentName: nextProps.configKey.name,
-                currentValue: nextProps.configKey.value,
-            });
-        }
-    }
-
     handleNameChange = (event, name) => {
-        this.setState({ currentName: name });
+        this.props.effects.updateEditedKey({ name, value: this.props.state.keyToEdit.value });
     };
 
     handleValueChange = (event, value) => {
-        this.setState({ currentValue: value });
-    };
-
-    handleSave = () => {
-        this.props.onSave({ name: this.state.currentName, value: this.state.currentValue });
+        this.props.effects.updateEditedKey({ name: this.props.state.keyToEdit.name, value });
     };
 
     render() {
-        const { open, onCancel } = this.props;
-        const { currentName, currentValue } = this.state;
+        const { state: { keyToEdit }, effects: { cancelEditKey }, updateConfigKey } = this.props;
+
         return (
             <Dialog
                 actions={[
-                    <FlatButton label="Cancel" onTouchTap={onCancel} />,
-                    <FlatButton label="Save" primary keyboardFocused={true} onTouchTap={this.handleSave} />,
+                    <FlatButton label="Cancel" onTouchTap={cancelEditKey} />,
+                    <FlatButton label="Save" primary keyboardFocused={true} onTouchTap={updateConfigKey} />,
                 ]}
-                open={open}
+                open={!!keyToEdit}
             >
-                <TextField floatingLabelText="Key" fullWidth value={currentName} onChange={this.handleNameChange} />
-                <TextField floatingLabelText="Value" fullWidth value={currentValue} onChange={this.handleValueChange} />
+                <TextField
+                    floatingLabelText="Key"
+                    fullWidth
+                    value={keyToEdit && keyToEdit.name}
+                    onChange={this.handleNameChange}
+                />
+                <TextField
+                    floatingLabelText="Value"
+                    fullWidth
+                    value={keyToEdit && keyToEdit.value}
+                    onChange={this.handleValueChange}
+                />
             </Dialog>
         );
     }
 }
 
-export default ConfigKeyEditionDialogComponent;
+export default compose(
+    injectState,
+    withHandlers({
+        updateConfigKey: ({
+            state: { config, environmentName, keyToEdit, origin, projectId, passphrase, token },
+            effects: { updateConfigKey },
+        }) => () => updateConfigKey({ config, environmentName, key: keyToEdit, origin, projectId, passphrase, token }),
+    }),
+)(ConfigKeyEditionDialogComponent);
