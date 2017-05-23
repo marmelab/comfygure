@@ -57,8 +57,8 @@ module.exports = {
         // Generated JS file names (with nested folders).
         // There will be one main bundle, and one file per asynchronous chunk.
         // We don't currently advertise code splitting but Webpack supports it.
-        filename: 'static/js/[name].[chunkhash:8].js',
-        chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+        filename: 'static/js/main.js',
+        chunkFilename: 'static/js/main.chunk.js',
         // We inferred the "public path" (such as / or /my-project) from homepage.
         publicPath: publicPath,
     },
@@ -191,7 +191,7 @@ module.exports = {
         // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
         // It is absolutely essential that NODE_ENV was set to production here.
         // Otherwise React will be compiled in the very slow development mode.
-        new webpack.DefinePlugin(Object.assign({}, env.stringified, { config: {} })),
+        new webpack.DefinePlugin(env.stringified),
         // This helps ensure the builds are consistent if source hasn't changed:
         new webpack.optimize.OccurrenceOrderPlugin(),
         // Try to dedupe duplicated modules, if any:
