@@ -15,6 +15,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import provideConfigState from './provideConfigState';
 import Alert from './components/Alert';
+import RemoveConfigKeyDialog from './components/RemoveConfigKeyDialog';
 import EnvironmentItem from './components/EnvironmentItem';
 
 const styles = {
@@ -33,6 +34,28 @@ const aceOptions = {
 };
 
 class Environment extends Component {
+    static propTypes = {
+        state: PropTypes.shape({
+            config: PropTypes.object,
+            edition: PropTypes.bool.isRequired,
+            environmentName: PropTypes.string,
+            error: PropTypes.string,
+            keyToRemove: PropTypes.string,
+            loading: PropTypes.bool,
+            newConfig: PropTypes.object,
+        }).isRequired,
+        effects: PropTypes.shape({
+            setNewConfig: PropTypes.func.isRequired,
+            toggleEdition: PropTypes.func.isRequired,
+        }).isRequired,
+        saveConfig: PropTypes.func.isRequired,
+        loadConfig: PropTypes.func.isRequired,
+    };
+
+    static defaultProps = {
+        loading: false,
+    };
+
     componentWillMount() {
         this.props.loadConfig(this.props.state.environmentName);
     }
@@ -50,7 +73,7 @@ class Environment extends Component {
     render() {
         const {
             state: { config, edition, error, loading, newConfig },
-            effects: { setNewConfig, toggleEdition },
+            effects: { requestToRemoveKey, setNewConfig, toggleEdition },
         } = this.props;
 
         return (
@@ -71,7 +94,12 @@ class Environment extends Component {
                             <List>
                                 <ListItem disabled rightIconButton={<span>Unlock</span>} />
                                 {Object.keys(config).map(key => (
-                                    <EnvironmentItem key={key} name={key} value={config[key]} />
+                                    <EnvironmentItem
+                                        key={key}
+                                        name={key}
+                                        value={config[key]}
+                                        onRemove={requestToRemoveKey}
+                                    />
                                 ))}
                             </List>
                         </CardText>}
@@ -92,31 +120,11 @@ class Environment extends Component {
                             />
                         </div>}
                 </Card>
+                <RemoveConfigKeyDialog />
             </div>
         );
     }
 }
-
-Environment.propTypes = {
-    state: PropTypes.shape({
-        config: PropTypes.object,
-        edition: PropTypes.bool.isRequired,
-        environmentName: PropTypes.string,
-        error: PropTypes.string,
-        loading: PropTypes.bool,
-        newConfig: PropTypes.object,
-    }).isRequired,
-    effects: PropTypes.shape({
-        setNewConfig: PropTypes.func.isRequired,
-        toggleEdition: PropTypes.func.isRequired,
-    }).isRequired,
-    saveConfig: PropTypes.func.isRequired,
-    loadConfig: PropTypes.func.isRequired,
-};
-
-Environment.defaultProps = {
-    loading: false,
-};
 
 const enhance = compose(
     provideConfigState,

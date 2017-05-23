@@ -4,6 +4,7 @@ import { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import LockOpen from 'material-ui/svg-icons/action/lock-open';
 import LockClose from 'material-ui/svg-icons/action/lock-outline';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 
 const styles = {
     container: {
@@ -21,36 +22,60 @@ const styles = {
 
 export class EnvironmentItemComponent extends Component {
     state = {
+        hover: false,
         showEncryted: false,
     };
 
     static propTypes = {
         name: PropTypes.string.isRequired,
+        onRemove: PropTypes.func.isRequired,
         value: PropTypes.string.isRequired,
     };
 
-    handleToggleShowDecrypted = () => {
+    toggleShowDecrypted = () => {
         this.setState({ showEncryted: !this.state.showEncryted });
+    };
+
+    handleRemove = () => {
+        this.props.onRemove(this.props.name);
+    };
+
+    toggleHover = () => {
+        this.setState({ hover: !this.state.hover });
     };
 
     render() {
         const { name, value } = this.props;
-        const { showEncryted } = this.state;
+        const { hover, showEncryted } = this.state;
+
+        const lockButton = (
+            <IconButton
+                tooltip={showEncryted ? 'Lock' : 'Unlock'}
+                tooltipPosition="top-center"
+                onClick={this.toggleShowDecrypted}
+            >
+                {showEncryted ? <LockOpen /> : <LockClose />}
+            </IconButton>
+        );
+
+        const removeButton = (
+            <IconButton tooltip="Delete" tooltipPosition="top-center" onClick={this.handleRemove}>
+                <DeleteIcon />}
+            </IconButton>
+        );
 
         return (
             <ListItem
-                onClick={this.handleToggleShowDecrypted}
+                onClick={this.toggleShowDecrypted}
+                onMouseEnter={this.toggleHover}
+                onMouseLeave={this.toggleHover}
                 primaryText={
                     <div style={styles.container}>
                         <span>{name}</span>
                         {showEncryted ? <span>{value}</span> : <div style={styles.placeholder} />}
                     </div>
                 }
-                rightIconButton={
-                    <IconButton touch={true} onClick={this.handleToggleShowDecrypted}>
-                        {showEncryted ? <LockOpen /> : <LockClose />}
-                    </IconButton>
-                }
+                rightIconButton={hover ? <div>{removeButton}{lockButton}</div> : lockButton}
             />
         );
     }
