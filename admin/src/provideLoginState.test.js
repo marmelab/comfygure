@@ -11,7 +11,7 @@ describe('provideLoginState', () => {
     };
 
     it('should update token', () => {
-        const { effects, getState } = new (provideLoginState())(null, {});
+        const { effects, getState } = new (provideLoginState())({}, {});
         expect(getState().token).toBe(undefined);
         expect(getState().passphrase).toBe(undefined);
 
@@ -21,7 +21,7 @@ describe('provideLoginState', () => {
     });
 
     it('should update passphrase', () => {
-        const { effects, getState } = new (provideLoginState())(null, {});
+        const { effects, getState } = new (provideLoginState())({}, {});
         expect(getState().token).toBe(undefined);
         expect(getState().passphrase).toBe(undefined);
 
