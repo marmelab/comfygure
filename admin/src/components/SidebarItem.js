@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'proptypes';
-import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
 
 const styles = {
-    active: {
-        fontWeight: 'bold',
+    button: {
+        textAlign: 'left',
+    },
+    label: {
+        textTransform: 'none',
     },
 };
 
@@ -22,10 +25,12 @@ export default class SidebarItem extends Component {
     render() {
         const { active, text } = this.props;
         return (
-            <MenuItem
-                style={active ? styles.active : styles.default}
-                primaryText={text}
-                onTouchTap={this.handleClick}
+            <FlatButton
+                label={text}
+                style={styles.button}
+                labelStyle={styles.label}
+                primary={active}
+                onClick={this.handleClick}
             />
         );
     }
