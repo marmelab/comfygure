@@ -82,11 +82,6 @@ describe('updateConfigSaga', () => {
 
     const saga = getSaga();
 
-    it('sets the loading state to true', () => {
-        const effect = saga.next().value;
-        expect(effect).toEqual(call('setLoading', true));
-    });
-
     it('flattens the new config', () => {
         const effect = saga.next().value;
         expect(effect).toEqual(call(toFlat, { foo: 'bar' }));
@@ -101,10 +96,5 @@ describe('updateConfigSaga', () => {
         const { passphrase, config, ...fetchArgs } = args;
         const effect = saga.next('encrypted').value;
         expect(effect).toEqual(call(updateConfig, { ...fetchArgs, config: 'encrypted' }));
-    });
-
-    it('sets the loading state to false', () => {
-        const effect = saga.next({ body: 'result' }).value;
-        expect(effect).toEqual(call('setLoading', false));
     });
 });
