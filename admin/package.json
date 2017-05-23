@@ -20,7 +20,7 @@
     "react-ace": "4.3.0",
     "react-dom": "15.5.4",
     "react-tap-event-plugin": "2.0.1",
-    "recompose": "^0.23.4",
+    "recompose": "0.23.4",
     "sg.js": "0.1.0"
   },
   "devDependencies": {
