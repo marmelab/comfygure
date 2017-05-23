@@ -9,7 +9,8 @@ import 'brace/theme/github';
 import { injectState } from 'freactal';
 import { List, ListItem } from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
-import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
+import { Card, CardText } from 'material-ui/Card';
+import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import provideConfigState from './provideConfigState';
@@ -22,9 +23,7 @@ const styles = {
         flexDirection: 'column',
         flexGrow: 2,
         padding: '1em',
-    },
-    config: {
-        paddingTop: '1em',
+        backgroundColor: 'rgb(232, 232, 232)',
     },
 };
 
@@ -56,42 +55,43 @@ class Environment extends Component {
 
         return (
             <div style={styles.container}>
-                <Toolbar>
-                    <ToolbarGroup firstChild>
+                <Card>
+                    <CardText>
                         {!edition && <RaisedButton label="Edit" primary onClick={toggleEdition} />}
                         {edition && <RaisedButton label="Save" primary onClick={this.handleSaveClick} />}
                         {edition && <RaisedButton label="Cancel" onClick={toggleEdition} />}
-                    </ToolbarGroup>
-                </Toolbar>
-                {loading && <LinearProgress mode="indeterminate" />}
-                {error && <Alert message={error} />}
-                {!loading &&
-                    config &&
-                    !edition &&
-                    <div style={styles.config}>
-                        <List>
-                            <ListItem disabled rightIconButton={<span>Unlock</span>} />
-                            {Object.keys(config).map(key => (
-                                <EnvironmentItem key={key} name={key} value={config[key]} />
-                            ))}
-                        </List>
-                    </div>}
-                {!loading &&
-                    config &&
-                    edition &&
-                    <div style={styles.config}>
-                        <AceEditor
-                            mode="javascript"
-                            theme="github"
-                            name="configEditor"
-                            showGutter
-                            highlightActiveLine
-                            value={JSON.stringify(newConfig, null, 4)}
-                            setOptions={aceOptions}
-                            onChange={setNewConfig}
-                            width="100%"
-                        />
-                    </div>}
+                    </CardText>
+                    <Divider />
+                    {loading && <LinearProgress mode="indeterminate" />}
+                    {error && <Alert message={error} />}
+                    {!loading &&
+                        config &&
+                        !edition &&
+                        <CardText>
+                            <List>
+                                <ListItem disabled rightIconButton={<span>Unlock</span>} />
+                                {Object.keys(config).map(key => (
+                                    <EnvironmentItem key={key} name={key} value={config[key]} />
+                                ))}
+                            </List>
+                        </CardText>}
+                    {!loading &&
+                        config &&
+                        edition &&
+                        <div style={styles.config}>
+                            <AceEditor
+                                mode="javascript"
+                                theme="github"
+                                name="configEditor"
+                                showGutter
+                                highlightActiveLine
+                                value={JSON.stringify(newConfig, null, 4)}
+                                setOptions={aceOptions}
+                                onChange={setNewConfig}
+                                width="100%"
+                            />
+                        </div>}
+                </Card>
             </div>
         );
     }

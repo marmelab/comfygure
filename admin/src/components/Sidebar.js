@@ -9,6 +9,8 @@ const styles = {
     flexGrow: 0,
     order: -1,
     flexBasis: 256,
+    backgroundColor: 'rgb(232, 232, 232)',
+    paddingTop: 16,
 };
 
 const Sidebar = ({ activeEnvironment, environments, onEnvironmentSelected }) => (
