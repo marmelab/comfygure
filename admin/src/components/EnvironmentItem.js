@@ -85,7 +85,7 @@ export class EnvironmentItemComponent extends Component {
                 onMouseEnter={this.toggleHover}
                 onMouseLeave={this.toggleHover}
                 primaryText={
-                    <div style={styles.container}>
+                    <div style={styles.container} onClick={this.toggleShowDecrypted}>
                         <span>{name}</span>
                         {showEncryted ? <span>{value}</span> : <div style={styles.placeholder} />}
                     </div>
