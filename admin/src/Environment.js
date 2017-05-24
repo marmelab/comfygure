@@ -133,7 +133,7 @@ class Environment extends Component {
                             </List>
                         </CardText>}
                     {!loading &&
-                        filteredConfig &&
+                        newConfig &&
                         edition &&
                         <div style={styles.config}>
                             <AceEditor
@@ -152,7 +152,6 @@ class Environment extends Component {
                         <ContentAdd />
                     </FloatingActionButton>
                 </Card>
-
                 <ConfigKeyRemoveDialog />
                 <ConfigKeyEditionDialog />
             </div>
