@@ -41,7 +41,7 @@ const styles = {
         display: 'flex',
     },
     search: {
-        marginLeft: 'auto',
+        marginLeft: 16,
     },
 };
 
@@ -106,7 +106,7 @@ class Environment extends Component {
                             </div>}
                         {!edition &&
                             <div style={styles.actions}>
-                                <TextField hintText="search" onChange={setSearch} />
+                                <TextField hintText="search" onChange={setSearch} fullWidth />
                                 <div style={styles.search}>
                                     <RaisedButton label="Edit" primary onClick={toggleEdition} />
                                 </div>
