@@ -29,7 +29,6 @@ const styles = {
         padding: '1em',
         backgroundColor: 'rgb(232, 232, 232)',
     },
-<<<<<<< HEAD
     card: {
         position: 'relative',
     },
@@ -37,13 +36,12 @@ const styles = {
         position: 'absolute',
         bottom: -28,
         right: 0,
-=======
+    },
     actions: {
         display: 'flex',
     },
     search: {
         marginLeft: 'auto',
->>>>>>> better style for search input
     },
 };
 
@@ -68,11 +66,8 @@ class Environment extends Component {
             toggleEdition: PropTypes.func.isRequired,
         }).isRequired,
         loadConfig: PropTypes.func.isRequired,
-<<<<<<< HEAD
         saveConfig: PropTypes.func.isRequired,
-=======
         setSearch: PropTypes.func.isRequired,
->>>>>>> better style for search input
     };
 
     static defaultProps = {
