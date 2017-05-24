@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'proptypes';
-import { ListItem } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import LockOpen from 'material-ui/svg-icons/action/lock-open';
 import LockClose from 'material-ui/svg-icons/action/lock-outline';
@@ -8,16 +7,26 @@ import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 
 const styles = {
-    container: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginRight: '6rem',
+    tr: {
+        cursor: 'pointer',
+        height: 50,
+    },
+    trHover: {
+        backgroundColor: 'rgb(232, 232, 232)',
+        cursor: 'pointer',
+        height: 50,
     },
     placeholder: {
         backgroundColor: 'rgb(208, 208, 208)',
         height: 16,
-        flexGrow: 2,
-        marginLeft: '3rem',
+        width: '100%',
+    },
+    cell: {
+        paddingLeft: 16,
+        paddingRight: 16,
+    },
+    buttonsCell: {
+        textAlign: 'right',
     },
 };
 
@@ -81,17 +90,20 @@ export class EnvironmentItemComponent extends Component {
         );
 
         return (
-            <ListItem
+            <tr
+                style={hover ? styles.trHover : styles.tr}
+                onClick={this.toggleShowDecrypted}
                 onMouseEnter={this.toggleHover}
                 onMouseLeave={this.toggleHover}
-                primaryText={
-                    <div style={styles.container} onClick={this.toggleShowDecrypted}>
-                        <span>{name}</span>
-                        {showEncryted ? <span>{value}</span> : <div style={styles.placeholder} />}
-                    </div>
-                }
-                rightIconButton={hover ? <div>{editButton}{removeButton}{lockButton}</div> : lockButton}
-            />
+            >
+                <td style={styles.cell}>{name}</td>
+                <td style={styles.cell}>
+                    {showEncryted ? <span>{value}</span> : <div style={styles.placeholder} />}
+                </td>
+                <td style={styles.buttonsCell}>
+                    {hover && <div>{editButton}{removeButton}{lockButton}</div>}
+                </td>
+            </tr>
         );
     }
 }
