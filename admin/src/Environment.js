@@ -48,6 +48,7 @@ const styles = {
     },
     headerCell: {
         width: '10rem',
+        minWidth: '10rem',
         padding: 16,
     },
     valueCell: {

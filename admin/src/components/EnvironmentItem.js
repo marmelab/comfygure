@@ -27,6 +27,7 @@ const styles = {
     },
     buttonsCell: {
         textAlign: 'right',
+        whiteSpace: 'no-wrap',
     },
 };
 
