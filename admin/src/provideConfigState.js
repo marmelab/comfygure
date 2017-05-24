@@ -2,6 +2,7 @@ import { provideState, softUpdate } from 'freactal';
 import sg from 'sg.js';
 import call from 'sg.js/dist/effects/call';
 import omit from 'lodash.omit';
+import pickBy from 'lodash.pickby';
 
 import fetchState from './fetch/state';
 import wrapWithLoading from './utils/wrapWithLoading';
@@ -89,6 +90,7 @@ export const state = {
         loading: false,
         keyToRemove: undefined,
         keyToEdit: undefined,
+        search: '',
     }),
     effects: {
         ...fetchState.effects,
@@ -108,6 +110,11 @@ export const state = {
         updateConfigKey: wrapWithErrorHandling(
             wrapWithLoading((effects, args) => sg(updateConfigKeySaga)(effects, args)),
         ),
+        setSearch: softUpdate((state, search) => ({ search })),
+    },
+    computed: {
+        filteredConfig: ({ config, search }) =>
+            pickBy(config, (_, key) => !!key.toLowerCase().match(search.toLowerCase())),
     },
 };
 
