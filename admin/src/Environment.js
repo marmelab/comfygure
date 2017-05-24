@@ -97,7 +97,7 @@ class Environment extends Component {
 
         return (
             <div style={styles.container}>
-                <Card>
+                <Card style={styles.card}>
                     <CardText>
                         {edition &&
                             <div>
