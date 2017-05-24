@@ -101,6 +101,7 @@ export const state = {
         requestToRemoveKey: softUpdate((state, keyToRemove) => ({ keyToRemove })),
         cancelEditKey: softUpdate(() => ({ keyToEdit: undefined })),
         updateEditedKey: softUpdate((state, keyToEdit) => ({ keyToEdit })),
+        requestToAddKey: softUpdate(() => ({ keyToEdit: { name: '', value: '' } })),
         requestToEditKey: softUpdate((state, keyToEdit) => ({ keyToEdit })),
         removeConfigKey: wrapWithErrorHandling(
             wrapWithLoading((effects, args) => sg(removeConfigKeySaga)(effects, args)),

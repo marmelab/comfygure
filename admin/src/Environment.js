@@ -91,7 +91,7 @@ class Environment extends Component {
     render() {
         const {
             state: { edition, error, loading, newConfig, filteredConfig },
-            effects: { requestToEditKey, requestToRemoveKey, setNewConfig, toggleEdition },
+            effects: { requestToAddKey, requestToEditKey, requestToRemoveKey, setNewConfig, toggleEdition },
             setSearch,
         } = this.props;
 
@@ -148,7 +148,7 @@ class Environment extends Component {
                                 width="100%"
                             />
                         </div>}
-                    <FloatingActionButton style={styles.addButton}>
+                    <FloatingActionButton style={styles.addButton} onClick={requestToAddKey}>
                         <ContentAdd />
                     </FloatingActionButton>
                 </Card>
