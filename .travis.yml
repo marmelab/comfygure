@@ -2,6 +2,16 @@ language: node_js
 node_js:
   - 6
 
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.4"
+
+before_script:
+  - psql -c 'create database comfy;' -U postgres
+  - psql -U postgres comfy < api/var/schema.sql
+
 install: make install
 script: make test
 
@@ -9,6 +19,8 @@ cache:
   directories:
     - api/node_modules
     - cli/node_modules
+    - admin/node_modules
+    - test/node_modules
 
 branches:
   only:

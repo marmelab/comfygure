@@ -1,4 +1,10 @@
 admin/build/
 admin/node_modules/
+
 cli/node_modules/
+
+test/node_modules/
+test/.pm2/
+test/.env/
+
 .comfy/config
