@@ -6,7 +6,6 @@ import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/github';
 import { injectState } from 'freactal';
-import { List, ListItem } from 'material-ui/List';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Card, CardText } from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
@@ -23,25 +22,37 @@ import EnvironmentItem from './components/EnvironmentItem';
 
 const styles = {
     container: {
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 2,
         padding: '1em',
-        backgroundColor: 'rgb(232, 232, 232)',
     },
     card: {
-        position: 'relative',
+        maxWidth: 960,
+        minWidth: 550,
+        margin: 'auto',
     },
     addButton: {
         position: 'absolute',
-        bottom: -28,
-        right: 0,
+        bottom: 16,
+        right: 16,
     },
     actions: {
         display: 'flex',
     },
     search: {
         marginLeft: 16,
+    },
+    table: {
+        width: '100%',
+        border: 'none',
+        borderSpacing: 0,
+        borderCollapse: 'collapse',
+    },
+    headerCell: {
+        width: '10rem',
+        minWidth: '10rem',
+        padding: 16,
+    },
+    valueCell: {
+        minWidth: 256,
     },
 };
 
@@ -119,18 +130,26 @@ class Environment extends Component {
                         filteredConfig &&
                         !edition &&
                         <CardText>
-                            <List>
-                                <ListItem disabled rightIconButton={<span>Unlock</span>} />
-                                {Object.keys(filteredConfig).map(key => (
-                                    <EnvironmentItem
-                                        key={key}
-                                        name={key}
-                                        value={filteredConfig[key]}
-                                        onRemove={requestToRemoveKey}
-                                        onEdit={requestToEditKey}
-                                    />
-                                ))}
-                            </List>
+                            <table style={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th />
+                                        <th style={styles.valueCell} />
+                                        <th style={styles.headerCell} />
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.keys(filteredConfig).map(key => (
+                                        <EnvironmentItem
+                                            key={key}
+                                            name={key}
+                                            value={filteredConfig[key]}
+                                            onRemove={requestToRemoveKey}
+                                            onEdit={requestToEditKey}
+                                        />
+                                    ))}
+                                </tbody>
+                            </table>
                         </CardText>}
                     {!loading &&
                         newConfig &&

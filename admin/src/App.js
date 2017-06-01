@@ -19,6 +19,7 @@ const styles = {
         right: 0,
         top: 0,
         position: 'fixed',
+        backgroundColor: 'rgb(232, 232, 232)',
     },
     container: {
         display: 'flex',

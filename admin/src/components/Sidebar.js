@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'proptypes';
-import Paper from 'material-ui/Paper';
 import SidebarItem from './SidebarItem';
 
 const styles = {
@@ -14,7 +13,7 @@ const styles = {
 };
 
 const Sidebar = ({ activeEnvironment, environments, onEnvironmentSelected }) => (
-    <Paper style={styles}>
+    <div style={styles}>
         {environments.map(environment => (
             <SidebarItem
                 key={environment.name}
@@ -24,7 +23,7 @@ const Sidebar = ({ activeEnvironment, environments, onEnvironmentSelected }) => 
                 value={environment.name}
             />
         ))}
-    </Paper>
+    </div>
 );
 
 Sidebar.propTypes = {
