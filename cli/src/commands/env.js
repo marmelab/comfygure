@@ -1,18 +1,28 @@
-const help = (ui, code = 0) => {
-    const { bold, dim } = ui.colors;
+const help = (ui) => {
+    const { bold, cyan } = ui.colors;
 
     ui.print(`
-    ${bold('comfy')} env <options>
+${bold('NAME')}
+        comfy env - Manage configuration environments
 
-    ${dim('Options')}
-        help                Show this very help message
-        ls                  List all environments
+${bold('SYNOPSIS')}
+        ${bold('comfy')} env <command> [<options>]
+
+${bold('COMMANDS')}
+        list                List all environments
         add <environment>   Create the environment <environment>
+
+${bold('OPTIONS')}
+        <environment>   Name of the environment
+        -h, --help      Show this very help message
+
+${bold('EXAMPLES')}
+        ${cyan('comfy env ls')}
+        ${cyan('comfy env add production')}
 `);
-    ui.exit(code);
 };
 
-const ls = (ui, modules) => function* () {
+const list = (ui, modules) => function* () {
     const project = yield modules.project.retrieveFromConfig();
     const environments = yield modules.environment.list(project);
 
@@ -24,31 +34,39 @@ const ls = (ui, modules) => function* () {
 };
 
 const add = (ui, modules, options) => function* () {
-    const { red, bold } = ui.colors;
+    const { red, bold, green } = ui.colors;
 
     if (!options.length) {
         ui.error(`${red('No environment specified.')}`);
-        help(ui, 1);
     }
 
     if (options.length > 1) {
         ui.error(`${red('Invalid environment format. The environment name should be one word.')}`);
-        help(ui, 1);
+    }
+
+    if (options.length !== 1) {
+        ui.print(`${bold('SYNOPSIS')}
+        ${bold('comfy')} env add <environment>
+
+Type ${green('comfy env --help')} for details`);
+
+        return ui.exit(0);
     }
 
     const project = yield modules.project.retrieveFromConfig();
     const environment = yield modules.environment.add(project, options[0]);
-    const addCommand = `comfy add ${environment.name}`;
+    const addCommand = `comfy setall ${environment.name}`;
 
-    ui.print(`${bold('Cool!')} Your new environment "${bold(environment.name)}" was successfully saved.`);
-    ui.print(`You can now add a configuration, try ${bold(addCommand)}`);
+    ui.print(`${bold(green('Environment successfully created'))}`);
+    ui.print(`You can now set a configuration fot this environment using ${bold(addCommand)}`);
     ui.exit();
 };
 
 module.exports = (ui, modules) => function* ([command, ...options]) {
     switch (command) {
+    case 'list':
     case 'ls':
-        yield ls(ui, modules);
+        yield list(ui, modules);
         break;
     case 'add':
         yield add(ui, modules, options);

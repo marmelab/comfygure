@@ -13,4 +13,4 @@ const ui = require('../src/ui/console');
 const comfy = require('../src')(ui, process.argv);
 
 // Dunno why I need to use co but I have to. I'll see that later
-co(comfy.run).catch(error => console.error(error));
+co(comfy).catch(error => console.error(error));

@@ -21,29 +21,33 @@ const runCommand = cmd =>
         });
     });
 
-const help = (ui, code = 0) => {
+const help = (ui) => {
 
-    const { bold, dim } = ui.colors;
+    const { bold, cyan } = ui.colors;
 
     ui.print(`
-    ${bold('comfy')} admin <environment> <options>
+${bold('NAME')}
+        comfy admin - Run the comfy admin web application
 
-    ${dim('Options')}
-        help        Show this very help message
-        -p          The port used to serve the admin, default to 3000
+${bold('SYNOPSIS')}
+        ${bold('comfy')} admin [<options>]
 
-    ${dim('Example')}
-        comfy admin -p 8080
+${bold('OPTIONS')}
+        -p, --port      The port used to serve the admin (defaults to 3000)
+        -h, --help      Show this very help message
+
+${bold('EXAMPLE')}
+        ${cyan('comfy admin -p 8080')}
 `);
-    ui.exit(code);
 };
 
-module.exports = ui => function* admin([env, ...rawOptions]) {
+module.exports = ui => function* admin(rawOptions) {
     const options = minimist(rawOptions);
-    const port = options.p || 3000;
+    const port = options.p || options.port || 3000;
 
-    if (env === 'help' || options._.includes('help')) {
+    if (options.help || options.h || options._.includes('help')) {
         help(ui);
+        return ui.exit(0);
     }
 
     if (moduleAvailable('comfy-admin')) {
@@ -63,8 +67,8 @@ module.exports = ui => function* admin([env, ...rawOptions]) {
         if (error.message.match('Please try running this command again as root/Administrator.')) {
             ui.print(`
     Uh oh, it looks like npm need administrator rights to install package globally on your machine.
-    Either run the command with sudo and trust us or look on internet to see how to configure your
-    environment so that sudo is no longer required to install global packages (which is a lot better)
+    Either run the command with sudo and trust us, or look on internet to see how to configure your
+    environment so that sudo is no longer required to install global packages (which is a lot better).
             `);
             return;
         }

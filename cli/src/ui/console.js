@@ -36,24 +36,26 @@ const input = {
 const printRequestError = (err) => {
     const { red, cyan, gray, bold, dim } = colors;
 
-    const contactUs = `If the error persist, please contact us:
-${gray('-')} Issue: ${cyan('https://github.com/marmelab/comfygure/issues')}`;
-
     switch (err.code) {
     case 'ECONNREFUSED':
     case 'ECONNRESET':
     case 'ETIMEDOUT':
     case 'ENETUNREACH':
-        error(`${red('Unable to reach the server.')} Please check your connection and try again.\n\n${contactUs}`);
+    case 'ENOTFOUND':
+        error(`${dim(err.message)}
+${red('Unable to reach the comfy server.')}
+Please check your connection and try again.`);
         break;
     case 403:
-        error(`${red('You are not allowed to perform this action.')} Please check your read or write token.`);
+        error(`${red('You are not allowed to perform this action.')}
+Please check your read or write token.`);
         break;
     default:
-        error(`${red('An error occured.')} We are sorry. ${contactUs}
+        error(`${dim(err.message)}
+${dim(err.stack)}
+${red('Unknown error, command aborted.')}
+If the error persists, please report it at ${cyan('https://github.com/marmelab/comfygure/issues')}`);
 
-${bold(err.message)}
-${dim(err.stack)}`);
     }
 };
 

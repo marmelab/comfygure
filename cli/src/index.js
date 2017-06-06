@@ -12,12 +12,12 @@ const main = (ui, evt) => {
         env: require('./commands/env'),
         setall: require('./commands/setall'),
         get: require('./commands/get'),
-        ls: require('./commands/ls'),
+        log: require('./commands/log'),
         tag: require('./commands/tag'),
         admin: require('./commands/admin'),
     };
 
-    const run = function* () {
+    return function* () {
         const request = ui.digestEvent(evt);
 
         let command = commands.help;
@@ -46,8 +46,6 @@ const main = (ui, evt) => {
 
         yield command(ui, modules)(request.arguments);
     };
-
-    return { run };
 };
 
 module.exports = main;
