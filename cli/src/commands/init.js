@@ -3,7 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const minimist = require('minimist');
 
-const help = (ui, code = 0) => {
+const help = (ui) => {
     const { bold, dim } = ui.colors;
 
     ui.print(`
@@ -25,7 +25,6 @@ ${bold('EXAMPLES')}
         comfy init
         comfy init --name foo --env 'development' --origin 'http://mycomfy.mydomain.com'
 `);
-    ui.exit(code);
 };
 
 module.exports = (ui, modules) => function* (rawOptions) {
