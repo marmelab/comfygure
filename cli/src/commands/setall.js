@@ -4,7 +4,7 @@ const minimist = require('minimist');
 const { parseYAML } = require('../format');
 
 const help = (ui) => {
-    const { bold } = ui.colors;
+    const { bold, cyan } = ui.colors;
 
     ui.print(`
 ${bold('NAME')}
@@ -20,8 +20,8 @@ ${bold('OPTIONS')}
         -h, --help        Show this very help message
 
 ${bold('EXAMPLES')}
-        comfy setall development config/comfy.json
-        comfy setall production config/api.yml -t next
+        ${cyan('comfy setall development config/comfy.json')}
+        ${cyan('comfy setall production config/api.yml -t next')}
 `);
 };
 
@@ -40,12 +40,18 @@ module.exports = (ui, modules) => function* (rawOptions) {
 
     if (!env) {
         ui.error(red('No environment specified.'));
-        help(ui, 1);
     }
 
     if (!configPath) {
         ui.error(red('No config file specified.'));
-        help(ui, 1);
+    }
+
+    if (!env || !configPath) {
+        ui.print(`${bold('SYNOPSIS')}
+        ${bold('comfy')} setall <environment> <path> [<options>]
+
+Type ${green('comfy setall --help')} for details`);
+        return ui.exit(0);
     }
 
     const filename = path.normalize(`${process.cwd()}${path.sep}${configPath}`);

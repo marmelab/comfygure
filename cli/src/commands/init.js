@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const minimist = require('minimist');
 
 const help = (ui) => {
-    const { bold, dim } = ui.colors;
+    const { bold, cyan } = ui.colors;
 
     ui.print(`
 ${bold('NAME')}
@@ -22,8 +22,8 @@ ${bold('OPTIONS')}
         -h, --help         Show this very help message
 
 ${bold('EXAMPLES')}
-        comfy init
-        comfy init --name foo --env 'development' --origin 'http://mycomfy.mydomain.com'
+        ${cyan('comfy init')}
+        ${cyan(`comfy init --name foo --env 'development' --origin 'http://mycomfy.mydomain.com'`)}
 `);
 };
 
