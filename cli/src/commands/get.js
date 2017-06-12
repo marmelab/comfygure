@@ -23,7 +23,7 @@ ${bold('EXAMPLES')}
         ${dim('# Get the development configuration as json')}
         ${cyan('comfy get development')}
         ${dim('# Get the staging configuration for the next tag in yaml')}
-        ${cyan('comfy get staging -t next --jml > config/staging.yaml')}
+        ${cyan('comfy get staging -t next --yml > config/staging.yaml')}
         ${dim('# Get the production configuration and set it as environment variables')}
         ${cyan('comfy get production --envvars | source /dev/stdin')}
 `);

@@ -58,7 +58,7 @@ Type ${green('comfy env --help')} for details`);
     const addCommand = `comfy setall ${environment.name}`;
 
     ui.print(`${bold(green('Environment successfully created'))}`);
-    ui.print(`You can now set a configuration fot this environment using ${bold(addCommand)}`);
+    ui.print(`You can now set a configuration for this environment using ${bold(addCommand)}`);
     ui.exit();
 };
 
