@@ -1,11 +1,8 @@
-const config = require('./config/production.js');
-const dconfig = require('./config/default.js');
+const config = require('config');
 
+// dev is the configuration by default, using config to change the conf based on NODE_ENV value
 module.exports = {
     dev: Object.assign({}, {
-        driver: 'pg',
-    }, dconfig.db.client),
-    production: Object.assign({}, {
         driver: 'pg',
     }, config.db.client),
 };
