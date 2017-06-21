@@ -7,7 +7,7 @@ install:
 run-test-api:
 	if [ "${CI}" = "false" ]; then \
 		echo 'Starting test database...'; \
-		cd ../api && make install-db || true; \
+		cd ../api && make install-db; \
 		cd ../api && make start-db; \
 	fi
 	@echo 'Starting test API...'
