@@ -32,7 +32,7 @@ teardown-test: stop-test-api
 
 test: setup-test
 	@echo 'Starting test suite...'
-	./node_modules/.bin/mocha --require co-mocha \
+	./node_modules/.bin/mocha --timeout 5000 --require co-mocha \
 		./setup.js \
 		'./specs/**/*.js'
 	make teardown-test
