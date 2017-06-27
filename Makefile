@@ -1,12 +1,16 @@
+.PHONY: test
+
 install:
-	cd api && make install
-	cd cli && make install
-	cd admin && make install
+	make -C api install
+	make -C cli install
+	make -C admin install
+	make -C test install
 
 test:
-	cd api && make test
-	cd cli && make test
-	cd admin && make test
+	make -C api test
+	make -C cli test
+	make -C admin test
+	make -C test test
 
 deploy:
 	cd api && NODE_ENV=production make deploy
