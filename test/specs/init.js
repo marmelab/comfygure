@@ -44,10 +44,10 @@ describe('Project initialization', () => {
         expect(stdout).toInclude('secretToken=');
     });
 
-    it('should create passphrase', function* () {
+    it('should create private key', function* () {
         yield run("comfy init --origin 'http://localhost:3000'");
 
         const { stdout } = yield run('cat .comfy/config');
-        expect(stdout).toInclude('passphrase=');
+        expect(stdout).toInclude('privateKey=');
     });
 });
