@@ -17,18 +17,16 @@ ${bold('OPTIONS')}
         --name=<name>      The configuration name (defaults to the current directory name)
         --env=<env>        The first environment to create (defaults to 'development')
         --origin=<origin>  URL of the comfy server (defaults to https://comfy.marmelab.com)
-        -p, --passphrase   Do not generate passphrase, ask for custom passphrase instead (defaults to false)
         -g, --nogitignore  Do not add .comfy directory to .gitignore
         -h, --help         Show this very help message
 
 ${bold('EXAMPLES')}
         ${cyan('comfy init')}
-        ${cyan(`comfy init --name foo --env 'development' --origin 'http://mycomfy.mydomain.com'`)}
+        ${cyan("comfy init --name foo --env 'development' --origin 'http://mycomfy.mydomain.com'")}
 `);
 };
 
 module.exports = (ui, modules) => function* (rawOptions) {
-    const ask = ui.input.text;
     const { bold, dim, yellow, green } = ui.colors;
     const options = minimist(rawOptions);
 
@@ -54,14 +52,12 @@ module.exports = (ui, modules) => function* (rawOptions) {
     const defaultProjectName = folders[folders.length - 1];
     const projectName = options.name || defaultProjectName;
     const environment = options.env || process.env.NODE_ENV || 'development';
-    const passphrase = (options.passphrase || options.p)
-        ? yield ask('- What is the encryption passphrase?')
-        : crypto.randomBytes(256).toString('hex');
+    const privateKey = modules.project.generateNewPrivateKey();
 
     ui.print('\nInitializing project configuration...');
 
     const project = yield modules.project.create(projectName, environment, options.origin);
-    yield modules.project.saveToConfig(project, passphrase, options.origin);
+    yield modules.project.saveToConfig(project, privateKey, options.origin);
     const { origin } = yield modules.project.retrieveFromConfig();
     if (isGitDirectory && !options.g) {
         fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);

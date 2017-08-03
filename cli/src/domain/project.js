@@ -2,6 +2,7 @@ const fs = require('fs');
 const ini = require('ini');
 const path = require('path');
 const { CONFIG_FOLDER, CONFIG_PATH, DEFAULT_ORIGIN } = require('./constants');
+const { generateNewPrivateKey } = require('../crypto');
 
 module.exports = (client, ui) => {
     const create = function* (name, environment, origin = DEFAULT_ORIGIN) {
@@ -15,13 +16,13 @@ module.exports = (client, ui) => {
         }
     };
 
-    const saveToConfig = function* (project, passphrase, origin = DEFAULT_ORIGIN) {
+    const saveToConfig = function* (project, privateKey, origin = DEFAULT_ORIGIN) {
         const config = ini.stringify({
             projectId: project.id,
             accessKey: project.accessKey,
             secretToken: project.writeToken,
             origin,
-            passphrase,
+            privateKey,
         }, { section: 'project' });
 
         const filename = `${process.cwd()}${path.sep}${CONFIG_PATH}`;
@@ -29,7 +30,7 @@ module.exports = (client, ui) => {
         yield cb => fs.writeFile(filename, config, { flag: 'w' }, cb);
     };
 
-    const checkProjectInfos = ({ id, accessKey, secretToken, passphrase, origin }) => {
+    const checkProjectInfos = ({ id, accessKey, secretToken, privateKey, origin }) => {
         const errors = [];
         const { red, dim, bold } = ui.colors;
 
@@ -50,9 +51,9 @@ ${set('COMFY_ACCESS_KEY')}`);
 ${set('COMFY_SECRET_TOKEN')}`);
         }
 
-        if (!passphrase) {
-            errors.push(`Unable to locate the ${red('passphrase')} to decrypt your configs.
-${set('COMFY_PASSPHRASE')}`);
+        if (!privateKey) {
+            errors.push(`Unable to locate the ${red('private key')} to decrypt your configs.
+${set('COMFY_PRIVATE_KEY')}`);
         }
 
         if (!origin) {
@@ -74,7 +75,7 @@ Type ${bold('comfy init')} to do so.`);
             id: process.env.COMFY_PROJECT_ID,
             accessKey: process.env.COMFY_ACCESS_KEY,
             secretToken: process.env.COMFY_SECRET_TOKEN,
-            passphrase: process.env.COMFY_PASSPHRASE,
+            privateKey: process.env.COMFY_PRIVATE_KEY,
             origin: process.env.COMFY_ORIGIN,
         };
 
@@ -91,7 +92,7 @@ Type ${bold('comfy init')} to do so.`);
             id: config.project.projectId,
             accessKey: config.project.accessKey,
             secretToken: config.project.secretToken,
-            passphrase: config.project.passphrase,
+            privateKey: config.project.privateKey,
             origin: config.project.origin,
         });
 
@@ -105,5 +106,6 @@ Type ${bold('comfy init')} to do so.`);
         saveToConfig,
         CONFIG_FOLDER,
         CONFIG_PATH,
+        generateNewPrivateKey,
     };
 };
