@@ -3,13 +3,17 @@ import logger from '../../logger';
 
 export default handler => (event, context) => {
     co(function* () {
-        const body = yield handler({
+        const { body, headers } = yield handler({
             ...event,
             body: event.body ? JSON.parse(event.body) : null,
         });
 
         context.succeed({
             statusCode: 200,
+            headers: {
+                ...headers,
+                'access-control-expose-headers': 'WWW-Authenticate,Server-Authorization,x-total-count',
+            },
             body: JSON.stringify(body),
         });
     })

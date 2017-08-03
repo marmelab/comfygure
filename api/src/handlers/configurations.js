@@ -10,7 +10,9 @@ const create = λ(async (event) => {
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     // create new configuration with entries
-    return addConfiguration(projectId, environmentName, configName, tagName, event.body);
+    return {
+        body: await addConfiguration(projectId, environmentName, configName, tagName, event.body),
+    };
 });
 
 const update = λ(async (event) => {
@@ -25,7 +27,9 @@ const get = λ(async (event) => {
     const { id: projectId, environmentName, configName: selector, tagName } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
 
-    return getConfiguration(projectId, environmentName, selector, tagName);
+    return {
+        body: await getConfiguration(projectId, environmentName, selector, tagName),
+    };
 });
 
 const history = λ(async (event) => {
@@ -33,7 +37,14 @@ const history = λ(async (event) => {
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
     const all = event.queryStringParameters && Object.keys(event.queryStringParameters).includes('all');
 
-    return getHistory(projectId, environmentName, configName, all);
+    const allConfigurations = await getHistory(projectId, environmentName, configName, all);
+
+    return {
+        headers: {
+            'X-Total-Count': allConfigurations.length,
+        },
+        body: allConfigurations,
+    };
 });
 
 export default {

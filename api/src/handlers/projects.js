@@ -10,7 +10,7 @@ const create = λ(async (event) => {
 
     const project = await addProject(projectName, environmentName);
 
-    return project;
+    return { body: project };
 });
 
 const update = λ(async (event) => {
@@ -20,14 +20,14 @@ const update = λ(async (event) => {
 
     const project = await renameProject(projectId, newProjectName);
 
-    return project;
+    return { body: project };
 });
 
 const remove = λ(async (event) => {
     const { id: projectId } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
-    return removeProject(projectId);
+    return { body: await removeProject(projectId) };
 });
 
 export default {

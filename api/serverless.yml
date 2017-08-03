@@ -46,7 +46,20 @@ functions:
       - http:
           method: GET
           path: projects/{id}/environments
-          cors: true
+          response:
+              headers:
+                  X-Total-Count: integration.response.header.X-Total-Count
+          cors:
+              origins:
+                  - '*'
+              headers:
+                  - Content-Type
+                  - X-Amz-Date
+                  - Authorization
+                  - X-Api-Key
+                  - X-Amz-Security-Token
+                  - X-Total-Count
+              allowCredentials: false
 
   environmentCreate:
     handler: environments.create
@@ -84,11 +97,37 @@ functions:
       - http:
           method: GET
           path: projects/{id}/environments/{environmentName}/configurations/{configName}/history
-          cors: true
+          response:
+              headers:
+                  X-Total-Count: integration.response.header.X-Total-Count
+          cors:
+              origins:
+                  - '*'
+              headers:
+                  - Content-Type
+                  - X-Amz-Date
+                  - Authorization
+                  - X-Api-Key
+                  - X-Amz-Security-Token
+                  - X-Total-Count
+              allowCredentials: false
       - http:
           method: GET
           path: projects/{id}/environments/{environmentName}/configurations/history
-          cors: true
+          response:
+              headers:
+                  X-Total-Count: integration.response.header.X-Total-Count
+          cors:
+              origins:
+                  - '*'
+              headers:
+                  - Content-Type
+                  - X-Amz-Date
+                  - Authorization
+                  - X-Api-Key
+                  - X-Amz-Security-Token
+                  - X-Total-Count
+              allowCredentials: false
 
   configurationGet:
     handler: configurations.get
