@@ -10,11 +10,11 @@ services:
 addons:
   postgresql: "9.4"
 
-before_script:
+before_install:
   - psql -c 'create database comfy;' -U postgres
   - psql -U postgres comfy < api/var/schema.sql
 
-install: make install
+install: make install migrate
 script: make test
 
 cache:

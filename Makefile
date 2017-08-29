@@ -6,6 +6,9 @@ install:
 	make -C admin install
 	make -C test install
 
+migrate:
+	make -C api migrate
+
 test:
 	make -C api test
 	make -C cli test

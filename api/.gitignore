@@ -2,3 +2,4 @@ node_modules
 .webpack
 .serverless
 config/*.js
+!config/database.js
