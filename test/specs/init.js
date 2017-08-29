@@ -50,4 +50,11 @@ describe('Project initialization', () => {
         const { stdout } = yield run('cat .comfy/config');
         expect(stdout).toInclude('privateKey=');
     });
+
+    it('should create a HMAC signature key', function* () {
+        yield run("comfy init --origin 'http://localhost:3000'");
+
+        const { stdout } = yield run('cat .comfy/config');
+        expect(stdout).toInclude('hmacKey=');
+    });
 });
