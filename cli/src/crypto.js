@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const ALGORITHM = 'aes-256-ctr';
 const KEY_BYTE_LENGTH = 32;
 const IV_LENGTH = 16;
+const HMAC_KEY_LENGTH = 32;
 
 const hexToBuffer = hex => new Buffer(hex, 'hex');
 const bufferToHex = buffer => buffer.toString('hex');
@@ -50,6 +51,7 @@ const decrypt = (entry, hexKey) => {
 };
 
 const generateNewPrivateKey = () => bufferToHex(crypto.randomBytes(KEY_BYTE_LENGTH));
+const generateNewHmacKey = () => bufferToHex(crypto.randomBytes(HMAC_KEY_LENGTH));
 
 module.exports = {
     ALGORITHM,
@@ -58,4 +60,5 @@ module.exports = {
     encrypt,
     decrypt,
     generateNewPrivateKey,
+    generateNewHmacKey,
 };
