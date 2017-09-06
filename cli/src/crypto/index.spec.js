@@ -15,7 +15,7 @@ describe('Crypto Features', () => {
         expect(decryptedData).toBe(data);
     });
 
-    it('should not return the identic signature twice for the same given entry and private key', () => {
+    it('should not return an identical signature twice for the same given entry and private key', () => {
         const data = 'SOME VERY PRIVATE INFO';
         const privateKey = generateNewPrivateKey();
         const hmacKey = generateNewHmacKey();
