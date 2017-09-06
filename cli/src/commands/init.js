@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const minimist = require('minimist');
 
 const help = (ui) => {
@@ -53,11 +52,12 @@ module.exports = (ui, modules) => function* (rawOptions) {
     const projectName = options.name || defaultProjectName;
     const environment = options.env || process.env.NODE_ENV || 'development';
     const privateKey = modules.project.generateNewPrivateKey();
+    const hmacKey = modules.project.generateNewHmacKey();
 
     ui.print('\nInitializing project configuration...');
 
     const project = yield modules.project.create(projectName, environment, options.origin);
-    yield modules.project.saveToConfig(project, privateKey, options.origin);
+    yield modules.project.saveToConfig(project, privateKey, hmacKey, options.origin);
     const { origin } = yield modules.project.retrieveFromConfig();
     if (isGitDirectory && !options.g) {
         fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);

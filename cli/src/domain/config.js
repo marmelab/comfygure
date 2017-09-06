@@ -31,7 +31,7 @@ module.exports = (client, ui) => {
 
             body[key] = isNullValue(value)
                 ? null // Do not encrypt null values
-                : encrypt(value.toString(), project.privateKey);
+                : encrypt(value.toString(), project.privateKey, project.hmacKey);
         });
 
         const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}`;
@@ -67,7 +67,7 @@ module.exports = (client, ui) => {
             const value = body[key];
 
             if (!isNullValue(value)) {
-                body[key] = decrypt(value.toString(), project.privateKey);
+                body[key] = decrypt(value.toString(), project.privateKey, project.hmacKey);
             }
         });
 

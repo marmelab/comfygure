@@ -2,7 +2,7 @@ const fs = require('fs');
 const ini = require('ini');
 const path = require('path');
 const { CONFIG_FOLDER, CONFIG_PATH, DEFAULT_ORIGIN } = require('./constants');
-const { generateNewPrivateKey } = require('../crypto');
+const { generateNewPrivateKey, generateNewHmacKey } = require('../crypto');
 
 module.exports = (client, ui) => {
     const create = function* (name, environment, origin = DEFAULT_ORIGIN) {
@@ -16,13 +16,14 @@ module.exports = (client, ui) => {
         }
     };
 
-    const saveToConfig = function* (project, privateKey, origin = DEFAULT_ORIGIN) {
+    const saveToConfig = function* (project, privateKey, hmacKey, origin = DEFAULT_ORIGIN) {
         const config = ini.stringify({
             projectId: project.id,
             accessKey: project.accessKey,
             secretToken: project.writeToken,
             origin,
             privateKey,
+            hmacKey,
         }, { section: 'project' });
 
         const filename = `${process.cwd()}${path.sep}${CONFIG_PATH}`;
@@ -30,7 +31,7 @@ module.exports = (client, ui) => {
         yield cb => fs.writeFile(filename, config, { flag: 'w' }, cb);
     };
 
-    const checkProjectInfos = ({ id, accessKey, secretToken, privateKey, origin }) => {
+    const checkProjectInfos = ({ id, accessKey, secretToken, privateKey, hmacKey, origin }) => {
         const errors = [];
         const { red, dim, bold } = ui.colors;
 
@@ -56,6 +57,11 @@ ${set('COMFY_SECRET_TOKEN')}`);
 ${set('COMFY_PRIVATE_KEY')}`);
         }
 
+        if (!hmacKey) {
+            errors.push(`Unable to locate the ${red('hmac key')} to sign and verify your configs.
+${set('COMFY_HMAC_KEY')}`);
+        }
+
         if (!origin) {
             errors.push(`Unable to locate the ${red('server origin')} to decrypt your configs.
 ${set('COMFY_ORIGIN')}`);
@@ -76,6 +82,7 @@ Type ${bold('comfy init')} to do so.`);
             accessKey: process.env.COMFY_ACCESS_KEY,
             secretToken: process.env.COMFY_SECRET_TOKEN,
             privateKey: process.env.COMFY_PRIVATE_KEY,
+            hmacKey: process.env.COMFY_HMAC_KEY,
             origin: process.env.COMFY_ORIGIN,
         };
 
@@ -93,6 +100,7 @@ Type ${bold('comfy init')} to do so.`);
             accessKey: config.project.accessKey,
             secretToken: config.project.secretToken,
             privateKey: config.project.privateKey,
+            hmacKey: config.project.hmacKey,
             origin: config.project.origin,
         });
 
@@ -107,5 +115,6 @@ Type ${bold('comfy init')} to do so.`);
         CONFIG_FOLDER,
         CONFIG_PATH,
         generateNewPrivateKey,
+        generateNewHmacKey,
     };
 };
