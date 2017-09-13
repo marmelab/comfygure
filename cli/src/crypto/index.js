@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { serialize, unserialize } = require('./serialization')
 const { sign, isSignatureValid } = require('./signature');
 
 const ALGORITHM = 'aes-256-ctr';
@@ -27,10 +28,11 @@ const castKeyToBuffer = (key, castToBuffer = true) => {
 
 const encrypt = (value, privateKey, hmacKey) => {
     const key = castKeyToBuffer(privateKey);
+    const serializedValue = serialize(value);
     const iv = crypto.randomBytes(IV_LENGTH);
 
     const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
-    const cipherText = Buffer.concat([cipher.update(value, 'utf-8'), cipher.final()]);
+    const cipherText = Buffer.concat([cipher.update(serializedValue, 'utf-8'), cipher.final()]);
     const signature = sign(cipherText, iv, hmacKey);
 
     return `${ALGORITHM}:${iv.toString('hex')}:${cipherText.toString('hex')}:${signature}`;
@@ -54,7 +56,7 @@ const decrypt = (entry, privatekey, hmacKey) => {
 
     const decipherText = Buffer.concat([decipher.update(cipherText, 'hex'), decipher.final()]);
 
-    return decipherText.toString('utf-8');
+    return unserialize(decipherText.toString('utf-8'));
 };
 
 const generateNewPrivateKey = () => bufferToHex(crypto.randomBytes(KEY_BYTE_LENGTH));
