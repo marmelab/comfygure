@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/comfygure.svg)](https://badge.fury.io/js/comfygure) [![Build Status](https://travis-ci.org/marmelab/comfygure.png?branch=master)](https://travis-ci.org/marmelab/comfygure)
+
 # Comfygure
 
 Store encrypted project configuration in a centralised place, then check it out and decrypt locally for development, test and deployment.
