@@ -1,9 +1,6 @@
 const { toFlat } = require('../format');
 const { encrypt, decrypt } = require('../crypto');
 
-// `null` and `undefined` are the only types that we cannot stringify
-const isNullValue = value => value === null || value === undefined;
-
 module.exports = (client, ui) => {
     const list = function* (project, env, config, all = false) {
         let url = config ?
@@ -27,11 +24,7 @@ module.exports = (client, ui) => {
         const body = toFlat(content);
 
         Object.keys(body).forEach((key) => {
-            const value = body[key];
-
-            body[key] = isNullValue(value)
-                ? null // Do not encrypt null values
-                : encrypt(value.toString(), project.privateKey, project.hmacKey);
+            body[key] = encrypt(body[key], project.privateKey, project.hmacKey);
         });
 
         const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}`;
@@ -64,11 +57,7 @@ module.exports = (client, ui) => {
         const { body } = response;
 
         Object.keys(body).forEach((key) => {
-            const value = body[key];
-
-            if (!isNullValue(value)) {
-                body[key] = decrypt(value.toString(), project.privateKey, project.hmacKey);
-            }
+            body[key] = decrypt(body[key], project.privateKey, project.hmacKey);
         });
 
         return { body };
