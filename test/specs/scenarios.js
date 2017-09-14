@@ -29,9 +29,19 @@ describe('Scenarios', () => {
         });
     });
 
-    describe('Boolean serialization', () => {
+    describe('Serialization', () => {
         it('should not transform a `false` bool to a `"false"` string', function* () {
             const config = { myEntry: false };
+
+            yield run(`echo '${JSON.stringify(config)}' > config.json`);
+            yield run('comfy setall development config.json');
+
+            const { stdout } = yield run('comfy get development');
+            expect(JSON.parse(stdout)).toEqual(config);
+        });
+
+        it('should not transform a `null` into something else', function* () {
+            const config = { myEntry: null };
 
             yield run(`echo '${JSON.stringify(config)}' > config.json`);
             yield run('comfy setall development config.json');

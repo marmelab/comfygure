@@ -18,4 +18,10 @@ describe('Serialization', () => {
         const unseriazedEntry = unserialize(serializedEntry);
         expect(typeof unseriazedEntry).toEqual('boolean');
     });
+
+    it('should keep `null` intact', () => {
+        const entry = null;
+        const unserializedEntry = unserialize(serialize(entry));
+        expect(unserializedEntry).toEqual(entry);
+    });
 });
