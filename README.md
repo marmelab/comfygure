@@ -2,7 +2,11 @@
 
 # Comfygure
 
-Store encrypted project configuration in a centralised place, then check it out and decrypt locally for development, test and deployment.
+Store encrypted project configuration in a centralised place, then check it out for team development, test and deployment.
+
+## Basic Usage
+
+[![asciicast](https://asciinema.org/a/137703.png)](https://asciinema.org/a/137703)
 
 ## The Problem: Managing Application Configuration
 
