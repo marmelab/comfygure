@@ -29,13 +29,11 @@ const toEnvVars = (flatContent) => {
     let source = '';
 
     for (const key of Object.keys(flatContent).sort()) {
-        const value = flatContent[key];
+        const value = flatContent[key] ? flatContent[key].toString() : '';
 
         // Replace each ' by '"'"' in the value
         // @see http://stackoverflow.com/a/1250279/3868326
-        const escapedValue = value
-            ? value.replace("'", "'\"'\"'")
-            : '';
+        const escapedValue = value.replace("'", "'\"'\"'");
 
         const envVar = key
             .replace('.', '_')
