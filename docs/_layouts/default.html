@@ -45,7 +45,7 @@
                     </li>
                     <li class="chapter {% if page.path == 'BasicUsage.md' %}active{% endif %}">
                         <a href="./BasicUsage.html">
-                            <b>2.</b> Basic Usage
+                            <b>3.</b> Basic Usage
                         </a>
                         <ul class="articles" {% if page.path != 'BasicUsage.md' %}style="display:none" {% endif %}>
                             <li class="chapter">
@@ -70,6 +70,16 @@
                             </li>
                             <li class="chapter">
                                 <a href="#deployment">Deployment</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="chapter {% if path.path == 'AdvancedUsage.md' %}active{% endif %}">
+                        <a href="./AdvancedUsage.html">
+                            <b>4.</b> Advanced Usage
+                        </a>
+                        <ul class="articles" {% if page.path != 'AdvancedUsage.md' %}style="display:none" {% endif %}>
+                            <li class="chapter">
+                                <a href="#host-your-own-comfy-server">Host your own comfy server</a>
                             </li>
                         </ul>
                     </li>
