@@ -37,6 +37,8 @@ Configuration saved locally in .comfy/config
 comfy project successfully created
 ```
 
+**Note:** You can host your own comfy server, see [the related documentation](https://marmelab.com/comfygure/AdvancedUsage.html#host-your-own-comfy-server).
+
 Set the configuration for a particular environment based on the content of an existing file using `comfy setall`:
 
 ```sh
@@ -58,15 +60,15 @@ export PASSWORD='S3cr3T';
 To store a remote configuration in the environment, use:
 
 ```sh
-> comfy get development | source /dev/stdin
+> comfy get development --envvars | source /dev/stdin
 > echo $LOGIN
 admin
 ```
 
 You now have all your credentials in `.comfy/config`, you can give them to your co-workers or use them on your remote server.
 
-See the [documentation](https://marmelab.com/comfygure/) to know more about how it works and the remote usage.
+See the [documentation](https://marmelab.com/comfygure/) to know more about how it works and its how you can use it.
 
 ## License
 
-comfygure is licensed under the [MIT Licence](https://github.com/marmelab/admin-on-rest/blob/master/LICENSE.md), sponsored and supported by [marmelab](http://marmelab.com).
+comfygure is licensed under the [MIT Licence](https://github.com/marmelab/comfygure/blob/master/LICENSE), sponsored and supported by [marmelab](http://marmelab.com).

@@ -5,8 +5,7 @@ title: "Basic Usage"
 
 ## Installation
 
-comfygure is available from npm. You can install it (and its required dependencies)
-using:
+comfygure is available from npm. You can install it (and its required dependencies) using:
 
 ```sh
 > npm install -g comfygure
@@ -29,14 +28,14 @@ comfy project successfully created
 ```
 
 By default, the server origin is `https://comfy.marmelab.com`. But if you can change it with the `--origin` argument.
-More about the custom origin on the [Advanced Usage]() section of this documentation.
+More about custom comfy server hosting on the [Advanced Usage](./AdvancedUsage.html) section of this documentation.
 
 ### Comfy folder
 
 Once the initialization is finished, you should have:
 
-* A new file in `.comfy/config` containing all your project informations and credentials
-* A new line on your `.gitignore` in order to avoid to commit this file (if a `.git` is found in the current folder)
+* A new file at `.comfy/config` containing all your project informations and credentials
+* A new line on your `.gitignore` in order to avoid to commit this file (if a `.git` folder is found in the current folder)
 
 ```bash
 > cat .comfy/config
@@ -47,21 +46,21 @@ projectId=1111111111-1111-1111-1111-1111111111111
 # Your credentials to access to the comfy server
 accessKey=XXXXXXXXXXXXXXXX
 secretToken=YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-# The comfy server endpoint
+# The comfy server URI
 origin=https://comfy.marmelab.com
-# The private key used to encrypt your configuration
+# The private key used to encrypt your configuration, never sent to the server
 privateKey=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-# The HMAC key used to sign and verify the integrity of your configuration
+# The HMAC key used to sign and verify the integrity of your configuration, never sent to the server
 hmacKey=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 ```
 
 The comfy server don't have access to your private and HMAC keys, ever. Be sure to keep these informations safe and secure.
 
-If you lose one of these informations, you will be no longer able to retrieve your configuration and no one will be able to help you, not even the server administrators.
+If you lose one of these informations, you will be no longer able to retrieve your configurations and no one will be able to help you, not even the server administrators.
 
 ## Managing Environments
 
-By default, comfy creates your first environment `development`. But you can chose it with:
+By default, comfy creates your first environment `development`. But you can chose its name with:
 
 ```bash
 comfy init --env production
@@ -93,7 +92,7 @@ When you create an environment, the first version of its configuration is empty.
 
 In order to add a new configuration version, you have to use the following command with a file containing your config.
 
-```bash
+```
 > cat config.json
 { "login": "admin", "password": "S3cret!" }
 
@@ -142,13 +141,13 @@ admin
 
 To be able to retrieve your configuration, comfy needs all the informations you can find in `.comfy/config`.
 
-If you want give the ability to Bob, your co-worker, to fetch the config, just give him this file.
+If you want to give the ability to Bob, your co-worker, to fetch the config, just give him this file.
 
 ```bash
 scp .comfy/config bob@bob-workstation:~/repository/.comfy/config
 ```
 
-You and Bob will share the same configurations. If someone edit a config, the other can have it immediatly.
+You and Bob will share the same configurations. If someone edit a config, everyone can retrieve it immediatly.
 
 ## Deployment
 
@@ -181,7 +180,7 @@ export COMFY_HMAC_KEY=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 comfy get production
 ```
 
-You can now set these environment variables in your CI configuration, code builder, or any continuous deployment system you have.
+You can now set these environment variables in your CI configuration, code builder, or any continuous delivery system you have.
 The advantage is that you only have to do it once.
 
 **Note:** These environment variables will be easier in the future.
