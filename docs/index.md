@@ -1,12 +1,18 @@
-[![npm version](https://badge.fury.io/js/comfygure.svg)](https://badge.fury.io/js/comfygure) [![Build Status](https://travis-ci.org/marmelab/comfygure.png?branch=master)](https://travis-ci.org/marmelab/comfygure)
-
+---
+layout: default
+title: "Documentation"
+---
 # comfygure
 
 A cli to help you manage your configurations for development, test and deployment. Open sourced and maintained by [marmelab](https://marmelab.com/).
 
-[Source](https://github.com/marmelab/comfygure) - [Releases](https://github.com/marmelab/comfygure/releases) - [StackOverflow](https://stackoverflow.com/questions/tagged/comfy/)
+<div style="text-align: center" markdown="1">
+<i class="octicon octicon-mark-github"></i> [Source](https://github.com/marmelab/comfygure) -
+<i class="octicon octicon-megaphone"></i> [Releases](https://github.com/marmelab/comfygure/releases) -
+<i class="octicon octicon-comment-discussion"></i> [StackOverflow](https://stackoverflow.com/questions/tagged/comfy/)
+</div>
 
-[![asciicast](https://asciinema.org/a/137703.png)](https://asciinema.org/a/137703)
+<script type="text/javascript" src="https://asciinema.org/a/137703.js" id="asciicast-137703" async></script>
 
 ## Features
 
@@ -19,16 +25,16 @@ A cli to help you manage your configurations for development, test and deploymen
 comfygure is available from npm. You can install it (and its required dependencies)
 using:
 
-```sh
+```bash
 npm install -g comfygure
 comfy help
 ```
 
-## Basic Usage
+## Usage
 
 In a project directory, initialize a new configuration with `comfy init`:
 
-```sh
+```bash
 > comfy init
 
 Initializing project configuration...
@@ -37,11 +43,11 @@ Configuration saved locally in .comfy/config
 comfy project successfully created
 ```
 
-**Note:** You can host your own comfy server, see [the related documentation](https://marmelab.com/comfygure/AdvancedUsage.html#host-your-own-comfy-server).
+**Note:** You can host your own comfy server, see [the related documentation](./AdvancedUsage.html#host-your-own-comfy-server).
 
 Set the configuration for a particular environment based on the content of an existing file using `comfy setall`:
 
-```sh
+```bash
 > echo '{"login": "admin", "password": "S3cr3T"}' > config.json
 > comfy setall development config.json
 Great! Your configuration was successfully saved.
@@ -49,7 +55,7 @@ Great! Your configuration was successfully saved.
 
 Grab that configuration from any server using `comfy get`:
 
-```sh
+```bash
 > comfy get development
 {"login": "admin", "password": "S3cr3T"}
 > comfy get development --envvars
@@ -59,7 +65,7 @@ export PASSWORD='S3cr3T';
 
 To store a remote configuration in the environment, use:
 
-```sh
+```bash
 > comfy get development --envvars | source /dev/stdin
 > echo $LOGIN
 admin
@@ -67,7 +73,7 @@ admin
 
 You now have all your credentials in `.comfy/config`, you can give them to your co-workers or use them on your remote server.
 
-See the [documentation](https://marmelab.com/comfygure/) to know more about how it works and its how you can use it.
+See the [documentation](https://marmelab.com/comfygure/) to know more about how it works and the remote usage.
 
 ## License
 
