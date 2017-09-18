@@ -5,6 +5,8 @@ const environmentModuleFactory = require('./domain/environment');
 const configModuleFactory = require('./domain/config');
 const tagModuleFactory = require('./domain/tag');
 
+const printVersion = require('./domain/printVersion');
+
 const main = (ui, evt) => {
     const commands = {
         help: require('./commands/help'),
@@ -15,10 +17,16 @@ const main = (ui, evt) => {
         log: require('./commands/log'),
         tag: require('./commands/tag'),
         admin: require('./commands/admin'),
+        version: require('./commands/version'),
     };
 
     return function* () {
         const request = ui.digestEvent(evt);
+
+        if (request.command === '-V' || request.arguments.includes('-V')) {
+            printVersion();
+            ui.exit();
+        }
 
         let command = commands.help;
         if (request.command) {

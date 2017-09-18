@@ -16,6 +16,7 @@ ${bold('COMMANDS')}
         env         Manage configuration environments
         tag         Manage configuration tags
         log         List all configuration versions
+        version     Output version information and exit
 
 ${bold('EXAMPLES')}
         ${dim('# Display the help')}
