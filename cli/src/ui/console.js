@@ -34,7 +34,7 @@ const input = {
 };
 
 const printRequestError = (err) => {
-    const { red, cyan, gray, bold, dim } = colors;
+    const { red, cyan, dim } = colors;
 
     switch (err.code) {
     case 'ECONNREFUSED':
