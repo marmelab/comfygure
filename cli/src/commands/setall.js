@@ -54,7 +54,9 @@ Type ${green('comfy setall --help')} for details`);
         return ui.exit(0);
     }
 
-    const filename = path.normalize(`${process.cwd()}${path.sep}${configPath}`);
+    const filename = configPath.startsWith(path.sep)
+        ? path.normalize(configPath)
+        : path.normalize(`${process.cwd()}${path.sep}${configPath}`);
 
     if (!fs.existsSync(filename)) {
         ui.error(`The file ${red(options.f)} doesn't exist.`);
