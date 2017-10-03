@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "babel-plugin-transform-react-inline-elements": "6.22.0",
+    "babel-plugin-transform-react-constant-elements": "6.22.0",
+    "babel-plugin-transform-class-properties": "6.22.0",
     "babel-polyfill": "6.23.0",
-    "babel-preset-stage-0": "6.24.1",
     "babel-runtime": "6.23.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "brace": "0.10.0",
     "fetch-ponyfill": "4.0.0",
     "freactal": "1.0.0",
