@@ -27,11 +27,9 @@ module.exports = {
                     options: {
                         presets: [
                             ['env', {
-                                  'targets': {
-                                      'node': '6'
-                                  },
-                                  modules: false,
-                                  loose: true
+                                'targets': {
+                                    'node': '6'
+                                }
                             }],
                         ],
                         plugins: [
