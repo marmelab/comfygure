@@ -26,12 +26,12 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                          ['env', {
-                                'targets': {
-                                    'node': '6'
-                                },
-                                modules: false,
-                                loose: true
+                            ['env', {
+                                  'targets': {
+                                      'node': '6'
+                                  },
+                                  modules: false,
+                                  loose: true
                             }],
                         ],
                         plugins: [
