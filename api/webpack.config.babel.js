@@ -18,11 +18,25 @@ module.exports = {
         filename: '[name].js',
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
                 exclude: path.resolve(__dirname, 'node_modules'),
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            ['env', {
+                                modules: false,
+                                loose: true
+                            }],
+                        ],
+                        plugins: [
+                            'transform-object-rest-spread'
+                        ],
+                        cacheDirectory: true
+                    }
+                }]
             },
             { test: /\.json$/, loader: 'json-loader' },
         ],
