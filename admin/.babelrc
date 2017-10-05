@@ -2,11 +2,12 @@
     "presets": [
         "env",
         "react",
-        "stage-0"
+        "react-app"
     ],
     "plugins": [
         "transform-class-properties",
         "transform-react-constant-elements",
-        "transform-react-inline-elements"
+        "transform-react-inline-elements",
+        "transform-object-rest-spread"
     ]
 }
