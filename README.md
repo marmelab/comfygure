@@ -1,20 +1,14 @@
----
-layout: default
-title: "Documentation"
----
+[![npm version](https://badge.fury.io/js/comfygure.svg)](https://badge.fury.io/js/comfygure) [![Build Status](https://travis-ci.org/marmelab/comfygure.png?branch=master)](https://travis-ci.org/marmelab/comfygure)
+
 # Comfygure
 
 Store and deploy settings across development, test, and production environments, using an encrypted key-value store.
 
-<div style="text-align: center" markdown="1">
-<i class="octicon octicon-mark-github"></i> [Source](https://github.com/marmelab/comfygure) -
-<i class="octicon octicon-megaphone"></i> [Releases](https://github.com/marmelab/comfygure/releases) -
-<i class="octicon octicon-comment-discussion"></i> [StackOverflow](https://stackoverflow.com/questions/tagged/comfy/)
-</div>
+[Source](https://github.com/marmelab/comfygure) - [Releases](https://github.com/marmelab/comfygure/releases) - [StackOverflow](https://stackoverflow.com/questions/tagged/comfy/)
 
 Comfygure assumes that you deploy artefacts that require settings to run in various environment. Comfygure solves the problem of managing, storing, and deploying these settings.
 
-<script type="text/javascript" src="https://asciinema.org/a/137703.js" id="asciicast-137703" async></script>
+[![asciicast](https://asciinema.org/a/137703.png)](https://asciinema.org/a/137703)
 
 Unlike many other [Secret Management Tools](https://gist.github.com/maxvt/bb49a6c7243163b8120625fc8ae3f3cd), comfygure doesn't try do pack too many features into one tool. Comfygure tries to do one thing (settings deployment), and do it well.
 
@@ -54,7 +48,7 @@ comfy project successfully created
 
 This creates a unique key to access the settings for `myproject`, and stores the key in `.comfy/config`. You can copy this file to share the credentials with co-workers or other computers.
 
-**Tip**: By default, the `comfy` command stores encrypted settings in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](./AdvancedUsage.html#host-your-own-comfy-server).
+**Tip**: By default, the `comfy` command stores encrypted settings in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](https://marmelab.com/comfygure/AdvancedUsage.html#host-your-own-comfy-server).
 
 Import an existing settings file to comfygure using `comfy setall`:
 
