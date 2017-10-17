@@ -3,19 +3,9 @@ layout: default
 title: "Basic Usage"
 ---
 
-## Installation
+## Initialization
 
-comfygure is available from npm. You can install it (and its required dependencies) using:
-
-```sh
-> npm install -g comfygure
-```
-
-`comfy` will be now be available. Type `comfy help` to list the commands.
-
-## Project Initialization
-
-First things first, you need to initialize your repository. To do so, go to the repository folder and type `comfy init`.
+Initialize comfygure in a project directory with `comfy init`:
 
 ```bash
 > cd dev/my-project
@@ -27,15 +17,16 @@ Configuration saved locally in .comfy/config
 comfy project successfully created
 ```
 
-By default, the server origin is `https://comfy.marmelab.com`. But if you can change it with the `--origin` argument.
-More about custom comfy server hosting on the [Advanced Usage](./AdvancedUsage.html) section of this documentation.
+By default, the `comfy` command stores encrypted data in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](./AdvancedUsage.html#host-your-own-comfy-server).
 
-### Comfy folder
+### `.comfy/` Folder
 
-Once the initialization is finished, you should have:
+The initialization creates:
 
-* A new file at `.comfy/config` containing all your project informations and credentials
-* A new line on your `.gitignore` in order to avoid to commit this file (if a `.git` folder is found in the current folder)
+* A `.comfy/config` file containing all identification and credentials about the current project, to allow synchronization with the comfygure server
+* A new line on your `.gitignore` in order to avoid committing this file (if a `.git` folder is found in the current folder)
+
+Here is how the comfygure config file looks like.
 
 ```bash
 > cat .comfy/config
@@ -56,41 +47,41 @@ hmacKey=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 
 The comfy server don't have access to your private and HMAC keys, ever. Be sure to keep these informations safe and secure.
 
-If you lose one of these informations, you will be no longer able to retrieve your configurations and no one will be able to help you, not even the server administrators.
+**Warning**: If you lose this file, you will no longer be able to retrieve your settings, and no one will be able to help you, not even the server administrators.
 
 ## Managing Environments
 
-By default, comfy creates your first environment `development`. But you can chose its name with:
+By default, comfy creates one single environment, called `development`. You can choose a different name during initialization:
 
 ```bash
 comfy init --env production
 ```
 
-At any time, you can list or create an environment.
+At any time, you can list environments, or create a new environment:
 
 ```bash
+# list environments
 > comfy env ls
 development
-
+# create a "production" environment
 > comfy env add production
 Environment successfully created
 You can now set a configuration for this environment using comfy setall production
-
 > comfy env ls
 development
 production
 ```
 
-## Add a configuration version
+## Adding A New Version Of Settings
 
-When you create an environment, the first version of its configuration is empty.
+When you initialize comfygure on an app, it starts with no settings.
 
 ```bash
 > comfy get development
 {}
 ```
 
-In order to add a new configuration version, you have to use the following command with a file containing your config.
+In order to add a new version of the settings, you have to use the `setall` command, with a file containing your settings.
 
 ```
 > cat config.json
@@ -100,9 +91,9 @@ In order to add a new configuration version, you have to use the following comma
 comfy configuration successfully saved
 ```
 
-## Retrieve a configuration
+## Retrieving Settings
 
-To retrieve a configuration, you can type:
+To retrieve the settings for an app, use `comfy get`:
 
 ```bash
 > comfy get development
@@ -112,7 +103,7 @@ To retrieve a configuration, you can type:
 }
 ```
 
-As an option, you can also format your configuration into a YAML or as environment variables.
+Optionally, you can format the settings as a YAML, or as environment variables:
 
 ```bash
 > comfy get development --yml
@@ -124,7 +115,7 @@ export LOGIN='admin';
 export PASSWORD='S3cret!';
 ```
 
-You can then use the standard output to create a new file or source your environment variables.
+You can then use the standard output to create a new file, or source your environment variables.
 
 ```bash
 > comfy get development --yml > src/config/development.yml
@@ -137,25 +128,25 @@ password: S3cret!
 admin
 ```
 
-## Collaborate with your team
+## Collaborating With A Team
 
-To be able to retrieve your configuration, comfy needs all the informations you can find in `.comfy/config`.
+To retrieve the settings of an app, comfygure needs all the information from the `.comfy/config` file for that app.
 
-If you want to give the ability to Bob, your co-worker, to fetch the config, just give him this file.
+If you want to give the ability to Bob, your co-worker, to fetch the settings usinf comfygure, just give him this file.
 
 ```bash
 scp .comfy/config bob@bob-workstation:~/repository/.comfy/config
 ```
 
-You and Bob will share the same configurations. If someone edit a config, everyone can retrieve it immediatly.
+You and Bob will now be able to share the settings. If bob edits a setting, you and other team members can retrieve it immediately.
 
 ## Deployment
 
-The file `.comfy/config` is convenient for tests and developments but not for real deployment.
+The `.comfy/config` file is convenient for tests and development, but not for real deployment.
 
-To this end, if comfy doesn't find `.comfy/config` from the current folder, it asks for the same infos from environment variables.
+To this end, if comfy doesn't find `.comfy/config` from the current folder, it looks for the credentials in environment variables.
 
-Say, you have the following `.comfy/config` file:
+So for example, provided you have the following `.comfy/config` file:
 
 ```ini
 [project]
@@ -180,7 +171,4 @@ export COMFY_HMAC_KEY=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 comfy get production
 ```
 
-You can now set these environment variables in your CI configuration, code builder, or any continuous delivery system you have.
-The advantage is that you only have to do it once.
-
-**Note:** These environment variables will be easier in the future.
+Set these environment variables in your CI configuration, code builder, or any continuous delivery system to let them use your settings. The advantage is that you only have to do it once.
