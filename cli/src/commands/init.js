@@ -59,8 +59,13 @@ module.exports = (ui, modules) => function* (rawOptions) {
     const project = yield modules.project.create(projectName, environment, options.origin);
     yield modules.project.saveToConfig(project, privateKey, hmacKey, options.origin);
     const { origin } = yield modules.project.retrieveFromConfig();
+
     if (isGitDirectory && !options.g) {
-        fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);
+        const gitignoreContent = fs.readFileSync(gitignore);
+
+        if (!gitignoreContent.includes(CONFIG_PATH)) {
+            fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);
+        }
     }
 
     ui.print(`Project created on comfy server ${dim(origin)}`);
