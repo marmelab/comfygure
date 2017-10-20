@@ -3,7 +3,7 @@ module.exports = ui => function* help() {
 
     ui.print(`
 ${bold('NAME')}
-        comfy - Encrypted key/value store designed for keeping configuration safe
+        comfy - Store and deploy settings across development, test, and production environments, using an encrypted key-value store.
 
 ${bold('SYNOPSIS')}
         ${bold('comfy')} <command> [<options>]
