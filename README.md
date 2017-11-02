@@ -2,6 +2,8 @@
 
 # Comfygure
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/marmelab/comfygure.svg)](https://greenkeeper.io/)
+
 Store and deploy settings across development, test, and production environments, using an encrypted key-value store.
 
 [Source](https://github.com/marmelab/comfygure) - [Releases](https://github.com/marmelab/comfygure/releases) - [StackOverflow](https://stackoverflow.com/questions/tagged/comfy/)
