@@ -27,3 +27,4 @@ cache:
 branches:
   only:
     - master
+    - /^greenkeeper/.*$/
