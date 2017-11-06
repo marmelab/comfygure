@@ -13,16 +13,35 @@ module.exports = {
         new ConfigPlugin({ dir: path.resolve(__dirname, 'config') }),
     ],
     output: {
-        libraryTarget: 'commonjs',
+        libraryTarget: 'commonjs2',
         path: '.webpack',
         filename: '[name].js',
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
                 exclude: path.resolve(__dirname, 'node_modules'),
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            ['env', {
+                                'targets': {
+                                    'node': '6',
+                                },
+                            }],
+                        ],
+                        plugins: [
+                            'transform-async-to-generator',
+                            'transform-regenerator',
+                            'transform-runtime',
+                            'transform-object-rest-spread',
+                            'transform-exponentiation-operator'
+                        ],
+                        cacheDirectory: true
+                    }
+                }]
             },
             { test: /\.json$/, loader: 'json-loader' },
         ],
