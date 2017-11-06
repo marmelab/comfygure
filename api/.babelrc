@@ -3,6 +3,7 @@
         "env"
     ],
     "plugins": [
+        "add-module-exports",
         "transform-async-to-generator",
         "transform-regenerator",
         "transform-runtime",
