@@ -1,15 +1,16 @@
 {
     "presets": [
-        "es2015-node6",
-        "env",
-        "stage-3"
+        ["env", {
+            "targets": {
+                "node": "6.0"
+            }
+        }]
     ],
     "plugins": [
-        "add-module-exports",
-        "transform-async-to-generator",
-        "transform-regenerator",
-        "transform-runtime",
+        "transform-async-to-generator", 
+        "transform-exponentiation-operator",
         "transform-object-rest-spread",
-        "transform-exponentiation-operator"
+        "transform-regenerator",
+        "transform-runtime"
     ]
 }
