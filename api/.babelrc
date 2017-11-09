@@ -1,6 +1,7 @@
 {
     "presets": [
-        "env"
+        "env",
+        "es2015-node6"
     ],
     "plugins": [
         "add-module-exports",
