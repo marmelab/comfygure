@@ -25,7 +25,7 @@
     "babel-preset-es2015-node6": "~0.4.0",
     "babel-preset-es2016": "6.24.1",
     "babel-preset-stage-0": "~6.24.1",
-    "babel-register": "~6.7.2",
+    "babel-register": "~6.26.0",
     "babel-runtime": "~6.6.1",
     "chai": "3.5.0",
     "db-migrate": "0.10.0-beta.20",
