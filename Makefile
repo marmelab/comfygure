@@ -5,7 +5,6 @@ PWD = $(shell pwd)
 install:
 	make -C api install
 	make -C cli install
-	make -C admin install
 	make -C test install
 
 migrate:
@@ -14,7 +13,6 @@ migrate:
 test:
 	make -C api test
 	make -C cli test
-	make -C admin test
 	make -C test test
 
 deploy:
@@ -22,9 +20,6 @@ deploy:
 
 publish-cli:
 	npm publish ./cli
-
-publish-admin:
-	npm publish ./admin
 
 serve-documentation:
 	docker run -it --rm \
