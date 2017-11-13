@@ -16,7 +16,9 @@ const main = (ui, evt) => {
         get: require('./commands/get'),
         log: require('./commands/log'),
         tag: require('./commands/tag'),
-        admin: require('./commands/admin'),
+        // @TODO Enable the following command when comfy-admin is published
+        // @see https://github.com/marmelab/comfygure-admin/milestone/1
+        // admin: require('./commands/admin'),
         version: require('./commands/version'),
     };
 

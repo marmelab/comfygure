@@ -1,4 +1,4 @@
-name: admin-on-rest documentation
+name: comfygure documentation
 markdown: kramdown
 kramdown:
   input: GFM

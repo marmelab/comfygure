@@ -11,7 +11,6 @@ They all contain their own `makefile` and `package.json`.
 
 ```bash
 .
-├── admin      # The admin GUI part, will be moved on another repository soon
 ├── api        # The serverless API (https://comfy.marmelab.com)
 ├── cli        # The console client (comfygure, that you can install from npm)
 ├── docs       # Built website served by GitHub pages (https://marmelab.com/comfygure)

@@ -1,6 +1,3 @@
-admin/build/
-admin/node_modules/
-
 cli/node_modules/
 
 test/node_modules/
