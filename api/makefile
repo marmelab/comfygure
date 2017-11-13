@@ -32,7 +32,7 @@ undeploy:
 	NODE_ENV=production $(SERVERLESS) remove --stage beta
 
 test:
-	NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register "src/**/*.spec.js"
+	NODE_ENV=test ./node_modules/.bin/jest
 
 test-watch:
-	NODE_ENV=test ./node_modules/.bin/mocha --compilers js:babel-core/register "src/**/*.spec.js" --watch --min
+	NODE_ENV=test ./node_modules/.bin/jest --watch
