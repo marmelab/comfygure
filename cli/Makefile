@@ -2,6 +2,6 @@ install:
 	npm install
 
 test-unit:
-	./node_modules/.bin/mocha './src/**/*.js'
+	./node_modules/.bin/jest
 
 test: test-unit
