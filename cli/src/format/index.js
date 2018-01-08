@@ -47,7 +47,10 @@ const toEnvVars = (flatContent) => {
     return source;
 };
 
+const toJavascript = content => `window.COMFY = ${JSON.stringify(content)};`;
+
 module.exports = {
+    toJavascript,
     parseJSON,
     toJSON,
     parseYAML,
