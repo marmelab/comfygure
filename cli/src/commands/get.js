@@ -1,5 +1,5 @@
 const minimist = require('minimist');
-const { parseFlat, toJSON, toYAML, toEnvVars } = require('../format');
+const { parseFlat, toJSON, toYAML, toEnvVars, toJavascript } = require('../format');
 
 const help = (ui) => {
     const { bold, cyan, dim } = ui.colors;
@@ -16,6 +16,7 @@ ${bold('OPTIONS')}
         --json          Output the configuration as a JSON file (default)
         --envvars       Output the configuration as a sourceable bash file
         --yml           Output the configuration as a YAML file
+        --js            Output the configuration as a JavaScript script
         -t, --tag=<tag> Get a tag for this config version (default: stable)
         -h, --help      Show this very help message
 
@@ -56,14 +57,15 @@ Type ${green('comfy get --help')} for details`);
         tag,
     });
 
-    if (options.json && options.yml) {
-        ui.error(`${red('You need to chose either --json or --yml')}`);
+    if ([options.json, options.yml, options.js].filter(x => x).length > 1) {
+        ui.error(`${red('You need to chose either --json, --yml or --js')}`);
         help(ui, 1);
     }
 
     let format = config.defaultFormat;
     if (options.json) format = 'json';
     if (options.yml) format = 'yml';
+    if (options.js) format = 'js';
 
     if (options.envvars) {
         ui.print(toEnvVars(config.body));
@@ -72,9 +74,14 @@ Type ${green('comfy get --help')} for details`);
 
     const body = parseFlat(config.body);
 
-    if (format === 'yml') {
+    switch (format) {
+    case 'yml':
         ui.print(toYAML(body));
-    } else {
+        break;
+    case 'js':
+        ui.print(toJavascript(body));
+        break;
+    default:
         ui.print(toJSON(body));
     }
 
