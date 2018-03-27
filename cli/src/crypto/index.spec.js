@@ -1,4 +1,3 @@
-const expect = require('expect');
 const { encrypt, decrypt, generateNewPrivateKey, generateNewHmacKey } = require('./');
 
 describe('Crypto Features', () => {
@@ -8,7 +7,7 @@ describe('Crypto Features', () => {
         const hmacKey = generateNewHmacKey();
         const encryptedData = encrypt(data, privateKey, hmacKey);
 
-        expect(encryptedData).toNotBe(data);
+        expect(encryptedData).not.toBe(data);
 
         const decryptedData = decrypt(encryptedData, privateKey, hmacKey);
 
@@ -23,7 +22,7 @@ describe('Crypto Features', () => {
         const encryptedData = encrypt(data, privateKey, hmacKey);
         const encryptedData2 = encrypt(data, privateKey, hmacKey);
 
-        expect(encryptedData).toNotBe(encryptedData2);
+        expect(encryptedData).not.toBe(encryptedData2);
 
         const decryptedData = decrypt(encryptedData, privateKey, hmacKey);
         const decryptedData2 = decrypt(encryptedData2, privateKey, hmacKey);
@@ -47,6 +46,6 @@ describe('Crypto Features', () => {
 
         expect(() => {
             decrypt(encryptedData, privateKey, hmacKey);
-        }).toNotThrow();
+        }).not.toThrow();
     });
 });

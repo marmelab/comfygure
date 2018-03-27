@@ -1,4 +1,3 @@
-const expect = require('expect');
 const { serialize, unserialize } = require('./serialization');
 
 describe('Serialization', () => {
