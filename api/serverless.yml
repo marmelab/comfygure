@@ -11,7 +11,7 @@ functions:
 ## PROJECTS
 
   projectCreate:
-    handler: projects.create
+    handler: src/handlers/projects.create
     description: Create a new project
     events:
       - http:
@@ -20,7 +20,7 @@ functions:
           cors: true
 
   projectUpdate:
-    handler: projects.update
+    handler: src/handlers/projects.update
     description: Rename a project
     events:
       - http:
@@ -29,7 +29,7 @@ functions:
           cors: true
 
   projectRemove:
-    handler: projects.remove
+    handler: src/handlers/projects.remove
     description: Delete a project
     events:
       - http:
@@ -40,7 +40,7 @@ functions:
 ## ENVIRONMENTS
 
   environmentGet:
-    handler: environments.get
+    handler: src/handlers/environments.get
     description: List environments of a project
     events:
       - http:
@@ -49,7 +49,7 @@ functions:
           cors: true
 
   environmentCreate:
-    handler: environments.create
+    handler: src/handlers/environments.create
     description: Add a new environment to a project
     events:
       - http:
@@ -58,7 +58,7 @@ functions:
           cors: true
 
   environmentUpdate:
-    handler: environments.update
+    handler: src/handlers/environments.update
     description: Rename environment of a project
     events:
       - http:
@@ -67,7 +67,7 @@ functions:
           cors: true
 
   environmentRemove:
-    handler: environments.remove
+    handler: src/handlers/environments.remove
     description: Delete environment of a project
     events:
       - http:
@@ -78,7 +78,7 @@ functions:
 ## CONFIGURATIONS
 
   configurationHistory:
-    handler: configurations.history
+    handler: src/handlers/configurations.history
     description: List history of a configuration
     events:
       - http:
@@ -91,7 +91,7 @@ functions:
           cors: true
 
   configurationGet:
-    handler: configurations.get
+    handler: src/handlers/configurations.get
     description: Get tag version of a configuration
     events:
       - http:
@@ -104,7 +104,7 @@ functions:
           cors: true
 
   configurationAdd:
-    handler: configurations.create
+    handler: src/handlers/configurations.create
     description: Add a new version of a configuration
     events:
       - http:
@@ -113,7 +113,7 @@ functions:
           cors: true
 
   configurationRemove:
-    handler: configurations.remove
+    handler: src/handlers/configurations.remove
     description: Remove a configuration
     events:
       - http:
@@ -124,7 +124,7 @@ functions:
 ## TAGS
 
   tagAdd:
-    handler: tags.create
+    handler: src/handlers/tags.create
     description: Add a new tag on a configuration
     events:
       - http:
@@ -133,7 +133,7 @@ functions:
           cors: true
 
   tagUpdate:
-    handler: tags.update
+    handler: src/handlers/tags.update
     description: Move a tag
     events:
       - http:
@@ -142,7 +142,7 @@ functions:
           cors: true
 
   tagRemove:
-    handler: tags.remove
+    handler: src/handlers/tags.remove
     description: Remove a tag
     events:
       - http:
@@ -153,6 +153,8 @@ functions:
 plugins:
   - serverless-webpack
   - serverless-offline
+
 custom:
-  webpack: ./webpack.config.babel.js
-  webpackIncludeModules: true
+  webpack:
+      webpackConfig: './webpack.config.babel.js'
+      includeModules: true

@@ -23,7 +23,7 @@ stop-db:
 	docker stop comfy-db
 
 run:
-	$(SERVERLESS) offline --location=.webpack --host=0.0.0.0 --port=3000
+	$(SERVERLESS) offline start --host=0.0.0.0 --port=3000
 
 deploy:
 	NODE_ENV=production $(SERVERLESS) deploy --stage beta

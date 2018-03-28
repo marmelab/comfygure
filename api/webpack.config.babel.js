@@ -1,14 +1,10 @@
 const path = require('path');
 const ConfigPlugin = require('webpack-config-plugin');
+const slsw = require('serverless-webpack');
 
 module.exports = {
     target: 'node',
-    entry: {
-        configurations: './src/handlers/configurations.js',
-        environments: './src/handlers/environments.js',
-        projects: './src/handlers/projects.js',
-        tags: './src/handlers/tags.js',
-    },
+    entry: slsw.lib.entries,
     plugins: [
         new ConfigPlugin({ dir: path.resolve(__dirname, 'config') }),
     ],
