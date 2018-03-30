@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "babel-eslint": "~7.1.1",
-    "babel-loader": "~6.2.4",
+    "babel-loader": "~6.4.1",
     "babel-plugin-add-module-exports": "~0.2.1",
     "babel-plugin-transform-async-to-generator": "~6.24.1",
     "babel-plugin-transform-object-rest-spread": "~6.26.0",
@@ -35,7 +35,7 @@
     "serverless": "~1.26.1",
     "serverless-offline": "~3.18.0",
     "serverless-webpack": "~5.1.1",
-    "webpack": "~2.2.1",
+    "webpack": "~3.11.0",
     "webpack-config-plugin": "~1.0.0"
   }
 }
