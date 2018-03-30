@@ -10,7 +10,7 @@ module.exports = {
     ],
     output: {
         libraryTarget: 'commonjs',
-        path: '.webpack',
+        path: path.resolve(__dirname, '.webpack'),
         filename: '[name].js',
     },
     module: {
