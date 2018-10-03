@@ -1,5 +1,1 @@
-const add = jest.fn(() => Promise.resolve({}));
-
-export default {
-    add,
-};
+export const add = jest.fn(() => Promise.resolve({}));

@@ -1,4 +1,3 @@
-
 const ENVVARS = 'envvars';
 const JSON = 'json';
 const YAML = 'yaml';

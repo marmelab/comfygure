@@ -1,6 +1,6 @@
 import projectQueries from '../queries/projects';
 
-const checkPermission = async (projectId, token, level) => {
+export const checkPermission = async (projectId, token, level) => {
     const project = await projectQueries.findFromIdAndToken(projectId, token);
 
     if (!project) {
@@ -25,5 +25,3 @@ const checkPermission = async (projectId, token, level) => {
         throw new Error("Your token doesn't allow you to perform this action.");
     }
 };
-
-export default { checkPermission };

@@ -1,4 +1,4 @@
-class HttpError extends Error {
+export class HttpError extends Error {
     constructor(message, statusCode) {
         super(message);
         this.message = message;
@@ -12,5 +12,3 @@ class HttpError extends Error {
         this.stack = new Error().stack;
     }
 }
-
-export default { HttpError };

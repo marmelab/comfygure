@@ -5,7 +5,7 @@ import addTag from '../domain/tags/add';
 import moveTag from '../domain/tags/move';
 import removeTag from '../domain/tags/remove';
 
-const create = λ(async (event) => {
+export const create = λ(async (event) => {
     const { id: projectId, environmentName, configName } = event.pathParameters;
     const { selector, name } = event.body;
 
@@ -16,8 +16,10 @@ const create = λ(async (event) => {
     return tag;
 });
 
-const update = λ(async (event) => {
-    const { id: projectId, environmentName, configName, tagName } = event.pathParameters;
+export const update = λ(async (event) => {
+    const {
+        id: projectId, environmentName, configName, tagName,
+    } = event.pathParameters;
     const { selector } = event.body;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
@@ -26,15 +28,11 @@ const update = λ(async (event) => {
     return project;
 });
 
-const remove = λ(async (event) => {
-    const { id: projectId, environmentName, configName, tagName } = event.pathParameters;
+export const remove = λ(async (event) => {
+    const {
+        id: projectId, environmentName, configName, tagName,
+    } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     return removeTag(projectId, environmentName, configName, tagName);
 });
-
-export default {
-    create,
-    update,
-    remove,
-};

@@ -13,16 +13,16 @@ export default handler => (event, context) => {
             body: JSON.stringify(body),
         });
     })
-    .catch((error) => {
-        logger.error('ERROR', error.message);
-        logger.error('ERR. STACK', error.stack);
+        .catch((error) => {
+            logger.error('ERROR', error.message);
+            logger.error('ERR. STACK', error.stack);
 
-        context.succeed({
-            statusCode: error.statusCode || 500,
-            body: JSON.stringify({
-                message: error.toString(),
-                error,
-            }),
+            context.succeed({
+                statusCode: error.statusCode || 500,
+                body: JSON.stringify({
+                    message: error.toString(),
+                    error,
+                }),
+            });
         });
-    });
 };

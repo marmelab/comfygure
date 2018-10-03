@@ -1,7 +1,6 @@
 import { PgPool } from 'co-postgres-queries';
-import config from 'config';
 
-const pool = new PgPool(config.db.client, config.db.pooling);
+const pool = new PgPool(CONFIG.db.client, CONFIG.db.pooling);
 
 const link = async (query) => {
     const client = await pool.connect();

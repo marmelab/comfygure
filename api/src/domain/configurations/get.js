@@ -1,5 +1,4 @@
 import configurationsQueries from '../../queries/configurations';
-import versionsQueries from '../../queries/versions';
 import entriesQueries from '../../queries/entries';
 
 import { get as getVersion } from './version';
