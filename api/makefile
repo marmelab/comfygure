@@ -1,4 +1,4 @@
-SERVERLESS := SLS_DEBUG=* node_modules/.bin/serverless
+SERVERLESS := node_modules/.bin/serverless
 DATABASE ?= comfy
 
 export PGUSER ?= postgres

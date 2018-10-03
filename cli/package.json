@@ -1,53 +1,52 @@
 {
-  "name": "comfygure",
-  "version": "0.1.2",
-  "description": "Configuration without pain",
-  "keywords": [
-    "configuration",
-    "deployment",
-    "node",
-    "bash",
-    "continuous"
-  ],
-  "engines": {
-    "node": ">6"
-  },
-  "bin": {
-    "comfy": "bin/comfy.js"
-  },
-  "scripts": {
-    "test": "make test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/marmelab/comfygure.git"
-  },
-  "author": "Marmelab",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/marmelab/comfygure/issues"
-  },
-  "homepage": "https://github.com/marmelab/comfygure#readme",
-  "dependencies": {
-    "chalk": "1.1.3",
-    "co": "4.6.0",
-    "http-server": "0.10.0",
-    "ini": "1.3.4",
-    "js-yaml": "3.8.4",
-    "lodash.get": "4.4.2",
-    "lodash.set": "4.3.2",
-    "minimist": "1.2.0",
-    "node-version": "1.0.0",
-    "request": "2.81.0",
-    "traverse": "0.6.6",
-    "uuid": "3.0.1"
-  },
-  "devDependencies": {
-    "eslint": "3.19.0",
-    "eslint-config-airbnb": "15.0.1",
-    "eslint-plugin-import": "2.3.0",
-    "eslint-plugin-jsx-a11y": "5.0.3",
-    "eslint-plugin-react": "7.0.1",
-    "jest": "~21.2.1"
-  }
+    "name": "comfygure",
+    "version": "0.1.2",
+    "description": "Configuration without pain",
+    "keywords": [
+        "configuration",
+        "deployment",
+        "node",
+        "bash",
+        "continuous"
+    ],
+    "engines": {
+        "node": ">=8"
+    },
+    "bin": {
+        "comfy": "bin/comfy.js"
+    },
+    "scripts": {
+        "test": "make test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/marmelab/comfygure.git"
+    },
+    "author": "Marmelab",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/marmelab/comfygure/issues"
+    },
+    "homepage": "https://github.com/marmelab/comfygure#readme",
+    "dependencies": {
+        "chalk": "~2.4.1",
+        "co": "4.6.0",
+        "ini": "~1.3.5",
+        "js-yaml": "~3.12.0",
+        "lodash.get": "4.4.2",
+        "lodash.set": "4.3.2",
+        "minimist": "1.2.0",
+        "node-version": "~1.2.0",
+        "request": "~2.88.0",
+        "traverse": "0.6.6",
+        "uuid": "~3.3.2"
+    },
+    "devDependencies": {
+        "eslint": "~5.6.1",
+        "eslint-config-airbnb": "~17.1.0",
+        "eslint-plugin-import": "~2.14.0",
+        "eslint-plugin-jsx-a11y": "~6.1.1",
+        "eslint-plugin-react": "~7.11.1",
+        "jest": "~23.6.0"
+    }
 }

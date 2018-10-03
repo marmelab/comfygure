@@ -1,6 +1,6 @@
 import { LIVE } from '../common/states';
 import projectsQueries from '../../queries/projects';
-import { add as addEnvironment } from '../environments';
+import addEnvironment from '../environments/add';
 
 const generateRandomString = (size, upperAlphaOnly = false) => {
     const numeric = '0123456789';

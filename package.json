@@ -20,5 +20,6 @@
     "url": "https://github.com/marmelab/comfygure/issues"
   },
   "homepage": "https://github.com/marmelab/comfygure#readme",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {}
 }

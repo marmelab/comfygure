@@ -1,4 +1,3 @@
-
 const LIVE = 'live';
 const ARCHIVED = 'archived';
 
