@@ -2,14 +2,14 @@
   "name": "comfygure-test",
   "private": true,
   "devDependencies": {
-    "co-mocha": "^1.2.0",
-    "eslint": "~5.6.1",
+    "co-mocha": "~1.2.2",
+    "eslint": "~5.8.0",
     "eslint-config-airbnb": "~17.1.0",
     "eslint-plugin-import": "~2.14.0",
-    "eslint-plugin-jsx-a11y": "~6.1.1",
+    "eslint-plugin-jsx-a11y": "~6.1.2",
     "eslint-plugin-react": "~7.11.1",
     "expect": "1.20.2",
-    "js-yaml": "3.8.4",
+    "js-yaml": "~3.12.0",
     "mocha": "3.4.2",
     "pm2": "2.4.6"
   }
