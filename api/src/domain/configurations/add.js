@@ -8,9 +8,22 @@ import { ENVVARS } from '../common/formats';
 
 import { get as getVersion } from './version';
 import { add as addTag, get as getTag, update as updateTag } from './tag';
+import { checkEnvironmentExistsOrThrow404 } from '../validation';
 
-export default async (projectId, environmentName, configurationName = 'default', tagName = null, entries = {}) => {
-    let configuration = await configurationsQueries.findOne(projectId, environmentName, configurationName);
+export default async (
+    projectId,
+    environmentName,
+    configurationName = 'default',
+    tagName = null,
+    entries = {},
+) => {
+    await checkEnvironmentExistsOrThrow404(projectId, environmentName);
+
+    let configuration = await configurationsQueries.findOne(
+        projectId,
+        environmentName,
+        configurationName,
+    );
     let configurationNewlyCreated = false;
 
     if (!configuration) {

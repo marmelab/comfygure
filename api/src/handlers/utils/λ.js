@@ -1,6 +1,21 @@
 import co from 'co';
 import logger from '../../logger';
 
+import { HttpError } from './errors';
+import { NotFoundError } from '../../domain/errors';
+
+const convertErrorToHttpError = (error) => {
+    if (error instanceof HttpError) {
+        return error;
+    }
+
+    if (error instanceof NotFoundError) {
+        return new HttpError(404, error.message, error.details);
+    }
+
+    return new HttpError(500, error.message, error.details);
+};
+
 export default handler => (event, context) => {
     co(function* () {
         const body = yield handler({
@@ -17,11 +32,14 @@ export default handler => (event, context) => {
             logger.error('ERROR', error.message);
             logger.error('ERR. STACK', error.stack);
 
+            const httpError = convertErrorToHttpError(error);
+
             context.succeed({
-                statusCode: error.statusCode || 500,
+                statusCode: httpError.statusCode || 500,
                 body: JSON.stringify({
-                    message: error.toString(),
                     error,
+                    message: httpError.message,
+                    details: httpError.details,
                 }),
             });
         });

@@ -16,13 +16,10 @@ const main = (ui, evt) => {
         get: require('./commands/get'),
         log: require('./commands/log'),
         tag: require('./commands/tag'),
-        // @TODO Enable the following command when comfy-admin is published
-        // @see https://github.com/marmelab/comfygure-admin/milestone/1
-        // admin: require('./commands/admin'),
         version: require('./commands/version'),
     };
 
-    return function* () {
+    return function* mainCommand() {
         const request = ui.digestEvent(evt);
 
         if (request.command === '-V' || request.arguments.includes('-V')) {
@@ -39,8 +36,8 @@ const main = (ui, evt) => {
             const { red, green } = ui.colors;
 
             ui.error(
-                `The command ${red(request.command)} doesn't exist.` +
-                `\nType ${green('comfy help')} to see the available commands.`
+                `The command ${red(request.command)} doesn't exist.`
+                + `\nType ${green('comfy help')} to see the available commands.`
             );
             ui.exit(1);
         }

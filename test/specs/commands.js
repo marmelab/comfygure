@@ -24,5 +24,38 @@ describe('Commands', () => {
             const { stdout } = yield run('comfy get development');
             expect(JSON.parse(stdout)).toEqual(config);
         });
+
+        it('should display a readable error if the environment does not exist', function* () {
+            const config = { login: 'admin', password: 'S3cret' };
+
+            yield run(`echo '${JSON.stringify(config)}' > test.json`);
+
+            try {
+                yield run('comfy setall donotexist $PWD/test.json');
+            } catch (error) {
+                expect(error.message).toInclude('Unable to found environment "donotexist"');
+                return;
+            }
+
+            expect('This command should fail').toBe(false);
+        });
+    });
+
+    describe('get', () => {
+        it('should display a readable error if the environment does not exist', function* () {
+            const config = { login: 'admin', password: 'S3cret' };
+
+            yield run(`echo '${JSON.stringify(config)}' > test.json`);
+            yield run('comfy setall development $PWD/test.json');
+
+            try {
+                yield run('comfy get donotexist');
+            } catch (error) {
+                expect(error.message).toInclude('Unable to found environment "donotexist"');
+                return;
+            }
+
+            expect('This command should fail').toBe(false);
+        });
     });
 });

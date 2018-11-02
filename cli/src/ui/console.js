@@ -2,17 +2,12 @@ const chalk = require('chalk');
 const readline = require('readline');
 
 const print = console.log; // eslint-disable-line no-console
-const error = console.error;  // eslint-disable-line no-console
+const error = console.error; // eslint-disable-line no-console
 
-const digestEvent = ([bin, file, command, ...args]) => {
-    // bin & file are: node comfy.js, we don't use these infos
-
-    return {
-        command,
-        arguments: args,
-    };
-};
-
+const digestEvent = ([bin, file, command, ...args]) => ({
+    command,
+    arguments: args,
+});
 const exit = (code = 0) => {
     process.exit(code);
 };
@@ -50,12 +45,19 @@ Please check your connection and try again.`);
         error(`${red('You are not allowed to perform this action.')}
 Please check your read or write token.`);
         break;
-    default:
+    case 404:
+        if (err.body && err.body.message) {
+            error(red(err.body.message));
+            if (err.body.details) {
+                error(err.body.details);
+            }
+            break;
+        }
+    default: // eslint-disable-line no-fallthrough
         error(`${dim(err.message)}
 ${dim(err.stack)}
 ${red('Unknown error, command aborted.')}
 If the error persists, please report it at ${cyan('https://github.com/marmelab/comfygure/issues')}`);
-
     }
 };
 

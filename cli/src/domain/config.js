@@ -3,9 +3,9 @@ const { encrypt, decrypt } = require('../crypto');
 
 module.exports = (client, ui) => {
     const list = function* (project, env, config, all = false) {
-        let url = config ?
-            `${project.origin}/projects/${project.id}/environments/${env}/configurations/${config}/history` :
-            `${project.origin}/projects/${project.id}/environments/${env}/configurations/history`;
+        let url = config
+            ? `${project.origin}/projects/${project.id}/environments/${env}/configurations/${config}/history`
+            : `${project.origin}/projects/${project.id}/environments/${env}/configurations/history`;
 
         if (all) {
             url += '?all';
@@ -15,7 +15,7 @@ module.exports = (client, ui) => {
             return yield client.get(url, client.buildAuthorization(project));
         } catch (error) {
             ui.printRequestError(error);
-            ui.exit(1);
+            return ui.exit(1);
         }
     };
 

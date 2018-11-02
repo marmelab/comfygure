@@ -13,9 +13,22 @@ query.selectPage = query.selectPage
     .table('environment LEFT JOIN configuration ON (environment.id = configuration.environment_id)')
     .idFields(['id'])
     .searchableFields(['environment.name', 'project_id', 'environment.state'])
-    .returnFields(['environment.id', 'environment.name', 'case when count(configuration.name) = 0 then \'[]\' else json_agg((SELECT x FROM (SELECT configuration.id, configuration.name, configuration.default_format as "defaultFormat") x)) end as configurations'])
-    .groupByFields(['environment.id', 'environment.name', 'environment.project_id'])
-;
+    .returnFields([
+        'environment.id',
+        'environment.name',
+        `case
+            when count(configuration.name) = 0 then '[]'
+            else json_agg((
+                SELECT x
+                FROM (
+                    SELECT
+                        configuration.id,
+                        configuration.name,
+                        configuration.default_format as "defaultFormat"
+                    ) x
+                )) end as configurations`,
+    ])
+    .groupByFields(['environment.id', 'environment.name', 'environment.project_id']);
 
 const insertOne = async (environment) => {
     const client = await db.link(query);
@@ -25,8 +38,7 @@ const insertOne = async (environment) => {
     return result;
 };
 
-const updateOne = async (id, environment) =>
-    (await db.link(query)).updateOne(id, environment);
+const updateOne = async (id, environment) => (await db.link(query)).updateOne(id, environment);
 
 const findOne = async (projectId, environmentName) => {
     const client = await db.link(query);

@@ -58,5 +58,11 @@ module.exports = (request) => {
 
     const buildAuthorization = project => ({ Authorization: `Token ${project.secretToken}` });
 
-    return { get, post, put, delete: remove, buildAuthorization };
+    return {
+        get,
+        post,
+        put,
+        delete: remove,
+        buildAuthorization,
+    };
 };

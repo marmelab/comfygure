@@ -15,11 +15,11 @@ export const create = λ(async (event) => {
     return addConfiguration(projectId, environmentName, configName, tagName, event.body);
 });
 
-export const update = λ(async (event) => {
+export const update = λ(async () => {
     //
 });
 
-export const remove = λ(async (event) => {
+export const remove = λ(async () => {
     // remove a configuration
 });
 

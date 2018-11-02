@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const { serialize, unserialize } = require('./serialization')
+const { serialize, unserialize } = require('./serialization');
 const { sign, isSignatureValid } = require('./signature');
 
 const ALGORITHM = 'aes-256-ctr';
@@ -7,7 +7,7 @@ const KEY_BYTE_LENGTH = 32;
 const IV_LENGTH = 16;
 const HMAC_KEY_LENGTH = 32;
 
-const hexToBuffer = hex => new Buffer(hex, 'hex');
+const hexToBuffer = hex => Buffer.from(hex, 'hex');
 const bufferToHex = buffer => buffer.toString('hex');
 
 const castKeyToBuffer = (key, castToBuffer = true) => {

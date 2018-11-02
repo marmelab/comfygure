@@ -1,5 +1,11 @@
 const minimist = require('minimist');
-const { parseFlat, toJSON, toYAML, toEnvVars, toJavascript } = require('../format');
+const {
+    parseFlat,
+    toJSON,
+    toYAML,
+    toEnvVars,
+    toJavascript,
+} = require('../format');
 
 const help = (ui) => {
     const { bold, cyan, dim } = ui.colors;
@@ -30,7 +36,7 @@ ${bold('EXAMPLES')}
 `);
 };
 
-module.exports = (ui, modules) => function* (rawOptions) {
+module.exports = (ui, modules) => function* get(rawOptions) {
     const { bold, green, red } = ui.colors;
     const options = minimist(rawOptions);
     const env = options._[0];
@@ -85,5 +91,5 @@ Type ${green('comfy get --help')} for details`);
         ui.print(toJSON(body));
     }
 
-    ui.exit();
+    return ui.exit();
 };

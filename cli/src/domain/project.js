@@ -31,7 +31,9 @@ module.exports = (client, ui) => {
         yield cb => fs.writeFile(filename, config, { flag: 'w' }, cb);
     };
 
-    const checkProjectInfos = ({ id, accessKey, secretToken, privateKey, hmacKey, origin }) => {
+    const checkProjectInfos = ({
+        id, accessKey, secretToken, privateKey, hmacKey, origin,
+    }) => {
         const errors = [];
         const { red, dim, bold } = ui.colors;
 

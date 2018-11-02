@@ -22,6 +22,9 @@ start-db:
 stop-db:
 	docker stop comfy-db
 
+connect-db:
+	psql comfy
+
 run:
 	$(SERVERLESS) offline start --host=0.0.0.0 --port=3000
 

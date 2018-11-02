@@ -26,7 +26,7 @@ ${bold('EXAMPLES')}
 };
 
 
-module.exports = (ui, modules) => function* (rawOptions) {
+module.exports = (ui, modules) => function* setall(rawOptions) {
     const { red, green, bold } = ui.colors;
     const options = minimist(rawOptions);
     const env = options._[0];
@@ -59,14 +59,14 @@ Type ${green('comfy setall --help')} for details`);
         : path.normalize(`${process.cwd()}${path.sep}${configPath}`);
 
     if (!fs.existsSync(filename)) {
-        ui.error(`The file ${red(options.f)} doesn't exist.`);
-        ui.exit(1);
+        ui.error(`The file ${red(configPath)} doesn't exist.`);
+        return ui.exit(1);
     }
 
     const stats = fs.statSync(filename);
     if (!stats.isFile()) {
-        ui.error(`The object located at ${red(options.f)} is not a file.`);
-        ui.exit(1);
+        ui.error(`The object located at ${red(configPath)} is not a file.`);
+        return ui.exit(1);
     }
 
     const file = fs.readFileSync(filename, 'utf-8');
@@ -76,7 +76,7 @@ Type ${green('comfy setall --help')} for details`);
     try {
         parsedContent = parseYAML(file);
     } catch (err) {
-        ui.error(red(`Failed to parse ${options.f}`));
+        ui.error(red(`Failed to parse ${configPath}`));
     }
 
     const project = yield modules.project.retrieveFromConfig();
@@ -86,5 +86,5 @@ Type ${green('comfy setall --help')} for details`);
     });
 
     ui.print(`${bold(green('comfy configuration successfully saved'))}`);
-    ui.exit();
+    return ui.exit();
 };
