@@ -3,12 +3,12 @@ import hash from 'object-hash';
 import entriesQueries from '../../queries/entries';
 import versionsQueries from '../../queries/versions';
 import configurationsQueries from '../../queries/configurations';
-import environmentsQueries from '../../queries/environments';
 import { ENVVARS } from '../common/formats';
 
 import { get as getVersion } from './version';
 import { add as addTag, get as getTag, update as updateTag } from './tag';
-import { checkEnvironmentExistsOrThrow404 } from '../validation';
+import { getProjectOr404 } from '../projects';
+import { getEnvironmentOr404 } from '../environments';
 
 export default async (
     projectId,
@@ -16,27 +16,33 @@ export default async (
     configurationName = 'default',
     tagName = null,
     entries = {},
+    format = null,
 ) => {
-    await checkEnvironmentExistsOrThrow404(projectId, environmentName);
+    await getProjectOr404(projectId);
+    const environment = await getEnvironmentOr404(projectId, environmentName);
 
     let configuration = await configurationsQueries.findOne(
         projectId,
         environmentName,
         configurationName,
     );
-    let configurationNewlyCreated = false;
+    let newlyCreated = false;
 
     if (!configuration) {
-        const environment = await environmentsQueries.findOne(projectId, environmentName);
-        // TODO: If no environment found, return a usable error
-
         configuration = await configurationsQueries.insertOne({
             environment_id: environment.id,
             name: configurationName,
-            default_format: ENVVARS,
+            default_format: format || ENVVARS,
         });
 
-        configurationNewlyCreated = true;
+        newlyCreated = true;
+    }
+
+    if (!newlyCreated && configuration.default_format !== format) {
+        configuration = await configurationsQueries.updateOne(configuration.id, {
+            ...configuration,
+            default_format: format || ENVVARS,
+        });
     }
 
     const currentVersion = await getVersion(projectId, environmentName, configurationName, tagName);
@@ -59,7 +65,7 @@ export default async (
         configurationId: configuration.id,
     };
 
-    if (configurationNewlyCreated) {
+    if (newlyCreated) {
         await Promise.all([
             { ...newTagInfos, name: 'stable' },
             { ...newTagInfos, name: 'next' },

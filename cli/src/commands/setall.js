@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
-const { parseYAML } = require('../format');
+const { parseYAML, guessFormat } = require('../format');
 
 const help = (ui) => {
     const { bold, cyan } = ui.colors;
@@ -80,9 +80,11 @@ Type ${green('comfy setall --help')} for details`);
     }
 
     const project = yield modules.project.retrieveFromConfig();
+
     yield modules.config.add(project, env, parsedContent, {
         tag,
         configName: 'default',
+        format: guessFormat(path.extname(filename)),
     });
 
     ui.print(`${bold(green('comfy configuration successfully saved'))}`);

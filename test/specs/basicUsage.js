@@ -31,6 +31,16 @@ describe('Basic Usages', () => {
             const { stdout: latestStdout } = yield run('comfy get development');
             expect(JSON.parse(latestStdout)).toEqual(latestConfig);
         });
+
+        it('should keep the default format of guessed by the file extension', function* () {
+            const config = 'login: admin';
+
+            yield run(`echo '${config}' > test.yml`);
+            yield run('comfy setall development test.yml');
+
+            const { stdout } = yield run('comfy get development');
+            expect(stdout.trim()).toEqual(config);
+        });
     });
 
     describe('environments', () => {
