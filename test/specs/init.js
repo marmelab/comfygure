@@ -5,7 +5,7 @@ describe('Project initialization', () => {
     it('should create a new project', function* () {
         const { stdout } = yield run("comfy init --origin 'http://localhost:3000'");
 
-        expect(stdout).toInclude('http://localhost:3000');
+        expect(stdout).toContain('http://localhost:3000');
     });
 
     it('should create a new environment', function* () {
@@ -13,48 +13,48 @@ describe('Project initialization', () => {
 
         const { stdout } = yield run('comfy env ls');
 
-        expect(stdout).toInclude('development');
+        expect(stdout).toContain('development');
     });
 
     it('should add the origin to `.comfy/config`', function* () {
         yield run("comfy init --origin 'http://localhost:3000'");
 
         const { stdout } = yield run('cat .comfy/config');
-        expect(stdout).toInclude('http://localhost:3000');
+        expect(stdout).toContain('http://localhost:3000');
     });
 
     it('should create project ID', function* () {
         yield run("comfy init --origin 'http://localhost:3000'");
 
         const { stdout } = yield run('cat .comfy/config');
-        expect(stdout).toInclude('projectId=');
+        expect(stdout).toContain('projectId=');
     });
 
     it('should create access key', function* () {
         yield run("comfy init --origin 'http://localhost:3000'");
 
         const { stdout } = yield run('cat .comfy/config');
-        expect(stdout).toInclude('accessKey=');
+        expect(stdout).toContain('accessKey=');
     });
 
     it('should create secret token', function* () {
         yield run("comfy init --origin 'http://localhost:3000'");
 
         const { stdout } = yield run('cat .comfy/config');
-        expect(stdout).toInclude('secretToken=');
+        expect(stdout).toContain('secretToken=');
     });
 
     it('should create private key', function* () {
         yield run("comfy init --origin 'http://localhost:3000'");
 
         const { stdout } = yield run('cat .comfy/config');
-        expect(stdout).toInclude('privateKey=');
+        expect(stdout).toContain('privateKey=');
     });
 
     it('should create a HMAC signature key', function* () {
         yield run("comfy init --origin 'http://localhost:3000'");
 
         const { stdout } = yield run('cat .comfy/config');
-        expect(stdout).toInclude('hmacKey=');
+        expect(stdout).toContain('hmacKey=');
     });
 });

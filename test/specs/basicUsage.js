@@ -37,15 +37,15 @@ describe('Basic Usages', () => {
         it('should be able to list environments', function* () {
             const { stdout } = yield run('comfy env ls');
 
-            expect(stdout).toInclude('development');
+            expect(stdout).toContain('development');
         });
 
         it('should be able to create an environment', function* () {
             yield run('comfy env add production');
             const { stdout } = yield run('comfy env ls');
 
-            expect(stdout).toInclude('development');
-            expect(stdout).toInclude('production');
+            expect(stdout).toContain('development');
+            expect(stdout).toContain('production');
         });
     });
 
@@ -59,7 +59,7 @@ describe('Basic Usages', () => {
             expect(lines.length).toBe(1);
             expect(environment).toBe('development');
             expect(configurationSha.length).toBe(40);
-            expect(tags).toInclude('stable, next');
+            expect(tags).toContain('stable, next');
         });
     });
 });
