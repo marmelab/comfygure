@@ -4,18 +4,25 @@ import entriesQueries from '../../queries/entries';
 import { get as getVersion } from './version';
 import { get as getTag } from './tag';
 
+import { checkEnvironmentExistsOrThrow404 } from '../validation';
+
 const entriesToDictionary = entries => entries.reduce((dictionary, item) => ({
     ...dictionary,
     [item.key]: item.value,
 }), {});
 
 const findAloneConfiguration = async (projectId, environmentName) => {
-    const configurations = await configurationsQueries.findAllByEnvironmentName(projectId, environmentName);
+    const configurations = await configurationsQueries.findAllByEnvironmentName(
+        projectId,
+        environmentName,
+    );
 
     if (configurations.length !== 1) {
         // TODO: If configurations.length = 0, return a usable error
         // TODO: If configurations.length > 1, return a usable error
-        throw new Error('There is more than one configuration. Please select a configuration by its name.');
+        throw new Error(
+            'There is more than one configuration. Please select a configuration by its name.',
+        );
     }
 
     return configurations[0];
@@ -27,6 +34,8 @@ export default async (projectId, environmentName, selector, pathTagName) => {
 
     let configuration;
     let tagName = pathTagName;
+
+    await checkEnvironmentExistsOrThrow404(projectId, environmentName);
 
     if (selector && tagName) {
         configuration = await configurationsQueries.findOne(projectId, environmentName, selector);

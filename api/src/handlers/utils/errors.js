@@ -1,7 +1,8 @@
 export class HttpError extends Error {
-    constructor(message, statusCode) {
+    constructor(statusCode = 500, message = 'An error occured', details = null) {
         super(message);
         this.message = message;
+        this.details = details;
         this.statusCode = statusCode;
         this.name = this.constructor.name;
         if (typeof Error.captureStackTrace === 'function') {

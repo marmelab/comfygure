@@ -10,6 +10,11 @@ install:
 migrate:
 	make -C api migrate
 
+run:
+	-make -C api start-db
+	make migrate
+	make -C api run
+
 test:
 	make -C api test
 	make -C cli test

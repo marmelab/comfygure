@@ -6,7 +6,7 @@ import renameProject from '../domain/projects/rename';
 import removeProject from '../domain/projects/remove';
 
 export const create = λ(async (event) => {
-    const { name: projectName, environment: environmentName } = event.body;
+    const { name: projectName, environment: environmentName } = event.body || {};
 
     const project = await addProject(projectName, environmentName);
 
@@ -14,8 +14,8 @@ export const create = λ(async (event) => {
 });
 
 export const update = λ(async (event) => {
-    const { id: projectId } = event.pathParameters;
-    const { name: newProjectName } = event.body;
+    const { id: projectId } = event.pathParameters || {};
+    const { name: newProjectName } = event.body || {};
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     const project = await renameProject(projectId, newProjectName);
@@ -24,7 +24,7 @@ export const update = λ(async (event) => {
 });
 
 export const remove = λ(async (event) => {
-    const { id: projectId } = event.pathParameters;
+    const { id: projectId } = event.pathParameters || {};
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
     return removeProject(projectId);

@@ -19,6 +19,17 @@ const query = crudQueries(
     readFields,
 );
 
+const findOne = async (id) => {
+    const client = await db.link(query);
+    const result = await client.selectPage(undefined, undefined, { id });
+    client.release();
+
+    if (!result.length) {
+        return null;
+    }
+    return result[0];
+};
+
 const insertOne = async (project) => {
     const client = await db.link(query);
     const result = await client.insertOne(project);
@@ -58,6 +69,7 @@ const findFromIdAndToken = async (id, token) => {
 };
 
 export default {
+    findOne,
     insertOne,
     updateOne,
     findFromIdAndToken,
