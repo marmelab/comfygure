@@ -36,9 +36,9 @@ const toEnvVars = (flatContent) => {
         const escapedValue = value.replace("'", "'\"'\"'");
 
         const envVar = key
-            .replace('.', '_')
-            .replace('[', '_')
-            .replace(']', '')
+            .replace(/\./g, '_')
+            .replace(/\[/g, '_')
+            .replace(/\]/g, '')
             .toUpperCase();
 
         source += `export ${envVar}='${escapedValue}';\n`;
