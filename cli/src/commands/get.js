@@ -56,7 +56,6 @@ Type ${green('comfy get --help')} for details`);
         return ui.exit(0);
     }
 
-
     const project = yield modules.project.retrieveFromConfig();
     const config = yield modules.config.get(project, env, {
         configName: 'default',

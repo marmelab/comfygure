@@ -58,4 +58,32 @@ describe('Commands', () => {
             expect('This command should fail').toBe(false);
         });
     });
+
+    describe('project', () => {
+        it('should allow to permanently delete the current project', function* () {
+            const { stdout: warning } = yield run('comfy project delete');
+            expect(warning).toContain('This action is irreversible');
+
+            const { stdout: currentConfig } = yield run('comfy get development');
+            expect(JSON.parse(currentConfig)).toEqual({});
+
+            const {
+                stdout: projectId,
+            } = yield run('cat .comfy/config | grep projectId | sed "s/projectId=//"');
+
+            const {
+                stdout: confirmation,
+            } = yield run(`comfy project delete --permanently --id=${projectId}`);
+            expect(confirmation).toContain('successfully deleted');
+
+            try {
+                yield run('comfy get development');
+            } catch (error) {
+                expect(error.message).toContain('Unable to locate the project identifier');
+                return;
+            }
+
+            expect('The last command should not work').toBe(false);
+        });
+    });
 });

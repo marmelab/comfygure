@@ -1,13 +1,15 @@
 const chalk = require('chalk');
 const readline = require('readline');
+const Table = require('cli-table');
 
 const print = console.log; // eslint-disable-line no-console
-const error = console.error; // eslint-disable-line no-console
+const { error } = console; // eslint-disable-line no-console
 
 const digestEvent = ([bin, file, command, ...args]) => ({
     command,
     arguments: args,
 });
+
 const exit = (code = 0) => {
     process.exit(code);
 };
@@ -61,12 +63,20 @@ If the error persists, please report it at ${cyan('https://github.com/marmelab/c
     }
 };
 
+const table = (rows) => {
+    const t = new Table();
+    t.push(...rows);
+
+    print(t.toString());
+};
+
 module.exports = {
     colors,
     print,
     error,
     exit,
     input,
+    table,
     digestEvent,
     printRequestError,
 };

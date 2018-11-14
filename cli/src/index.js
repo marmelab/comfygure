@@ -17,6 +17,7 @@ const main = (ui, evt) => {
         log: require('./commands/log'),
         tag: require('./commands/tag'),
         version: require('./commands/version'),
+        project: require('./commands/project'),
     };
 
     return function* mainCommand() {

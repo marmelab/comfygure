@@ -1,4 +1,4 @@
-const exec = require('child_process').exec;
+const { exec } = require('child_process');
 
 const COMFY_BIN = '../../cli/bin/comfy.js';
 const DEFAULT_CWD = './.env/';
