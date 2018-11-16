@@ -44,8 +44,7 @@ ${bold('EXAMPLES')}
 module.exports = (ui, modules) => function* get(rawOptions) {
     const { bold, green, red } = ui.colors;
     const options = minimist(rawOptions);
-    const env = options._[0];
-    const selector = options._[1];
+    const [env, selector] = options._;
     const tag = options.tag || options.t || 'stable';
 
     if (options.help || options.h || options._.includes('help')) {
