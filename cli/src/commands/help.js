@@ -1,5 +1,7 @@
-module.exports = ui => function* help() {
-    const { bold, dim, gray, cyan } = ui.colors;
+module.exports = ui => () => {
+    const {
+        bold, dim, gray, cyan,
+    } = ui.colors;
 
     ui.print(`
 ${bold('NAME')}
@@ -16,6 +18,7 @@ ${bold('COMMANDS')}
         env         Manage configuration environments
         tag         Manage configuration tags
         log         List all configuration versions
+        project     Manage the current project
         version     Output version information and exit
 
 ${bold('EXAMPLES')}

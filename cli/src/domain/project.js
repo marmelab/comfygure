@@ -4,6 +4,9 @@ const path = require('path');
 const { CONFIG_FOLDER, CONFIG_PATH, DEFAULT_ORIGIN } = require('./constants');
 const { generateNewPrivateKey, generateNewHmacKey } = require('../crypto');
 
+const getConfigFolder = () => `${process.cwd()}${path.sep}${CONFIG_FOLDER}`;
+const getConfigPath = () => `${process.cwd()}${path.sep}${CONFIG_PATH}`;
+
 module.exports = (client, ui) => {
     const create = function* (name, environment, origin = DEFAULT_ORIGIN) {
         const url = `${origin}/projects`;
@@ -12,7 +15,7 @@ module.exports = (client, ui) => {
             return yield client.post(url, { name, environment });
         } catch (error) {
             ui.printRequestError(error);
-            ui.exit(1);
+            return ui.exit(1);
         }
     };
 
@@ -26,8 +29,8 @@ module.exports = (client, ui) => {
             hmacKey,
         }, { section: 'project' });
 
-        const filename = `${process.cwd()}${path.sep}${CONFIG_PATH}`;
-        yield cb => fs.mkdir(`${process.cwd()}${path.sep}${CONFIG_FOLDER}`, cb);
+        const filename = getConfigPath();
+        yield cb => fs.mkdir(getConfigFolder(), cb);
         yield cb => fs.writeFile(filename, config, { flag: 'w' }, cb);
     };
 
@@ -78,7 +81,7 @@ Type ${bold('comfy init')} to do so.`);
         }
     };
 
-    const retrieveFromConfig = function* () {
+    const retrieveFromConfig = () => {
         const envs = {
             id: process.env.COMFY_PROJECT_ID,
             accessKey: process.env.COMFY_ACCESS_KEY,
@@ -88,7 +91,7 @@ Type ${bold('comfy init')} to do so.`);
             origin: process.env.COMFY_ORIGIN,
         };
 
-        const filename = `${process.cwd()}${path.sep}${CONFIG_PATH}`;
+        const filename = getConfigPath();
 
         if (!fs.existsSync(filename)) {
             checkProjectInfos(envs);
@@ -110,6 +113,21 @@ Type ${bold('comfy init')} to do so.`);
         return projectInfos;
     };
 
+    const permanentlyDelete = function* () {
+        const project = retrieveFromConfig();
+        const url = `${project.origin}/projects/${project.id}`;
+
+        try {
+            yield client.delete(url, client.buildAuthorization(project));
+        } catch (error) {
+            ui.printRequestError(error);
+            ui.exit(1);
+        }
+
+        yield cb => fs.unlink(getConfigPath(), cb);
+        yield cb => fs.rmdir(getConfigFolder(), cb);
+    };
+
     return {
         create,
         retrieveFromConfig,
@@ -118,5 +136,8 @@ Type ${bold('comfy init')} to do so.`);
         CONFIG_PATH,
         generateNewPrivateKey,
         generateNewHmacKey,
+        getConfigFolder,
+        getConfigPath,
+        permanentlyDelete,
     };
 };
