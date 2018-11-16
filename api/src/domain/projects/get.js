@@ -9,7 +9,7 @@ export const getProjectOr404 = async (projectId) => {
         throw new NotFoundError({
             message: `Unable to find project "${projectId}"`,
             details: [
-                'Have you initialized a comfy project is this directory?',
+                'Have you initialized a comfy project in thin directory?',
                 'Type "comfy init" to do so.',
             ].join(' '),
         });
