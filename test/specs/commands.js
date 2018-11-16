@@ -33,7 +33,7 @@ describe('Commands', () => {
             try {
                 yield run('comfy setall donotexist $PWD/test.json');
             } catch (error) {
-                expect(error.message).toContain('Unable to found environment "donotexist"');
+                expect(error.message).toContain('Unable to find environment "donotexist"');
                 return;
             }
 
@@ -51,7 +51,7 @@ describe('Commands', () => {
             try {
                 yield run('comfy get donotexist');
             } catch (error) {
-                expect(error.message).toContain('Unable to found environment "donotexist"');
+                expect(error.message).toContain('Unable to find environment "donotexist"');
                 return;
             }
 
