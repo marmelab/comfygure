@@ -6,7 +6,7 @@ export const getEnvironmentOr404 = async (projectId, environmentName) => {
 
     if (!env) {
         throw new NotFoundError({
-            message: `Unable to found environment "${environmentName}" for project "${projectId}".`,
+            message: `Unable to find environment "${environmentName}" for project "${projectId}".`,
             details: 'Type "comfy env ls" to list available environments.',
         });
     }
