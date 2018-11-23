@@ -6,6 +6,7 @@ const {
     toEnvVars,
     toJavascript,
 } = require('../format');
+const { JSON, YAML, JAVASCRIPT } = require('../format/constants');
 
 const help = (ui) => {
     const { bold, cyan, dim } = ui.colors;
@@ -73,9 +74,9 @@ Type ${green('comfy get --help')} for details`);
     }
 
     let format = config.defaultFormat;
-    if (options.json) format = 'json';
-    if (options.yml) format = 'yml';
-    if (options.js) format = 'js';
+    if (options.json) format = JSON;
+    if (options.yml) format = YAML;
+    if (options.js) format = JAVASCRIPT;
 
     let entries = config.body;
     if (selector) {
@@ -104,10 +105,10 @@ Type ${green('comfy get --help')} for details`);
     const body = parseFlat(entries);
 
     switch (format) {
-    case 'yml':
+    case YAML:
         ui.print(toYAML(body));
         break;
-    case 'js':
+    case JAVASCRIPT:
         ui.print(toJavascript(body));
         break;
     default:

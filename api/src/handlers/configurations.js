@@ -7,25 +7,31 @@ import addConfiguration from '../domain/configurations/add';
 
 export const create = λ(async (event) => {
     const {
-        id: projectId, environmentName, configName, tagName,
+        id: projectId,
+        environmentName,
+        configName,
+        tagName,
     } = event.pathParameters;
+    const { entries, format } = event.body;
+
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'write');
 
-    // create new configuration with entries
-    return addConfiguration(projectId, environmentName, configName, tagName, event.body);
-});
-
-export const update = λ(async () => {
-    //
-});
-
-export const remove = λ(async () => {
-    // remove a configuration
+    return addConfiguration(
+        projectId,
+        environmentName,
+        configName,
+        tagName,
+        entries,
+        format,
+    );
 });
 
 export const get = λ(async (event) => {
     const {
-        id: projectId, environmentName, configName: selector, tagName,
+        id: projectId,
+        environmentName,
+        configName: selector,
+        tagName,
     } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
 
@@ -35,7 +41,8 @@ export const get = λ(async (event) => {
 export const history = λ(async (event) => {
     const { id: projectId, environmentName, configName } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
-    const all = event.queryStringParameters && Object.keys(event.queryStringParameters).includes('all');
+    const all = event.queryStringParameters
+        && Object.keys(event.queryStringParameters).includes('all');
 
     return getHistory(projectId, environmentName, configName, all);
 });

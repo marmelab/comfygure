@@ -13,6 +13,6 @@ export default async (projectId, environmentName, configName, all = false) => {
             hash: version.hash,
             previous: version.previous,
             tags: version.tags,
-            defaultFormat: configuration.defaultFormat,
+            defaultFormat: configuration.default_format,
         }));
 };

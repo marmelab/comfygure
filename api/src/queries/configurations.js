@@ -3,7 +3,15 @@ import { crudQueries } from 'co-postgres-queries';
 import db from './db';
 
 const table = 'configuration';
-const fields = ['id', 'environment_id', 'name', 'state', 'default_format', 'created_at', 'updated_at'];
+const fields = [
+    'id',
+    'environment_id',
+    'name',
+    'state',
+    'default_format',
+    'created_at',
+    'updated_at',
+];
 const idFields = ['id'];
 const returnFields = ['id', 'name', 'state', 'default_format'];
 
@@ -27,8 +35,7 @@ query.selectPage = query.selectPage
         'configuration.updated_at',
         'environment.name as environment_name',
         'project.id as project_id',
-    ])
-;
+    ]);
 
 const findOne = async (projectId, environmentName, configurationName) => {
     const client = await db.link(query);
@@ -65,8 +72,17 @@ const insertOne = async (configurationData) => {
     return configuration;
 };
 
+const updateOne = async (id, data) => {
+    const client = await db.link(query);
+    const configuration = client.updateOne(id, data);
+    client.release();
+
+    return configuration;
+};
+
 export default {
     findOne,
     findAllByEnvironmentName,
     insertOne,
+    updateOne,
 };

@@ -13,7 +13,11 @@ const convertErrorToHttpError = (error) => {
         return new HttpError(404, error.message, error.details);
     }
 
-    return new HttpError(500, error.message, error.details);
+    return new HttpError(
+        500,
+        CONFIG.logs.debug ? error.message : 'An error occured',
+        CONFIG.logs.debug ? error.details : 'Please contact an administrator',
+    );
 };
 
 export default handler => (event, context) => {
@@ -37,7 +41,7 @@ export default handler => (event, context) => {
             context.succeed({
                 statusCode: httpError.statusCode || 500,
                 body: JSON.stringify({
-                    error,
+                    error: CONFIG.logs.debug ? error : null,
                     message: httpError.message,
                     details: httpError.details,
                 }),

@@ -1,6 +1,7 @@
 const deepSet = require('lodash.set');
 const yaml = require('js-yaml');
 const toFlat = require('./toFlat');
+const guessFormat = require('./guessFormat');
 
 const parseJSON = content => JSON.parse(content);
 
@@ -58,4 +59,5 @@ module.exports = {
     parseFlat,
     toEnvVars,
     toFlat,
+    guessFormat,
 };

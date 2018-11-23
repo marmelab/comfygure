@@ -1,7 +1,10 @@
 import environmentsQueries from '../../queries/environments';
+import { getProjectOr404 } from '../projects/get';
+import { getEnvironmentOr404 } from './get';
 
 export default async (projectId, environmentName, newEnvironmentName) => {
-    const environment = await environmentsQueries.findOne(projectId, environmentName);
+    await getProjectOr404(projectId);
+    const environment = await getEnvironmentOr404(projectId, environmentName);
 
     if (!environment) {
         return null;

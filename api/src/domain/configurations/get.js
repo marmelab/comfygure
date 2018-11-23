@@ -69,7 +69,7 @@ export default async (projectId, environmentName, selector, pathTagName) => {
         tag: tag ? tag.name : '',
         hash: version.hash,
         previous: version.previous,
-        defaultFormat: configuration.defaultFormat,
+        defaultFormat: configuration.default_format,
         body: entries,
         state: configuration.state,
     };
