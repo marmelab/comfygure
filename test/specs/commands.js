@@ -57,6 +57,38 @@ describe('Commands', () => {
 
             expect('This command should fail').toBe(false);
         });
+
+        it('should be able to select a subset of the config', function* () {
+            const config = {
+                admin: 'Admin',
+                password: 'S3cret!',
+                nested: {
+                    a: {
+                        a: 3,
+                        b: 4,
+                    },
+                    b: 2,
+                },
+            };
+
+            yield run(`echo '${JSON.stringify(config)}' > test.json`);
+            yield run('comfy setall development $PWD/test.json');
+
+            const { stdout: admin } = yield run('comfy get development admin');
+            expect(admin.trim()).toBe('Admin');
+
+            const { stdout: nested } = yield run('comfy get development nested.a');
+            expect(JSON.parse(nested)).toEqual({
+                a: 3,
+                b: 4,
+            });
+
+            const { stdout: nestedValue } = yield run('comfy get development nested.a.b');
+            expect(nestedValue.trim()).toBe('4');
+
+            const { stdout: envvars } = yield run('comfy get development nested.a --envvars');
+            expect(envvars.trim()).toBe("export NESTED_A_A='3';\nexport NESTED_A_B='4';");
+        });
     });
 
     describe('project', () => {

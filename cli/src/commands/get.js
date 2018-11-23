@@ -15,10 +15,11 @@ ${bold('NAME')}
         comfy get - Retrieve the configuration for a given environment
 
 ${bold('SYNOPSIS')}
-        ${bold('comfy')} get <environment> [<options>]
+        ${bold('comfy')} get <environment> [<selector>] [<options>]
 
 ${bold('OPTIONS')}
         <environment>   Name of the environment (must already exist in project)
+        <selector>      Get only a subset of the config (dot separated)
         --json          Output the configuration as a JSON file (default)
         --envvars       Output the configuration as a sourceable bash file
         --yml           Output the configuration as a YAML file
@@ -33,13 +34,17 @@ ${bold('EXAMPLES')}
         ${cyan('comfy get staging -t next --yml > config/staging.yaml')}
         ${dim('# Get the production configuration and set it as environment variables')}
         ${cyan('comfy get production --envvars | source /dev/stdin')}
+
+        ${dim('# Get only a field of the config')}
+        ${dim('config.json: { "admin": { "user": "Admin", "pass": "1234" } }')}
+        ${cyan('comfy get production admin.user')} // Admin
 `);
 };
 
 module.exports = (ui, modules) => function* get(rawOptions) {
     const { bold, green, red } = ui.colors;
     const options = minimist(rawOptions);
-    const env = options._[0];
+    const [env, selector] = options._;
     const tag = options.tag || options.t || 'stable';
 
     if (options.help || options.h || options._.includes('help')) {
@@ -72,12 +77,31 @@ Type ${green('comfy get --help')} for details`);
     if (options.yml) format = 'yml';
     if (options.js) format = 'js';
 
+    let entries = config.body;
+    if (selector) {
+        const sanitizedSelector = selector.toLowerCase();
+
+        if (entries[sanitizedSelector]) {
+            ui.print(entries[sanitizedSelector]);
+            return ui.exit();
+        }
+
+        entries = Object
+            .entries(entries)
+            .map(([key, value]) => [key.toLowerCase(), value])
+            .filter(([key]) => key.startsWith(sanitizedSelector))
+            .reduce((newEntries, [key, value]) => ({
+                ...newEntries,
+                [options.envvars || format === 'envvars' ? key : key.replace(`${sanitizedSelector}.`, '')]: value,
+            }), {});
+    }
+
     if (options.envvars) {
-        ui.print(toEnvVars(config.body));
+        ui.print(toEnvVars(entries));
         ui.exit();
     }
 
-    const body = parseFlat(config.body);
+    const body = parseFlat(entries);
 
     switch (format) {
     case 'yml':
