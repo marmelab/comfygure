@@ -1,6 +1,6 @@
 module.exports = {
     logs: {
-        debug: true,
+        debug: false,
     },
     db: {
         client: {

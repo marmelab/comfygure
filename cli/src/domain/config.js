@@ -19,15 +19,19 @@ module.exports = (client, ui) => {
         }
     };
 
-    const add = function* (project, env, content, { configName, tag, defaultFormat }) {
-        // TODO: Send the default format to the API
-        const body = toFlat(content);
+    const add = function* (project, env, content, { configName, tag, format }) {
+        const entries = toFlat(content);
 
-        Object.keys(body).forEach((key) => {
-            body[key] = encrypt(body[key], project.privateKey, project.hmacKey);
+        Object.keys(entries).forEach((key) => {
+            entries[key] = encrypt(entries[key], project.privateKey, project.hmacKey);
         });
 
         const url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/${configName}/${tag}`;
+
+        const body = {
+            entries,
+            format,
+        };
 
         try {
             yield client.post(url, body, client.buildAuthorization(project));
@@ -54,13 +58,13 @@ module.exports = (client, ui) => {
             ui.exit(1);
         }
 
-        const { body } = response;
+        const { body, defaultFormat } = response;
 
         Object.keys(body).forEach((key) => {
             body[key] = decrypt(body[key], project.privateKey, project.hmacKey);
         });
 
-        return { body };
+        return { body, defaultFormat };
     };
 
     return { list, add, get };
