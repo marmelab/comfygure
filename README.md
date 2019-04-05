@@ -1,4 +1,5 @@
 [![npm version](https://badge.fury.io/js/comfygure.svg)](https://badge.fury.io/js/comfygure) [![Build Status](https://travis-ci.org/marmelab/comfygure.png?branch=master)](https://travis-ci.org/marmelab/comfygure)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmarmelab%2Fcomfygure.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmarmelab%2Fcomfygure?ref=badge_shield)
 
 # Comfygure
 
@@ -81,3 +82,6 @@ See the [documentation](https://marmelab.com/comfygure/) to know more about how 
 ## License
 
 Comfygure is licensed under the [MIT License](https://github.com/marmelab/comfygure/blob/master/LICENSE), sponsored and supported by [marmelab](http://marmelab.com).
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmarmelab%2Fcomfygure.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmarmelab%2Fcomfygure?ref=badge_large)
