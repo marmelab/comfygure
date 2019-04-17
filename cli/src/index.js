@@ -17,7 +17,7 @@ const main = (ui, evt) => {
         log: require('./commands/log'),
         tag: require('./commands/tag'),
         version: require('./commands/version'),
-        project: require('./commands/project'),
+        project: require('./commands/project')
     };
 
     return function* mainCommand() {
@@ -37,8 +37,8 @@ const main = (ui, evt) => {
             const { red, green } = ui.colors;
 
             ui.error(
-                `The command ${red(request.command)} doesn't exist.`
-                + `\nType ${green('comfy help')} to see the available commands.`
+                `The command ${red(request.command)} doesn't exist.` +
+                    `\nType ${green('comfy help')} to see the available commands.`
             );
             ui.exit(1);
         }
@@ -49,7 +49,7 @@ const main = (ui, evt) => {
             project: projectModuleFactory(client, ui),
             environment: environmentModuleFactory(client, ui),
             config: configModuleFactory(client, ui),
-            tag: tagModuleFactory(client, ui),
+            tag: tagModuleFactory(client, ui)
         };
 
         yield command(ui, modules)(request.arguments);
