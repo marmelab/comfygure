@@ -1,30 +1,31 @@
 language: node_js
 node_js:
-  - "8.10"
-  - "lts/*"
-  - "node"
+    - '8.10'
+    - '9'
+    - 'lts/*'
+    - 'node'
 
 services:
-  - postgresql
+    - postgresql
 
 addons:
-  postgresql: "9.4"
+    postgresql: '9.4'
 
 before_install:
-  - psql -c 'create database comfy;' -U postgres
-  - psql -U postgres comfy < api/var/schema.sql
+    - psql -c 'create database comfy;' -U postgres
+    - psql -U postgres comfy < api/var/schema.sql
 
 install: make install migrate
 script: make test
 
 cache:
-  directories:
-    - api/node_modules
-    - cli/node_modules
-    - admin/node_modules
-    - test/node_modules
+    directories:
+        - api/node_modules
+        - cli/node_modules
+        - admin/node_modules
+        - test/node_modules
 
 branches:
-  only:
-    - master
-    - next
+    only:
+        - master
+        - next
