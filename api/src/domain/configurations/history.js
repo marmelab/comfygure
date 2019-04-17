@@ -8,11 +8,13 @@ export default async (projectId, environmentName, configName, all = false) => {
 
     return versions
         .filter(version => (all ? true : version.tags.length)) // TODO: Do this filter in SQL
+        .sort((a, b) => b.created_at - a.created_at)
         .map(version => ({
             name: configuration.name,
             hash: version.hash,
             previous: version.previous,
             tags: version.tags,
             defaultFormat: configuration.default_format,
+            created_at: version.created_at
         }));
 };
