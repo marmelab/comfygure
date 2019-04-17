@@ -2,7 +2,7 @@ const { toFlat } = require('../format');
 const { encrypt, decrypt } = require('../crypto');
 
 module.exports = (client, ui) => {
-    const list = function*(project, env, config, all = false) {
+    const list = function* (project, env, config, all = false) {
         let url = config
             ? `${project.origin}/projects/${project.id}/environments/${env}/configurations/${config}/history`
             : `${project.origin}/projects/${project.id}/environments/${env}/configurations/history`;
@@ -19,7 +19,7 @@ module.exports = (client, ui) => {
         }
     };
 
-    const add = function*(project, env, content, { configName, tag, format }) {
+    const add = function* (project, env, content, { configName, tag, format }) {
         const entries = toFlat(content);
 
         Object.keys(entries).forEach(key => {
@@ -41,13 +41,13 @@ module.exports = (client, ui) => {
         }
     };
 
-    const get = function*(project, env, { configName = 'default', tag }) {
+    const get = function* (project, env, { configName = 'default', tag, hash }) {
         let url = `${project.origin}/projects/${project.id}/environments/${env}/configurations`;
-
-        if (configName && tag) {
-            url += `/${configName}/${tag}`;
-        } else if (configName || tag) {
-            url += `/${configName || tag}`;
+        const hashOrTag = hash || tag;
+        if (configName && hashOrTag) {
+            url += `/${configName}/${hashOrTag}`;
+        } else if (configName || hashOrTag) {
+            url += `/${configName || hashOrTag}`;
         }
 
         let response;
