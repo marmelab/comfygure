@@ -106,7 +106,7 @@ describe('Commands', () => {
             yield run(`echo '${JSON.stringify(configV2)}' > test.json`);
             yield run('comfy setall development $PWD/test.json');
 
-            const version = yield run(`comfy get development --hash=${configurationSha} version`);
+            const { stdout: version } = yield run(`comfy get development --hash=${configurationSha} version`);
 
             expect(version).toBe(1);
         });
