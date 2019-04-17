@@ -1,5 +1,6 @@
 import configurationsQueries from '../../queries/configurations';
 import entriesQueries from '../../queries/entries';
+import { NotFoundError } from '../../domain/errors';
 
 import { get as getVersion } from './version';
 import { get as getTag } from './tag';
@@ -52,13 +53,19 @@ export default async (projectId, environmentName, selector, pathTagOrHashName) =
 
     let tag;
     let version;
+    const defaultVersion = 'stable';
     if (tagOrHashName) {
         version = await getVersion(projectId, environmentName, configuration.name, tagOrHashName);
     }
+    else {
+        tag = await getTag(configuration.id, defaultVersion);
+        version = await getVersion(projectId, environmentName, configuration.name, tag.name);
+    }
 
     if (!version) {
-        tag = await getTag(configuration.id, 'stable');
-        version = await getVersion(projectId, environmentName, configuration.name, tag.name);
+        throw new NotFoundError(
+            `There is no tag or hash with this name: ${tagOrHashName ? tagOrHashName : defaultVersion}.`,
+        );
     }
 
     const entries = entriesToDictionary(await entriesQueries.findByVersion(version.id));

@@ -108,7 +108,7 @@ describe('Commands', () => {
 
             const { stdout: version } = yield run(`comfy get development --hash=${configurationSha} version`);
 
-            expect(version).toBe(1);
+            expect(version).toContain('1');
         });
     });
 
