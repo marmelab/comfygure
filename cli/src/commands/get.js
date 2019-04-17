@@ -56,7 +56,7 @@ module.exports = (ui, modules) => function* get(rawOptions) {
     if (!env) {
         ui.error(red('No environment specified.'));
         ui.print(`${bold('SYNOPSIS')}
-        ${bold('comfy')} get <environment> [<options>]
+        ${bold('comfy')} get <environment> [<selector>] [<options>]
 
 Type ${green('comfy get --help')} for details`);
         return ui.exit(0);
@@ -105,14 +105,14 @@ Type ${green('comfy get --help')} for details`);
     const body = parseFlat(entries);
 
     switch (format) {
-    case YAML:
-        ui.print(toYAML(body));
-        break;
-    case JAVASCRIPT:
-        ui.print(toJavascript(body));
-        break;
-    default:
-        ui.print(toJSON(body));
+        case YAML:
+            ui.print(toYAML(body));
+            break;
+        case JAVASCRIPT:
+            ui.print(toJavascript(body));
+            break;
+        default:
+            ui.print(toJSON(body));
     }
 
     return ui.exit();
