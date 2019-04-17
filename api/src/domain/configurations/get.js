@@ -28,16 +28,16 @@ const findAloneConfiguration = async (projectId, environmentName) => {
     return configurations[0];
 };
 
-export default async (projectId, environmentName, selector, pathTagName) => {
+export default async (projectId, environmentName, selector, pathTagOrHashName) => {
     // The `selector` argument can be a configName, a tag, or empty
     // TODO (Kevin): If needed, move this selector intelligence into its own service
 
     let configuration;
-    let tagName = pathTagName;
+    let tagOrHashName = pathTagOrHashName;
 
     await checkEnvironmentExistsOrThrow404(projectId, environmentName);
 
-    if (selector && tagName) {
+    if (selector && tagOrHashName) {
         configuration = await configurationsQueries.findOne(projectId, environmentName, selector);
     } else if (!selector) {
         configuration = await findAloneConfiguration(projectId, environmentName);
@@ -47,19 +47,19 @@ export default async (projectId, environmentName, selector, pathTagName) => {
 
     if (!configuration) {
         configuration = await findAloneConfiguration(projectId, environmentName);
-        tagName = pathTagName || selector;
+        tagOrHashName = pathTagOrHashName || selector;
     }
 
     let tag;
-    if (tagName) {
-        tag = await getTag(configuration.id, tagName);
+    let version;
+    if (tagOrHashName) {
+        version = await getVersion(projectId, environmentName, configuration.name, tagOrHashName);
     }
 
-    if (!tag) {
+    if (!version) {
         tag = await getTag(configuration.id, 'stable');
+        version = await getVersion(projectId, environmentName, configuration.name, tag.name);
     }
-
-    const version = await getVersion(projectId, environmentName, configuration.name, tag.name);
 
     const entries = entriesToDictionary(await entriesQueries.findByVersion(version.id));
 

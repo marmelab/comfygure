@@ -31,11 +31,11 @@ export const get = λ(async (event) => {
         id: projectId,
         environmentName,
         configName: selector,
-        tagName,
+        tagOrHashName,
     } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
 
-    return getConfiguration(projectId, environmentName, selector, tagName);
+    return getConfiguration(projectId, environmentName, selector, tagOrHashName);
 });
 
 export const history = λ(async (event) => {
