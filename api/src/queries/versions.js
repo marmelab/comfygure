@@ -6,7 +6,7 @@ const query = crudQueries(
     'version',
     ['id', 'configuration_id', 'hash', 'previous'],
     ['id'],
-    ['id', 'configuration_id', 'hash', 'previous'],
+    ['id', 'configuration_id', 'hash', 'previous', 'created_at']
 );
 
 query.selectPage = query.selectPage
@@ -18,11 +18,11 @@ query.selectPage = query.selectPage
         'previous',
         'version.configuration_id',
         "case when count(tag.name) = 0 then '[]' else json_agg(tag.name) end as tags",
+        'version.created_at'
     ])
-    .groupByFields(['version.id', 'version.hash', 'version.previous'])
-;
+    .groupByFields(['version.id', 'version.hash', 'version.previous']);
 
-const findOne = async (version) => {
+const findOne = async version => {
     const client = await db.link(query);
     const result = await client.selectOne(version);
     client.release();
@@ -30,7 +30,7 @@ const findOne = async (version) => {
     return result;
 };
 
-const insertOne = async (version) => {
+const insertOne = async version => {
     const client = await db.link(query);
     const result = await client.insertOne(version);
     client.release();
@@ -38,10 +38,10 @@ const insertOne = async (version) => {
     return result;
 };
 
-const find = async (configurationId) => {
+const find = async configurationId => {
     const client = await db.link(query);
     const result = await client.selectPage(undefined, undefined, {
-        'version.configuration_id': configurationId,
+        'version.configuration_id': configurationId
     });
     client.release();
 
@@ -52,7 +52,7 @@ const findOneByHash = async (configurationId, hash) => {
     const client = await db.link(query);
     const result = await client.selectPage(undefined, undefined, {
         'version.configuration_id': configurationId,
-        hash,
+        hash
     });
     client.release();
 
@@ -66,7 +66,7 @@ const findOneByTag = async (configurationId, tagId) => {
     const client = await db.link(query);
     const result = await client.selectPage(undefined, undefined, {
         'version.configuration_id': configurationId,
-        'tag.id': tagId,
+        'tag.id': tagId
     });
     client.release();
 
@@ -81,5 +81,5 @@ export default {
     insertOne,
     find,
     findOneByHash,
-    findOneByTag,
+    findOneByTag
 };
