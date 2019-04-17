@@ -5,7 +5,7 @@ describe('Commands', () => {
     beforeEach(createProject);
 
     describe('setall', () => {
-        it('should accept relative path for config', function*() {
+        it('should accept relative path for config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -15,7 +15,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(config);
         });
 
-        it('should accept absolute path for config', function*() {
+        it('should accept absolute path for config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -25,7 +25,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(config);
         });
 
-        it('should display a readable error if the environment does not exist', function*() {
+        it('should display a readable error if the environment does not exist', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -42,7 +42,7 @@ describe('Commands', () => {
     });
 
     describe('get', () => {
-        it('should display a readable error if the environment does not exist', function*() {
+        it('should display a readable error if the environment does not exist', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -58,7 +58,7 @@ describe('Commands', () => {
             expect('This command should fail').toBe(false);
         });
 
-        it('should be able to select a subset of the config', function*() {
+        it('should be able to select a subset of the config', function* () {
             const config = {
                 admin: 'Admin',
                 password: 'S3cret!',
@@ -89,10 +89,31 @@ describe('Commands', () => {
             const { stdout: envvars } = yield run('comfy get development nested.a --envvars');
             expect(envvars.trim()).toBe("export NESTED_A_A='3';\nexport NESTED_A_B='4';");
         });
+
+        it('should get config with hash name', function* () {
+            const configV1 = { version: '1', login: 'admin', password: 'S3cret' };
+
+            yield run(`echo '${JSON.stringify(configV1)}' > test.json`);
+            yield run('comfy setall development $PWD/test.json');
+
+            const { stdout } = yield run('comfy log development');
+
+            const lines = stdout.trim().split('\n');
+            const [dateStr, environment, configurationSha, tags] = lines[0].split('\t');
+
+            const configV2 = { version: '2', login: 'super-admin', password: 'S3cret' };
+
+            yield run(`echo '${JSON.stringify(configV2)}' > test.json`);
+            yield run('comfy setall development $PWD/test.json');
+
+            const { stdout: version } = yield run(`comfy get development --hash=${configurationSha} version`);
+
+            expect(version).toContain('1');
+        });
     });
 
     describe('set', () => {
-        it('should change the value of a direct entry of the config', function*() {
+        it('should change the value of a direct entry of the config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -108,7 +129,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(expectedConfig);
         });
 
-        it('should change the value of a subset of the config', function*() {
+        it('should change the value of a subset of the config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -124,7 +145,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(expectedConfig);
         });
 
-        it('should display a readable error if the environment does not exist', function*() {
+        it('should display a readable error if the environment does not exist', function* () {
             try {
                 yield run('comfy set donotexist login user');
             } catch (error) {
@@ -137,7 +158,7 @@ describe('Commands', () => {
     });
 
     describe('project', () => {
-        it('should allow to permanently delete the current project', function*() {
+        it('should allow to permanently delete the current project', function* () {
             const { stdout: warning } = yield run('comfy project delete');
             expect(warning).toContain('This action is irreversible');
 

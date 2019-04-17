@@ -26,6 +26,7 @@ ${bold('OPTIONS')}
         --yml           Output the configuration as a YAML file
         --js            Output the configuration as a JavaScript script
         -t, --tag=<tag> Get a tag for this config version (default: stable)
+        --hash=<hash>   Get a specific hash for this config version (ignore tag then)
         -h, --help      Show this very help message
 
 ${bold('EXAMPLES')}
@@ -33,6 +34,8 @@ ${bold('EXAMPLES')}
         ${cyan('comfy get development')}
         ${dim('# Get the staging configuration for the next tag in yaml')}
         ${cyan('comfy get staging -t next --yml > config/staging.yaml')}
+        ${dim('# Get the staging configuration for a specific hash in yaml')}
+        ${cyan('comfy get staging --hash=5eb9f3ea5cf01384333115007cf7606f --yml > config/staging.yaml')}
         ${dim('# Get the production configuration and set it as environment variables')}
         ${cyan('comfy get production --envvars | source /dev/stdin')}
 
@@ -47,6 +50,7 @@ module.exports = (ui, modules) => function* get(rawOptions) {
     const options = minimist(rawOptions);
     const [env, selector] = options._;
     const tag = options.tag || options.t || 'stable';
+    const hash = options.hash;
 
     if (options.help || options.h || options._.includes('help')) {
         help(ui);
@@ -66,6 +70,7 @@ Type ${green('comfy get --help')} for details`);
     const config = yield modules.config.get(project, env, {
         configName: 'default',
         tag,
+        hash,
     });
 
     if ([options.json, options.yml, options.js].filter(x => x).length > 1) {

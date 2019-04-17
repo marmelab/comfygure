@@ -92,7 +92,7 @@ functions:
 
   configurationGet:
     handler: src/handlers/configurations.get
-    description: Get tag version of a configuration
+    description: Get tag or hash version of a configuration
     events:
       - http:
           method: GET
@@ -100,7 +100,7 @@ functions:
           cors: true
       - http:
           method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagName}
+          path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagOrHashName}
           cors: true
 
   configurationAdd:

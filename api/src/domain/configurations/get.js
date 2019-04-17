@@ -1,5 +1,6 @@
 import configurationsQueries from '../../queries/configurations';
 import entriesQueries from '../../queries/entries';
+import { NotFoundError } from '../../domain/errors';
 
 import { get as getVersion } from './version';
 import { get as getTag } from './tag';
@@ -28,16 +29,16 @@ const findAloneConfiguration = async (projectId, environmentName) => {
     return configurations[0];
 };
 
-export default async (projectId, environmentName, selector, pathTagName) => {
+export default async (projectId, environmentName, selector, pathTagOrHashName) => {
     // The `selector` argument can be a configName, a tag, or empty
     // TODO (Kevin): If needed, move this selector intelligence into its own service
 
     let configuration;
-    let tagName = pathTagName;
+    let tagOrHashName = pathTagOrHashName;
 
     await checkEnvironmentExistsOrThrow404(projectId, environmentName);
 
-    if (selector && tagName) {
+    if (selector && tagOrHashName) {
         configuration = await configurationsQueries.findOne(projectId, environmentName, selector);
     } else if (!selector) {
         configuration = await findAloneConfiguration(projectId, environmentName);
@@ -47,19 +48,25 @@ export default async (projectId, environmentName, selector, pathTagName) => {
 
     if (!configuration) {
         configuration = await findAloneConfiguration(projectId, environmentName);
-        tagName = pathTagName || selector;
+        tagOrHashName = pathTagOrHashName || selector;
     }
 
     let tag;
-    if (tagName) {
-        tag = await getTag(configuration.id, tagName);
+    let version;
+    const defaultVersion = 'stable';
+    if (tagOrHashName) {
+        version = await getVersion(projectId, environmentName, configuration.name, tagOrHashName);
+    }
+    else {
+        tag = await getTag(configuration.id, defaultVersion);
+        version = await getVersion(projectId, environmentName, configuration.name, tag.name);
     }
 
-    if (!tag) {
-        tag = await getTag(configuration.id, 'stable');
+    if (!version) {
+        throw new NotFoundError(
+            `There is no tag or hash with this name: ${tagOrHashName ? tagOrHashName : defaultVersion}.`,
+        );
     }
-
-    const version = await getVersion(projectId, environmentName, configuration.name, tag.name);
 
     const entries = entriesToDictionary(await entriesQueries.findByVersion(version.id));
 
