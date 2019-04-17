@@ -2,7 +2,7 @@ const { toFlat } = require('../format');
 const { encrypt, decrypt } = require('../crypto');
 
 module.exports = (client, ui) => {
-    const list = function* (project, env, config, all = false) {
+    const list = function*(project, env, config, all = false) {
         let url = config
             ? `${project.origin}/projects/${project.id}/environments/${env}/configurations/${config}/history`
             : `${project.origin}/projects/${project.id}/environments/${env}/configurations/history`;
@@ -19,10 +19,10 @@ module.exports = (client, ui) => {
         }
     };
 
-    const add = function* (project, env, content, { configName, tag, format }) {
+    const add = function*(project, env, content, { configName, tag, format }) {
         const entries = toFlat(content);
 
-        Object.keys(entries).forEach((key) => {
+        Object.keys(entries).forEach(key => {
             entries[key] = encrypt(entries[key], project.privateKey, project.hmacKey);
         });
 
@@ -30,7 +30,7 @@ module.exports = (client, ui) => {
 
         const body = {
             entries,
-            format,
+            format
         };
 
         try {
@@ -41,7 +41,7 @@ module.exports = (client, ui) => {
         }
     };
 
-    const get = function* (project, env, { configName = 'default', tag }) {
+    const get = function*(project, env, { configName = 'default', tag }) {
         let url = `${project.origin}/projects/${project.id}/environments/${env}/configurations`;
 
         if (configName && tag) {
@@ -60,7 +60,7 @@ module.exports = (client, ui) => {
 
         const { body, defaultFormat } = response;
 
-        Object.keys(body).forEach((key) => {
+        Object.keys(body).forEach(key => {
             body[key] = decrypt(body[key], project.privateKey, project.hmacKey);
         });
 

@@ -13,6 +13,7 @@ const main = (ui, evt) => {
         init: require('./commands/init'),
         env: require('./commands/env'),
         setall: require('./commands/setall'),
+        set: require('./commands/set'),
         get: require('./commands/get'),
         log: require('./commands/log'),
         tag: require('./commands/tag'),

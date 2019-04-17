@@ -92,7 +92,7 @@ describe('Commands', () => {
     });
 
     describe('set', () => {
-        it('should change the value of a direct config', function*() {
+        it('should change the value of a direct entry of the config', function*() {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -117,9 +117,9 @@ describe('Commands', () => {
             const { stdout: originalStdout } = yield run('comfy get development');
             expect(JSON.parse(originalStdout)).toEqual(config);
 
-            yield run('comfy set development nested.a yolo');
+            yield run('comfy set development nested.test yolo');
 
-            const expectedConfig = { login: 'user', password: 'S3cret', nested: { a: 'yolo' } };
+            const expectedConfig = { login: 'admin', password: 'S3cret', nested: { test: 'yolo' } };
             const { stdout } = yield run('comfy get development');
             expect(JSON.parse(stdout)).toEqual(expectedConfig);
         });
