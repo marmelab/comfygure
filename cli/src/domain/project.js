@@ -8,7 +8,7 @@ const getConfigFolder = () => `${process.cwd()}${path.sep}${CONFIG_FOLDER}`;
 const getConfigPath = () => `${process.cwd()}${path.sep}${CONFIG_PATH}`;
 
 module.exports = (client, ui) => {
-    const create = function* (name, environment, origin = DEFAULT_ORIGIN) {
+    const create = function*(name, environment, origin = DEFAULT_ORIGIN) {
         const url = `${origin}/projects`;
 
         try {
@@ -19,26 +19,27 @@ module.exports = (client, ui) => {
         }
     };
 
-    const saveToConfig = function* (project, privateKey, hmacKey, origin = DEFAULT_ORIGIN) {
-        const config = ini.stringify({
-            projectId: project.id,
-            accessKey: project.accessKey,
-            secretToken: project.writeToken,
-            origin,
-            privateKey,
-            hmacKey,
-        }, { section: 'project' });
+    const saveToConfig = function*(project, privateKey, hmacKey, origin = DEFAULT_ORIGIN) {
+        const config = ini.stringify(
+            {
+                projectId: project.id,
+                accessKey: project.accessKey,
+                secretToken: project.writeToken,
+                origin,
+                privateKey,
+                hmacKey
+            },
+            { section: 'project' }
+        );
 
         const filename = getConfigPath();
         yield cb => fs.mkdir(getConfigFolder(), cb);
         yield cb => fs.writeFile(filename, config, { flag: 'w' }, cb);
     };
 
-    const checkProjectInfos = ({
-        id, accessKey, secretToken, privateKey, hmacKey, origin,
-    }) => {
+    const checkProjectInfos = ({ id, accessKey, secretToken, privateKey, hmacKey, origin }) => {
         const errors = [];
-        const { red, dim, bold } = ui.colors;
+        const { red, dim, bold, bgRed } = ui.colors;
 
         const set = v => `Please set ${dim(v)} or edit your ${dim(CONFIG_PATH)} file.`;
 
@@ -79,6 +80,23 @@ Have you tried to initialize comfy on this folder?
 Type ${bold('comfy init')} to do so.`);
             ui.exit(1);
         }
+
+        // beta deprecation warning: disable this message for the V1
+        if (origin === DEFAULT_ORIGIN) {
+            ui.error(bgRed(bold('ATTENTION : your version of comfy will be unavailable soon!')));
+
+            ui.error(
+                red(
+                    bold(
+                        [
+                            'In order be able to access your configs after the May 15th, please change your `.comfy/config` file.',
+                            'Replace : origin=https://comfy.marmelab.com',
+                            'By : origin=https://comfy-beta.marmelab.com'
+                        ].join('\n')
+                    )
+                )
+            );
+        }
     };
 
     const retrieveFromConfig = () => {
@@ -88,7 +106,7 @@ Type ${bold('comfy init')} to do so.`);
             secretToken: process.env.COMFY_SECRET_TOKEN,
             privateKey: process.env.COMFY_PRIVATE_KEY,
             hmacKey: process.env.COMFY_HMAC_KEY,
-            origin: process.env.COMFY_ORIGIN,
+            origin: process.env.COMFY_ORIGIN
         };
 
         const filename = getConfigPath();
@@ -106,14 +124,14 @@ Type ${bold('comfy init')} to do so.`);
             secretToken: config.project.secretToken,
             privateKey: config.project.privateKey,
             hmacKey: config.project.hmacKey,
-            origin: config.project.origin,
+            origin: config.project.origin
         });
 
         checkProjectInfos(projectInfos);
         return projectInfos;
     };
 
-    const permanentlyDelete = function* () {
+    const permanentlyDelete = function*() {
         const project = retrieveFromConfig();
         const url = `${project.origin}/projects/${project.id}`;
 
@@ -138,6 +156,6 @@ Type ${bold('comfy init')} to do so.`);
         generateNewHmacKey,
         getConfigFolder,
         getConfigPath,
-        permanentlyDelete,
+        permanentlyDelete
     };
 };
