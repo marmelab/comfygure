@@ -34,6 +34,8 @@ ${bold('EXAMPLES')}
         ${cyan('comfy get development')}
         ${dim('# Get the staging configuration for the next tag in yaml')}
         ${cyan('comfy get staging -t next --yml > config/staging.yaml')}
+        ${dim('# Get the staging configuration for a specific hash in yaml')}
+        ${cyan('comfy get staging --hash=5eb9f3ea5cf01384333115007cf7606f --yml > config/staging.yaml')}
         ${dim('# Get the production configuration and set it as environment variables')}
         ${cyan('comfy get production --envvars | source /dev/stdin')}
 
