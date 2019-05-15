@@ -4,3 +4,4 @@ node_modules
 config/*.js
 !config/database.js
 build/
+.env

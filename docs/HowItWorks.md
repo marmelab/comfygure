@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "How It Works"
+title: 'How It Works'
 ---
 
 ## The Problem: Managing Application Settings
@@ -29,11 +29,10 @@ export PASSWORD='S3cr3T';
 
 ## Storage
 
-By default, comy stores the encrypted settings in the [comfy.marmelab.com](https://comfy.marmelab.com) server (run by marmelab). The comfygure project contains [the code](https://github.com/marmelab/comfygure) to let you host your own comfygure server (see the [Custom Server documentation](./AdvancedUsage.html#host-your-own-comfy-server).
+By default, comy stores the encrypted settings in the [comfy.marmelab.com](https://comfy.marmelab.com) server (run by marmelab). The comfygure project contains [the code](https://github.com/marmelab/comfygure) to let you host your own comfygure server (see the [Custom Server documentation](./HostYourOwn.html#host-your-own-comfy-server).
 
-## Security 
+## Security
 
 From a security standpoint, if the remote server is owned, the attacker can only access encrypted data (AES-256). Since the server never has access to the decryption key, the attacker can't decrypt the settings.
 
 Developers store the decryption key locally, allowing them to decrypt and/or update the app settings. In a similar fashion, CI servers can also check out the app settings with a simple decryption key, then build an artifact to be deployed to production.
-

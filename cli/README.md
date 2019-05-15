@@ -45,7 +45,7 @@ comfy project successfully created
 
 This creates a unique key to access the settings for `myproject`, and stores the key in `.comfy/config`. You can copy this file to share the credentials with co-workers or other computers.
 
-**Note**: By default, the `comfy` command stores encrypted settings in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](https://marmelab.com/comfygure/HostYourOwn.html).
+**Note**: By default, the `comfy` command stores encrypted settings in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](https://marmelab.com/comfygure/HostYourOwn.html#host-your-own-comfy-server).
 
 Import an existing settings file to comfygure using `comfy setall`:
 

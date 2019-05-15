@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Basic Usage"
+title: 'Usage'
 ---
 
 ## Initialization
@@ -17,14 +17,14 @@ Configuration saved locally in .comfy/config
 comfy project successfully created
 ```
 
-By default, the `comfy` command stores encrypted data in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](./AdvancedUsage.html#host-your-own-comfy-server).
+By default, the `comfy` command stores encrypted data in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](./HostYourOwn.html#host-your-own-comfy-server).
 
 ### `.comfy/` Folder
 
 The initialization creates:
 
-* A `.comfy/config` file containing all identification and credentials about the current project, to allow synchronization with the comfygure server
-* A new line on your `.gitignore` in order to avoid committing this file (if a `.git` folder is found in the current folder)
+-   A `.comfy/config` file containing all identification and credentials about the current project, to allow synchronization with the comfygure server
+-   A new line on your `.gitignore` in order to avoid committing this file (if a `.git` folder is found in the current folder)
 
 Here is how the comfygure config file looks like.
 

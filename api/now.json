@@ -7,5 +7,11 @@
             "use": "@now/node"
         }
     ],
-    "routes": [{ "src": ".*", "dest": "/build" }]
+    "routes": [{ "src": ".*", "dest": "/build" }],
+    "env": {
+        "PGHOST": "@comfy-pghost",
+        "PGDATABASE": "@comfy-pgdatabase",
+        "PGUSER": "@comfy-pguser",
+        "PGPASSWORD": "@comfy-pgpassword"
+    }
 }
