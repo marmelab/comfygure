@@ -1,6 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
 const slsw = require('serverless-webpack');
-const ConfigWebpackPlugin = require('config-webpack');
 
 module.exports = {
     mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -9,26 +9,28 @@ module.exports = {
     output: {
         libraryTarget: 'commonjs2',
         path: path.resolve(__dirname, '.webpack'),
-        filename: '[name].js',
+        filename: '[name].js'
     },
     module: {
         rules: [
             {
                 test: /\.js$/,
                 use: 'babel-loader',
-                exclude: /node_modules/,
-            },
+                exclude: /node_modules/
+            }
         ],
-        noParse: [/pg\/lib\/native/],
+        noParse: [/pg\/lib\/native/]
     },
     externals: ['aws-sdk'],
     plugins: [
-        new ConfigWebpackPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.SERVERLESS': JSON.stringify(true)
+        })
     ],
     optimization: {
-        minimize: false,
+        minimize: false
     },
     performance: {
-        hints: false,
-    },
+        hints: false
+    }
 };

@@ -1,0 +1,70 @@
+import convict from 'convict';
+
+const config = convict({
+    port: {
+        doc: 'Default port for the comfy API (default : 80)',
+        format: Number,
+        default: 80,
+        env: 'COMFY_API_PORT'
+    },
+    logs: {
+        debug: {
+            doc: 'Log level debug (default: false)',
+            format: Boolean,
+            default: false,
+            env: 'COMFY_LOG_DEBUG'
+        }
+    },
+    db: {
+        client: {
+            host: {
+                doc: 'PostgreSQL host (default : localhost)',
+                format: String,
+                default: 'localhost',
+                env: 'PGHOST'
+            },
+            port: {
+                doc: 'PostgreSQL port (default : 5432)',
+                format: Number,
+                default: 5432,
+                env: 'PGPORT'
+            },
+            database: {
+                doc: 'PostgreSQL database (default : 5432)',
+                format: String,
+                default: 'comfy',
+                env: 'PGDATABASE'
+            },
+            user: {
+                doc: 'PostgreSQL user (default : postgres)',
+                format: String,
+                default: 'postgres',
+                env: 'PGUSER'
+            },
+            password: {
+                doc: "PostgreSQL password (default : '')",
+                format: String,
+                default: '',
+                env: 'PGPASSWORD'
+            }
+        },
+        pooling: {
+            max: {
+                doc: 'Maximum number of DB client in a pool (default : 10)',
+                format: Number,
+                default: 10,
+                env: 'COMFY_DB_MAX_POOLING'
+            },
+            idleTimeoutMillis: {
+                doc: 'DB client idle timeline in ms (default : 30000)',
+                format: Number,
+                default: 30000,
+                env: 'COMFY_DB_IDLE_TIMEOUT'
+            }
+        }
+    }
+});
+
+config.validate({ allowed: 'strict' });
+
+export default config.getProperties();

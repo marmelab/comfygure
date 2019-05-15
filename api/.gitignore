@@ -3,3 +3,4 @@ node_modules
 .serverless
 config/*.js
 !config/database.js
+build/
