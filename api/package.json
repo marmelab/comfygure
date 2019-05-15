@@ -4,7 +4,8 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "start": "node --require @babel/register src/launcher.js",
+        "start": "node build/launcher.js",
+        "dev": "node --require @babel/register src/launcher.js",
         "build": "rm -rf build && babel src -d build",
         "now-build": "rm -rf build && babel src -d build"
     },

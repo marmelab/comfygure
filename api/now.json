@@ -1,0 +1,11 @@
+{
+    "name": "comfygure-api",
+    "version": 2,
+    "builds": [
+        {
+            "src": "build/index.js",
+            "use": "@now/node"
+        }
+    ],
+    "routes": [{ "src": ".*", "dest": "/build" }]
+}

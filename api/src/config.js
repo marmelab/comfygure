@@ -1,6 +1,12 @@
 import convict from 'convict';
 
 const config = convict({
+    port: {
+        doc: 'Default port for the comfy API (default : 80)',
+        format: Number,
+        default: 80,
+        env: 'COMFY_API_PORT'
+    },
     logs: {
         debug: {
             doc: 'Log level debug (default: false)',
