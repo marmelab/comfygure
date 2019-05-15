@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const slsw = require('serverless-webpack');
-const ConfigWebpackPlugin = require('config-webpack');
 
 module.exports = {
     mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -24,7 +23,6 @@ module.exports = {
     },
     externals: ['aws-sdk'],
     plugins: [
-        new ConfigWebpackPlugin(),
         new webpack.DefinePlugin({
             'process.env.SERVERLESS': JSON.stringify(true)
         })

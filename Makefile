@@ -7,12 +7,8 @@ install:
 	make -C cli install
 	make -C test install
 
-migrate:
-	make -C api migrate
-
 run:
 	-make -C api start-db
-	make migrate
 	make -C api run
 
 test:

@@ -16,7 +16,7 @@ before_install:
     - psql -c 'create database comfy;' -U postgres
     - psql -U postgres comfy < api/var/schema.sql
 
-install: make install migrate
+install: make install
 script: make test
 
 cache:
