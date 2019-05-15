@@ -1,35 +1,34 @@
 ---
 layout: default
-title: "Documentation"
+title: 'Documentation'
 ---
-# Comfygure
 
-Store and deploy settings across development, test, and production environments, using an encrypted key-value store.
+<p><a href="https://badge.fury.io/js/comfygure"><img class="no-margin" src="https://badge.fury.io/js/comfygure.svg" alt="npm version" /></a> <img  class="no-margin" src="https://img.shields.io/david/marmelab/comfygure.svg?label=CLI%20dependencies&amp;path=cli" alt="CLI dependencies" /> <img  class="no-margin" src="https://img.shields.io/david/marmelab/comfygure.svg?label=API%20dependencies&amp;path=api" alt="API dependencies" /> <a href="http://npmjs.com/comfygure"><img  class="no-margin" src="https://img.shields.io/npm/dt/comfygure.svg" alt="npm downloads" /></a> <a href="https://hub.docker.com/r/marmelab/comfygure"><img  class="no-margin" src="https://img.shields.io/docker/pulls/marmelab/comfygure.svg" alt="docker pulls" /></a> <a href="https://travis-ci.org/marmelab/comfygure"><img  class="no-margin" src="https://travis-ci.org/marmelab/comfygure.png?branch=master" alt="Build Status" /></a></p>
+# comfygure
+
+Encrypted and versioned configuration storage built with collaboration in mind.
 
 <div style="text-align: center" markdown="1">
 <i class="octicon octicon-mark-github"></i> [Source](https://github.com/marmelab/comfygure) -
 <i class="octicon octicon-megaphone"></i> [Releases](https://github.com/marmelab/comfygure/releases) -
-<i class="octicon octicon-comment-discussion"></i> [StackOverflow](https://stackoverflow.com/questions/tagged/comfy/)
+<i class="octicon octicon-comment-discussion"></i> [Stack Overflow](https://stackoverflow.com/questions/tagged/comfy/)
 </div>
-
-Comfygure assumes that you deploy artefacts that require settings to run in various environment. Comfygure solves the problem of managing, storing, and deploying these settings.
 
 <script type="text/javascript" src="https://asciinema.org/a/137703.js" id="asciicast-137703" async></script>
 
-Unlike many other [Secret Management Tools](https://gist.github.com/maxvt/bb49a6c7243163b8120625fc8ae3f3cd), comfygure doesn't try do pack too many features into one tool. Comfygure tries to do one thing (settings deployment), and do it well.
-
 ## Features
 
-* Simple CLI tool
-* Web GUI
-* Multi-environment (dev, test, staging, production, etc.)
-* End-to-end encryption using AES-256
-* Read/Write permissions
-* Input and output in multiple formats (JSON, YAML, environment variables)
-* Versioning (git-like)
-* Easy to host
+-   Simple CLI
+-   End-to-end AES-256 encryption
+-   Multiple formats support (JSON, YAML, environment variables)
+-   Git-like Versioning
+-   Easy to host on your own
 
-## Command Line Installation
+Comfygure is great to manage application configurations for multiple environments, toggle feature flags quickly, manage A/B testing based on configuration files.
+
+It is not a [Secret Management Tool](https://gist.github.com/maxvt/bb49a6c7243163b8120625fc8ae3f3cd), it focus on configurations files, their history, and how teams collaborate with them.
+
+## Get Started
 
 On every server that needs access to the settings of an app, install the `comfy` CLI using `npm`:
 
@@ -54,7 +53,7 @@ comfy project successfully created
 
 This creates a unique key to access the settings for `myproject`, and stores the key in `.comfy/config`. You can copy this file to share the credentials with co-workers or other computers.
 
-**Tip**: By default, the `comfy` command stores encrypted settings in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](./AdvancedUsage.html#host-your-own-comfy-server).
+**Note**: By default, the `comfy` command stores encrypted settings in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](https://marmelab.com/comfygure/HostYourOwn.html#host-your-own-comfy-server).
 
 Import an existing settings file to comfygure using `comfy setall`:
 

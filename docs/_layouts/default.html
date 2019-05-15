@@ -25,7 +25,7 @@
                     <li class="header">Table of Contents</li>
                     <li class="chapter {% if page.path == 'index.md' %}active{% endif %}">
                         <a href="./index.html">
-                            <b>1.</b> Read Me
+                            <b>1.</b> Comfygure
                         </a>
                     </li>
                     <li class="chapter {% if page.path == 'HowItWorks.md' %}active{% endif %}">
@@ -49,11 +49,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="chapter {% if page.path == 'BasicUsage.md' %}active{% endif %}">
-                        <a href="./BasicUsage.html">
+                    <li class="chapter {% if page.path == 'Usage.md' %}active{% endif %}">
+                        <a href="./Usage.html">
                             <b>3.</b> Basic Usage
                         </a>
-                        <ul class="articles" {% if page.path != 'BasicUsage.md' %}style="display:none" {% endif %}>
+                        <ul class="articles" {% if page.path != 'Usage.md' %}style="display:none" {% endif %}>
                             <li class="chapter">
                                 <a href="#installation">
                                     Installation
@@ -79,13 +79,19 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="chapter {% if path.path == 'AdvancedUsage.md' %}active{% endif %}">
-                        <a href="./AdvancedUsage.html">
-                            <b>4.</b> Advanced Usage
+                    <li class="chapter {% if path.path == 'HostYourOwn.md' %}active{% endif %}">
+                        <a href="./HostYourOwn.html">
+                            <b>4.</b> Host Your Own
                         </a>
-                        <ul class="articles" {% if page.path != 'AdvancedUsage.md' %}style="display:none" {% endif %}>
+                        <ul class="articles" {% if page.path != 'HostYourOwn.md' %}style="display:none" {% endif %}>
                             <li class="chapter">
-                                <a href="#host-your-own-comfy-server">Host your own comfy server</a>
+                                <a href="#with-the-docker-image">With the Docker Image</a>
+                            </li>
+                            <li class="chapter">
+                                <a href="#with-zeits-now">With ZEIT's Now</a>
+                            </li>
+                            <li class="chapter">
+                                <a href="#environment-variables">Environment Variables</a>
                             </li>
                         </ul>
                     </li>
