@@ -39,7 +39,7 @@ module.exports = (client, ui) => {
 
     const checkProjectInfos = ({ id, accessKey, secretToken, privateKey, hmacKey, origin }) => {
         const errors = [];
-        const { red, dim, bold, bgRed } = ui.colors;
+        const { red, dim, bold } = ui.colors;
 
         const set = v => `Please set ${dim(v)} or edit your ${dim(CONFIG_PATH)} file.`;
 
@@ -79,23 +79,6 @@ ${set('COMFY_ORIGIN')}`);
 Have you tried to initialize comfy on this folder?
 Type ${bold('comfy init')} to do so.`);
             ui.exit(1);
-        }
-
-        // beta deprecation warning: disable this message for the V1
-        if (origin === DEFAULT_ORIGIN) {
-            ui.error(bgRed(bold('ATTENTION : your version of comfy will be unavailable soon!')));
-
-            ui.error(
-                red(
-                    bold(
-                        [
-                            'In order be able to access your configs after the May 15th, please change your `.comfy/config` file.',
-                            'Replace : origin=https://comfy.marmelab.com',
-                            'By : origin=https://comfy-beta.marmelab.com'
-                        ].join('\n')
-                    )
-                )
-            );
         }
     };
 
