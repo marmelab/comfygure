@@ -70,7 +70,7 @@ describe('Basic Usages', () => {
             expect(lines.length).toBe(1);
             expect(environment).toBe('development');
             expect(configurationSha.length).toBe(40);
-            expect(tags).toContain('stable, next');
+            expect(tags).toContain('latest');
         });
     });
 });

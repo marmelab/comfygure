@@ -33,7 +33,7 @@ module.exports = (ui, modules) =>
         const env = options._[0];
         const selector = options._[1];
         const value = options._[2];
-        const tag = options.tag || options.t || 'stable';
+        const tag = options.tag || options.t || 'latest';
 
         if (options.help || options.h || options._.includes('help')) {
             help(ui);

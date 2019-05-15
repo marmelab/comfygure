@@ -7,23 +7,22 @@ import { get as getTag } from './tag';
 
 import { checkEnvironmentExistsOrThrow404 } from '../validation';
 
-const entriesToDictionary = entries => entries.reduce((dictionary, item) => ({
-    ...dictionary,
-    [item.key]: item.value,
-}), {});
+const entriesToDictionary = entries =>
+    entries.reduce(
+        (dictionary, item) => ({
+            ...dictionary,
+            [item.key]: item.value
+        }),
+        {}
+    );
 
 const findAloneConfiguration = async (projectId, environmentName) => {
-    const configurations = await configurationsQueries.findAllByEnvironmentName(
-        projectId,
-        environmentName,
-    );
+    const configurations = await configurationsQueries.findAllByEnvironmentName(projectId, environmentName);
 
     if (configurations.length !== 1) {
         // TODO: If configurations.length = 0, return a usable error
         // TODO: If configurations.length > 1, return a usable error
-        throw new Error(
-            'There is more than one configuration. Please select a configuration by its name.',
-        );
+        throw new Error('There is more than one configuration. Please select a configuration by its name.');
     }
 
     return configurations[0];
@@ -53,18 +52,17 @@ export default async (projectId, environmentName, selector, pathTagOrHashName) =
 
     let tag;
     let version;
-    const defaultVersion = 'stable';
+    const defaultTag = 'latest';
     if (tagOrHashName) {
         version = await getVersion(projectId, environmentName, configuration.name, tagOrHashName);
-    }
-    else {
-        tag = await getTag(configuration.id, defaultVersion);
-        version = await getVersion(projectId, environmentName, configuration.name, tag.name);
+    } else {
+        tag = await getTag(configuration.id, defaultTag);
+        version = await getVersion(projectId, environmentName, configuration.name, tag ? tag.name : '');
     }
 
     if (!version) {
         throw new NotFoundError(
-            `There is no tag or hash with this name: ${tagOrHashName ? tagOrHashName : defaultVersion}.`,
+            `There is no tag or hash with this name: ${tagOrHashName ? tagOrHashName : defaultTag}.`
         );
     }
 
@@ -78,6 +76,6 @@ export default async (projectId, environmentName, selector, pathTagOrHashName) =
         previous: version.previous,
         defaultFormat: configuration.default_format,
         body: entries,
-        state: configuration.state,
+        state: configuration.state
     };
 };

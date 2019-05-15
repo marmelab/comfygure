@@ -1,14 +1,8 @@
 const minimist = require('minimist');
-const {
-    parseFlat,
-    toJSON,
-    toYAML,
-    toEnvVars,
-    toJavascript,
-} = require('../format');
+const { parseFlat, toJSON, toYAML, toEnvVars, toJavascript } = require('../format');
 const { JSON, YAML, JAVASCRIPT } = require('../format/constants');
 
-const help = (ui) => {
+const help = ui => {
     const { bold, cyan, dim } = ui.colors;
 
     ui.print(`
@@ -45,80 +39,85 @@ ${bold('EXAMPLES')}
 `);
 };
 
-module.exports = (ui, modules) => function* get(rawOptions) {
-    const { bold, green, red } = ui.colors;
-    const options = minimist(rawOptions);
-    const [env, selector] = options._;
-    const tag = options.tag || options.t || 'stable';
-    const hash = options.hash;
+module.exports = (ui, modules) =>
+    function* get(rawOptions) {
+        const { bold, green, red } = ui.colors;
+        const options = minimist(rawOptions);
+        const [env, selector] = options._;
+        const tag = options.tag || options.t || 'latest';
+        const hash = options.hash;
 
-    if (options.help || options.h || options._.includes('help')) {
-        help(ui);
-        return ui.exit(0);
-    }
+        if (options.help || options.h || options._.includes('help')) {
+            help(ui);
+            return ui.exit(0);
+        }
 
-    if (!env) {
-        ui.error(red('No environment specified.'));
-        ui.print(`${bold('SYNOPSIS')}
+        if (!env) {
+            ui.error(red('No environment specified.'));
+            ui.print(`${bold('SYNOPSIS')}
         ${bold('comfy')} get <environment> [<selector>] [<options>]
 
 Type ${green('comfy get --help')} for details`);
-        return ui.exit(0);
-    }
-
-    const project = yield modules.project.retrieveFromConfig();
-    const config = yield modules.config.get(project, env, {
-        configName: 'default',
-        tag,
-        hash,
-    });
-
-    if ([options.json, options.yml, options.js].filter(x => x).length > 1) {
-        ui.error(`${red('You need to chose either --json, --yml or --js')}`);
-        help(ui, 1);
-    }
-
-    let format = config.defaultFormat;
-    if (options.json) format = JSON;
-    if (options.yml) format = YAML;
-    if (options.js) format = JAVASCRIPT;
-
-    let entries = config.body;
-    if (selector) {
-        const sanitizedSelector = selector.toLowerCase();
-
-        if (entries[sanitizedSelector]) {
-            ui.print(entries[sanitizedSelector]);
-            return ui.exit();
+            return ui.exit(0);
         }
 
-        entries = Object
-            .entries(entries)
-            .map(([key, value]) => [key.toLowerCase(), value])
-            .filter(([key]) => key.startsWith(sanitizedSelector))
-            .reduce((newEntries, [key, value]) => ({
-                ...newEntries,
-                [options.envvars || format === 'envvars' ? key : key.replace(`${sanitizedSelector}.`, '')]: value,
-            }), {});
-    }
+        const project = yield modules.project.retrieveFromConfig();
+        const config = yield modules.config.get(project, env, {
+            configName: 'default',
+            tag,
+            hash
+        });
 
-    if (options.envvars) {
-        ui.print(toEnvVars(entries));
-        ui.exit();
-    }
+        if ([options.json, options.yml, options.js].filter(x => x).length > 1) {
+            ui.error(`${red('You need to chose either --json, --yml or --js')}`);
+            help(ui, 1);
+        }
 
-    const body = parseFlat(entries);
+        let format = config.defaultFormat;
+        if (options.json) format = JSON;
+        if (options.yml) format = YAML;
+        if (options.js) format = JAVASCRIPT;
 
-    switch (format) {
-        case YAML:
-            ui.print(toYAML(body));
-            break;
-        case JAVASCRIPT:
-            ui.print(toJavascript(body));
-            break;
-        default:
-            ui.print(toJSON(body));
-    }
+        let entries = config.body;
+        if (selector) {
+            const sanitizedSelector = selector.toLowerCase();
 
-    return ui.exit();
-};
+            if (entries[sanitizedSelector]) {
+                ui.print(entries[sanitizedSelector]);
+                return ui.exit();
+            }
+
+            entries = Object.entries(entries)
+                .map(([key, value]) => [key.toLowerCase(), value])
+                .filter(([key]) => key.startsWith(sanitizedSelector))
+                .reduce(
+                    (newEntries, [key, value]) => ({
+                        ...newEntries,
+                        [options.envvars || format === 'envvars'
+                            ? key
+                            : key.replace(`${sanitizedSelector}.`, '')]: value
+                    }),
+                    {}
+                );
+        }
+
+        if (options.envvars) {
+            ui.print(toEnvVars(entries));
+            ui.exit();
+        }
+
+        const body = parseFlat(entries);
+
+        switch (format) {
+            case YAML:
+                ui.print(toYAML(body));
+                break;
+            case JAVASCRIPT:
+                ui.print(toJavascript(body));
+                break;
+            default:
+                ui.print(toJSON(body));
+        }
+
+        return ui.exit();
+    };

@@ -31,7 +31,7 @@ module.exports = (ui, modules) => function* setall(rawOptions) {
     const options = minimist(rawOptions);
     const env = options._[0];
     const configPath = options._[1];
-    const tag = options.tag || options.t || 'stable';
+    const tag = options.tag || options.t || 'latest';
 
     if (options.help || options.h || options._.includes('help')) {
         help(ui);

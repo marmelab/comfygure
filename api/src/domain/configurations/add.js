@@ -16,23 +16,19 @@ export default async (
     configurationName = 'default',
     tagName = null,
     entries = {},
-    format = null,
+    format = null
 ) => {
     await getProjectOr404(projectId);
     const environment = await getEnvironmentOr404(projectId, environmentName);
 
-    let configuration = await configurationsQueries.findOne(
-        projectId,
-        environmentName,
-        configurationName,
-    );
+    let configuration = await configurationsQueries.findOne(projectId, environmentName, configurationName);
     let newlyCreated = false;
 
     if (!configuration) {
         configuration = await configurationsQueries.insertOne({
             environment_id: environment.id,
             name: configurationName,
-            default_format: format || ENVVARS,
+            default_format: format || ENVVARS
         });
 
         newlyCreated = true;
@@ -41,7 +37,7 @@ export default async (
     if (!newlyCreated && configuration.default_format !== format) {
         configuration = await configurationsQueries.updateOne(configuration.id, {
             ...configuration,
-            default_format: format || ENVVARS,
+            default_format: format || ENVVARS
         });
     }
 
@@ -49,7 +45,7 @@ export default async (
 
     const versionHash = hash({
         previous: currentVersion ? currentVersion.hash : null,
-        entries,
+        entries
     });
     // TODO: If the version hash already exist in DB
     // return a 304 to warn that the version already exists
@@ -57,19 +53,11 @@ export default async (
     const version = await versionsQueries.insertOne({
         hash: versionHash,
         configuration_id: configuration.id,
-        previous: currentVersion ? currentVersion.hash : null,
+        previous: currentVersion ? currentVersion.hash : null
     });
 
-    const newTagInfos = {
-        versionId: version.id,
-        configurationId: configuration.id,
-    };
-
     if (newlyCreated) {
-        await Promise.all([
-            { ...newTagInfos, name: 'stable' },
-            { ...newTagInfos, name: 'next' },
-        ].map(tag => addTag(tag.configurationId, tag.versionId, tag.name)));
+        await addTag(configuration.id, version.id, 'latest');
     }
 
     // Create or update the specified tag
@@ -79,21 +67,25 @@ export default async (
         if (tag) {
             await updateTag(tag, { version_id: version.id });
         } else {
-            await addTag(newTagInfos.configurationId, newTagInfos.versionId, tagName);
+            await addTag(configuration.id, version.id, tagName);
         }
     }
 
-    await Promise.all(Object.keys(entries).map(key => entriesQueries.insertOne({
-        key,
-        value: entries[key],
-        version_id: version.id,
-    })));
+    await Promise.all(
+        Object.keys(entries).map(key =>
+            entriesQueries.insertOne({
+                key,
+                value: entries[key],
+                version_id: version.id
+            })
+        )
+    );
 
     const { id, name, default_format: defaultFormat } = configuration;
 
     return {
         id,
         name,
-        defaultFormat,
+        defaultFormat
     };
 };

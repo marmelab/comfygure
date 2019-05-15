@@ -1,6 +1,6 @@
 const minimist = require('minimist');
 
-const help = (ui) => {
+const help = ui => {
     const { bold, dim, cyan } = ui.colors;
 
     ui.print(`
@@ -37,7 +37,7 @@ ${bold('HINT')}
 `);
 };
 
-const add = function* (ui, modules, options) {
+const add = function*(ui, modules, options) {
     const { green, red, bold } = ui.colors;
     if (options._.length < 3) {
         ui.error(red('Missing environment, tag, or hash'));
@@ -66,8 +66,14 @@ Type ${green('comfy tag --help')} for details`);
     ui.exit();
 };
 
-const list = function* (ui, modules, options) {
-    const { green, red, bold, yellow } = ui.colors;
+const formatDate = dateStr => {
+    const date = new Date(dateStr);
+
+    return date.toLocaleString();
+};
+
+const list = function*(ui, modules, options) {
+    const { green, red, bold, yellow, gray } = ui.colors;
     if (options._.length == 0) {
         ui.error(red('Missing environment'));
     }
@@ -89,15 +95,17 @@ Type ${green('comfy tag --help')} for details`);
     const project = yield modules.project.retrieveFromConfig();
     const configs = yield modules.config.list(project, env, 'default', false);
 
+    const noTag = gray('no tag');
     for (const config of configs) {
-        const tags = config.tags.length > 0 ? config.tags.map(tag => yellow(tag)).join(', ') : '';
-        ui.print(`${env}\t${config.hash}\t(${tags})`);
+        const tags = config.tags.length > 0 ? config.tags.map(tag => yellow(tag)).join(', ') : notTag;
+
+        ui.print(`${formatDate(config.created_at)}\t${env}\t${config.hash}\t${tags}`);
     }
 
     ui.exit();
 };
 
-const move = function* (ui, modules, options) {
+const move = function*(ui, modules, options) {
     const { green, red, bold } = ui.colors;
     if (options._.length < 3) {
         ui.error(red('Missing environment, tag, or hash'));
@@ -119,6 +127,11 @@ Type ${green('comfy tag --help')} for details`);
     const tag = options._[1];
     const hash = options._[2];
 
+    if (tag.toLowerCase() === 'latest') {
+        ui.error(red('The tag `latest` cannot be moved'));
+        return ui.exit(1);
+    }
+
     const project = yield modules.project.retrieveFromConfig();
     yield modules.tag.move(project, environment, 'default', tag, hash);
 
@@ -126,7 +139,7 @@ Type ${green('comfy tag --help')} for details`);
     ui.exit();
 };
 
-const remove = function* (ui, modules, options) {
+const remove = function*(ui, modules, options) {
     const { green, red, bold } = ui.colors;
     if (options._.length < 2) {
         ui.error(red('Missing environment, or tag'));
@@ -147,6 +160,11 @@ Type ${green('comfy tag --help')} for details`);
     const environment = options._[0];
     const tag = options._[1];
 
+    if (tag.toLowerCase() === 'latest') {
+        ui.error(red('The tag `latest` cannot be deleted'));
+        return ui.exit(1);
+    }
+
     const project = yield modules.project.retrieveFromConfig();
     const removedTag = yield modules.tag.remove(project, environment, 'default', tag);
 
@@ -154,32 +172,33 @@ Type ${green('comfy tag --help')} for details`);
     ui.exit();
 };
 
-module.exports = (ui, modules) => function* ([command, ...rawOptions]) {
-    const options = minimist(rawOptions);
+module.exports = (ui, modules) =>
+    function*([command, ...rawOptions]) {
+        const options = minimist(rawOptions);
 
-    if (options.help || options.h || options._.includes('help')) {
-        help(ui);
-        return ui.exit(0);
-    }
+        if (options.help || options.h || options._.includes('help')) {
+            help(ui);
+            return ui.exit(0);
+        }
 
-    switch (command) {
-    case 'add':
-        yield add(ui, modules, options);
-        break;
-    case 'list':
-    case 'ls':
-        yield list(ui, modules, options);
-        break;
-    case 'move':
-    case 'mv':
-        yield move(ui, modules, options);
-        break;
-    case 'delete':
-    case 'remove':
-    case 'rm':
-        yield remove(ui, modules, options);
-        break;
-    default:
-        help(ui);
-    }
-};
+        switch (command) {
+            case 'add':
+                yield add(ui, modules, options);
+                break;
+            case 'list':
+            case 'ls':
+                yield list(ui, modules, options);
+                break;
+            case 'move':
+            case 'mv':
+                yield move(ui, modules, options);
+                break;
+            case 'delete':
+            case 'remove':
+            case 'rm':
+                yield remove(ui, modules, options);
+                break;
+            default:
+                help(ui);
+        }
+    };
