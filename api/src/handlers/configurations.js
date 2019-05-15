@@ -19,7 +19,7 @@ export const get = λ(async event => {
         id: projectId,
         environmentName,
         configName: selector,
-        tagOrHashName
+        tagName: tagOrHashName
     } = event.pathParameters;
     await checkAuthorizationOr403(parseAuthorizationToken(event), projectId, 'read');
 

@@ -80,7 +80,7 @@ app.get(
     handlerToMiddleware(getConfiguration)
 );
 app.get(
-    '/projects/:id/environments/:environmentName/configurations/:configName/:tagOrHashName',
+    '/projects/:id/environments/:environmentName/configurations/:configName/:tagName',
     handlerToMiddleware(getConfiguration)
 );
 app.post(

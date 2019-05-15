@@ -25,10 +25,10 @@ run:
 	$(SERVERLESS) offline start --host=0.0.0.0 --port=3000
 
 deploy:
-	NODE_ENV=production $(SERVERLESS) deploy --stage beta
+	NODE_ENV=production $(SERVERLESS) deploy --stage prod
 
 undeploy:
-	NODE_ENV=production $(SERVERLESS) remove --stage beta
+	NODE_ENV=production $(SERVERLESS) remove --stage prod
 
 test:
 	NODE_ENV=test ./node_modules/.bin/jest

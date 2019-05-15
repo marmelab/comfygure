@@ -1,160 +1,159 @@
 service: comfy
 
 provider:
-  name: aws
-  runtime: nodejs8.10
-  stage: dev
-  region: eu-west-1
+    name: aws
+    runtime: nodejs8.10
+    stage: prod
+    region: eu-west-1
 
 functions:
+    ## PROJECTS
 
-## PROJECTS
+    projectCreate:
+        handler: src/handlers/projects.create
+        description: Create a new project
+        events:
+            - http:
+                  method: POST
+                  path: projects
+                  cors: true
 
-  projectCreate:
-    handler: src/handlers/projects.create
-    description: Create a new project
-    events:
-      - http:
-          method: POST
-          path: projects
-          cors: true
+    projectUpdate:
+        handler: src/handlers/projects.update
+        description: Rename a project
+        events:
+            - http:
+                  method: PUT
+                  path: projects/{id}
+                  cors: true
 
-  projectUpdate:
-    handler: src/handlers/projects.update
-    description: Rename a project
-    events:
-      - http:
-          method: PUT
-          path: projects/{id}
-          cors: true
+    projectRemove:
+        handler: src/handlers/projects.remove
+        description: Delete a project
+        events:
+            - http:
+                  method: DELETE
+                  path: projects/{id}
+                  cors: true
 
-  projectRemove:
-    handler: src/handlers/projects.remove
-    description: Delete a project
-    events:
-      - http:
-          method: DELETE
-          path: projects/{id}
-          cors: true
+    ## ENVIRONMENTS
 
-## ENVIRONMENTS
+    environmentGet:
+        handler: src/handlers/environments.get
+        description: List environments of a project
+        events:
+            - http:
+                  method: GET
+                  path: projects/{id}/environments
+                  cors: true
 
-  environmentGet:
-    handler: src/handlers/environments.get
-    description: List environments of a project
-    events:
-      - http:
-          method: GET
-          path: projects/{id}/environments
-          cors: true
+    environmentCreate:
+        handler: src/handlers/environments.create
+        description: Add a new environment to a project
+        events:
+            - http:
+                  method: POST
+                  path: projects/{id}/environments
+                  cors: true
 
-  environmentCreate:
-    handler: src/handlers/environments.create
-    description: Add a new environment to a project
-    events:
-      - http:
-          method: POST
-          path: projects/{id}/environments
-          cors: true
+    environmentUpdate:
+        handler: src/handlers/environments.update
+        description: Rename environment of a project
+        events:
+            - http:
+                  method: PUT
+                  path: projects/{id}/environments/{environmentName}
+                  cors: true
 
-  environmentUpdate:
-    handler: src/handlers/environments.update
-    description: Rename environment of a project
-    events:
-      - http:
-          method: PUT
-          path: projects/{id}/environments/{environmentName}
-          cors: true
+    environmentRemove:
+        handler: src/handlers/environments.remove
+        description: Delete environment of a project
+        events:
+            - http:
+                  method: DELETE
+                  path: projects/{id}/environments/{environmentName}
+                  cors: true
 
-  environmentRemove:
-    handler: src/handlers/environments.remove
-    description: Delete environment of a project
-    events:
-      - http:
-          method: DELETE
-          path: projects/{id}/environments/{environmentName}
-          cors: true
+    ## CONFIGURATIONS
 
-## CONFIGURATIONS
+    configurationHistory:
+        handler: src/handlers/configurations.history
+        description: List history of a configuration
+        events:
+            - http:
+                  method: GET
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}/history
+                  cors: true
+            - http:
+                  method: GET
+                  path: projects/{id}/environments/{environmentName}/configurations/history
+                  cors: true
 
-  configurationHistory:
-    handler: src/handlers/configurations.history
-    description: List history of a configuration
-    events:
-      - http:
-          method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}/history
-          cors: true
-      - http:
-          method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/history
-          cors: true
+    configurationGet:
+        handler: src/handlers/configurations.get
+        description: Get tag or hash version of a configuration
+        events:
+            - http:
+                  method: GET
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}
+                  cors: true
+            - http:
+                  method: GET
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagName}
+                  cors: true
 
-  configurationGet:
-    handler: src/handlers/configurations.get
-    description: Get tag or hash version of a configuration
-    events:
-      - http:
-          method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}
-          cors: true
-      - http:
-          method: GET
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagOrHashName}
-          cors: true
+    configurationAdd:
+        handler: src/handlers/configurations.create
+        description: Add a new version of a configuration
+        events:
+            - http:
+                  method: POST
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagName}
+                  cors: true
 
-  configurationAdd:
-    handler: src/handlers/configurations.create
-    description: Add a new version of a configuration
-    events:
-      - http:
-          method: POST
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}/{tagName}
-          cors: true
+    configurationRemove:
+        handler: src/handlers/configurations.remove
+        description: Remove a configuration
+        events:
+            - http:
+                  method: POST
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}
+                  cors: true
 
-  configurationRemove:
-    handler: src/handlers/configurations.remove
-    description: Remove a configuration
-    events:
-      - http:
-          method: POST
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}
-          cors: true
+    ## TAGS
 
-## TAGS
+    tagAdd:
+        handler: src/handlers/tags.create
+        description: Add a new tag on a configuration
+        events:
+            - http:
+                  method: POST
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags
+                  cors: true
 
-  tagAdd:
-    handler: src/handlers/tags.create
-    description: Add a new tag on a configuration
-    events:
-      - http:
-          method: POST
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags
-          cors: true
+    tagUpdate:
+        handler: src/handlers/tags.update
+        description: Move a tag
+        events:
+            - http:
+                  method: PUT
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
+                  cors: true
 
-  tagUpdate:
-    handler: src/handlers/tags.update
-    description: Move a tag
-    events:
-      - http:
-          method: PUT
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
-          cors: true
-
-  tagRemove:
-    handler: src/handlers/tags.remove
-    description: Remove a tag
-    events:
-      - http:
-          method: DELETE
-          path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
-          cors: true
+    tagRemove:
+        handler: src/handlers/tags.remove
+        description: Remove a tag
+        events:
+            - http:
+                  method: DELETE
+                  path: projects/{id}/environments/{environmentName}/configurations/{configName}/tags/{tagName}
+                  cors: true
 
 plugins:
-  - serverless-webpack
-  - serverless-offline
+    - serverless-webpack
+    - serverless-offline
 
 custom:
-  webpack:
-      webpackConfig: './webpack.config.babel.js'
-      includeModules: true
+    webpack:
+        webpackConfig: './webpack.config.babel.js'
+        includeModules: true
