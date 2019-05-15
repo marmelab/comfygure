@@ -6,7 +6,7 @@ import configurationsQueries from '../../queries/configurations';
 import tagsQueries from '../../queries/tags';
 import { get as getVersion } from './version';
 
-export default async (configurationId, tagName = 'next') => {
+export default async (configurationId, tagName = 'latest') => {
     const configuration = await configurationsQueries.findOne(configurationId);
 
     if (!configuration) {
@@ -17,21 +17,23 @@ export default async (configurationId, tagName = 'next') => {
 
     const versionHash = hash({
         previous: lastVersion.hash,
-        entries,
+        entries
     });
 
     const version = await versionsQueries.insertOne({
         hash: versionHash,
-        previous: lastVersion.hash,
+        previous: lastVersion.hash
     });
 
     await tagsQueries.updateOne(lastTag.id, {
-        version_id: version.id,
+        version_id: version.id
     });
 
-    await Object.keys(entries).map(key => entriesQueries.insertOne({
-        key,
-        value: entries[key],
-        version_id: version.id,
-    }));
+    await Object.keys(entries).map(key =>
+        entriesQueries.insertOne({
+            key,
+            value: entries[key],
+            version_id: version.id
+        })
+    );
 };

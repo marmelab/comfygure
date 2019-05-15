@@ -21,7 +21,7 @@ export const getDefault = async (projectId, configName, tagName) => {
 
     let tag = await tagsQueries.findOne(configuration.id, tagName);
     if (!tag) {
-        tag = await tagsQueries.findOne(configuration.id, 'stable');
+        tag = await tagsQueries.findOne(configuration.id, 'latest');
     }
 
     const version = await versionsQueries.findOneByTag(configuration.id, tag.id);

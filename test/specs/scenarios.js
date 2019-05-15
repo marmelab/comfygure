@@ -5,9 +5,9 @@ describe('Scenarios', () => {
     beforeEach(createProject);
 
     describe('Child Entries', () => {
-        it('should be able to delete a child entry with a new configuration', function* () {
+        it('should be able to delete a child entry with a new configuration', function*() {
             const firstConfig = {
-                parent: { entry: 'entryToDelete' },
+                parent: { entry: 'entryToDelete' }
             };
 
             yield run(`echo '${JSON.stringify(firstConfig)}' > firstConfig.json`);
@@ -18,7 +18,7 @@ describe('Scenarios', () => {
 
             const secondConfig = {
                 parent: { child: { entry: 'entry' } },
-                child: { entry: 'entry' },
+                child: { entry: 'entry' }
             };
 
             yield run(`echo '${JSON.stringify(secondConfig)}' > secondConfig.json`);
@@ -30,7 +30,7 @@ describe('Scenarios', () => {
     });
 
     describe('Serialization', () => {
-        it('should not transform a `false` bool to a `"false"` string', function* () {
+        it('should not transform a `false` bool to a `"false"` string', function*() {
             const config = { myEntry: false };
 
             yield run(`echo '${JSON.stringify(config)}' > config.json`);
@@ -40,7 +40,7 @@ describe('Scenarios', () => {
             expect(JSON.parse(stdout)).toEqual(config);
         });
 
-        it('should not transform a `null` into something else', function* () {
+        it('should not transform a `null` into something else', function*() {
             const config = { myEntry: null };
 
             yield run(`echo '${JSON.stringify(config)}' > config.json`);

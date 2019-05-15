@@ -3,6 +3,7 @@ node_js:
     - '8.10'
     - '9'
     - 'lts/*'
+    - '11'
     - 'node'
 
 services:
