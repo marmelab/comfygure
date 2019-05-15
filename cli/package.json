@@ -1,7 +1,7 @@
 {
     "name": "comfygure",
-    "version": "1.0.0",
-    "description": "Configuration without pain",
+    "version": "1.0.1",
+    "description": "Encrypted and versioned configuration store built with collaboration in mind",
     "keywords": [
         "configuration",
         "deployment",
@@ -22,12 +22,15 @@
         "type": "git",
         "url": "git+https://github.com/marmelab/comfygure.git"
     },
-    "author": "Marmelab",
+    "author": "Marmelab <info@marmelab.com> (https://marmelab.com/fr/)",
+    "contributors": [
+        "Kévin Maschtaler <kevin@marmelab.com>"
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/marmelab/comfygure/issues"
     },
-    "homepage": "https://github.com/marmelab/comfygure#readme",
+    "homepage": "https://marmelab.com/comfygure",
     "dependencies": {
         "chalk": "~2.4.2",
         "cli-table": "~0.3.1",
