@@ -29,7 +29,9 @@ ${bold('EXAMPLES')}
         ${dim('# Get the staging configuration for the next tag in yaml')}
         ${cyan('comfy get staging -t next --yml > config/staging.yaml')}
         ${dim('# Get the staging configuration for a specific hash in yaml')}
-        ${cyan('comfy get staging --hash=5eb9f3ea5cf01384333115007cf7606f --yml > config/staging.yaml')}
+        ${cyan(
+            'comfy get staging --hash=5eb9f3ea5cf01384333115007cf7606f --yml > config/staging.yaml'
+        )}
         ${dim('# Get the production configuration and set it as environment variables')}
         ${cyan('comfy get production --envvars | source /dev/stdin')}
 
@@ -81,9 +83,11 @@ Type ${green('comfy get --help')} for details`);
         let entries = config.body;
         if (selector) {
             const sanitizedSelector = selector.toLowerCase();
+            const entry = entries[sanitizedSelector] || entries[selector];
 
-            if (entries[sanitizedSelector]) {
-                ui.print(entries[sanitizedSelector]);
+            if (entry) {
+                // @TODO Support subset getter for nested entries
+                ui.print(entry);
                 return ui.exit();
             }
 
