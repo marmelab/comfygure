@@ -90,6 +90,25 @@ describe('Commands', () => {
             expect(envvars.trim()).toBe("export NESTED_A_A='3';\nexport NESTED_A_B='4';");
         });
 
+        it('should be able to select a subset of the config with an uppercase selector', function*() {
+            const config = {
+                version: 3,
+                id: 'id',
+                address: 'address',
+                Crypto: {
+                    ciphertext: 'ciphertext',
+                    cipherparams: { iv: 'iv' },
+                    cipher: 'cipher'
+                }
+            };
+
+            yield run(`echo '${JSON.stringify(config)}' > test.json`);
+            yield run('comfy setall development $PWD/test.json');
+
+            const { stdout: cipher } = yield run('comfy get development Crypto.cipher');
+            expect(cipher).toBe('cipher\n');
+        });
+
         it('should get config with hash name', function*() {
             const configV1 = { version: '1', login: 'admin', password: 'S3cret' };
 
@@ -106,7 +125,9 @@ describe('Commands', () => {
             yield run(`echo '${JSON.stringify(configV2)}' > test.json`);
             yield run('comfy setall development $PWD/test.json');
 
-            const { stdout: version } = yield run(`comfy get development --hash=${configurationSha} version`);
+            const { stdout: version } = yield run(
+                `comfy get development --hash=${configurationSha} version`
+            );
 
             expect(version).toContain('1');
         });
@@ -165,9 +186,13 @@ describe('Commands', () => {
             const { stdout: currentConfig } = yield run('comfy get development');
             expect(JSON.parse(currentConfig)).toEqual({});
 
-            const { stdout: projectId } = yield run('cat .comfy/config | grep projectId | sed "s/projectId=//"');
+            const { stdout: projectId } = yield run(
+                'cat .comfy/config | grep projectId | sed "s/projectId=//"'
+            );
 
-            const { stdout: confirmation } = yield run(`comfy project delete --permanently --id=${projectId}`);
+            const { stdout: confirmation } = yield run(
+                `comfy project delete --permanently --id=${projectId}`
+            );
             expect(confirmation).toContain('successfully deleted');
 
             try {
@@ -214,7 +239,9 @@ describe('Commands', () => {
             const { stdout: addedTag } = yield run('comfy tag list development');
             expect(addedTag).toContain(`${firstHash}\tlatest, newtag`);
 
-            const { stdout: success } = yield run(`comfy tag move development newtag ${secondHash}`);
+            const { stdout: success } = yield run(
+                `comfy tag move development newtag ${secondHash}`
+            );
             expect(success).toContain('Tag successfully moved');
 
             const { stdout: movedTag } = yield run('comfy tag list development');
