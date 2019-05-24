@@ -7,6 +7,17 @@ const { generateNewPrivateKey, generateNewHmacKey } = require('../crypto');
 const getConfigFolder = () => `${process.cwd()}${path.sep}${CONFIG_FOLDER}`;
 const getConfigPath = () => `${process.cwd()}${path.sep}${CONFIG_PATH}`;
 
+// The function `fs.mkdir(folder, { recursive: true })` doesn't exist in Node <10
+const mkdirRecursive = function*(folder) {
+    try {
+        return yield cb => fs.mkdir(folder, cb);
+    } catch (error) {
+        if (error.code !== 'EEXIST') {
+            throw error;
+        }
+    }
+};
+
 module.exports = (client, ui) => {
     const create = function*(name, environment, origin = DEFAULT_ORIGIN) {
         const url = `${origin}/projects`;
@@ -33,7 +44,7 @@ module.exports = (client, ui) => {
         );
 
         const filename = getConfigPath();
-        yield cb => fs.mkdir(getConfigFolder(), cb);
+        yield mkdirRecursive(getConfigFolder());
         yield cb => fs.writeFile(filename, config, { flag: 'w' }, cb);
     };
 
