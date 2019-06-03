@@ -1,6 +1,8 @@
 module.exports = (client, ui) => {
-    const add = function* (project, environment, configName, name, selector) {
-        const url = `${project.origin}/projects/${project.id}/environments/${environment}/configurations/${configName}/tags`;
+    const add = function*(project, environment, configName, name, selector) {
+        const url = `${project.origin}/projects/${
+            project.id
+        }/environments/${environment}/configurations/${configName}/tags`;
         const body = {
             name,
             selector,
@@ -14,8 +16,10 @@ module.exports = (client, ui) => {
         }
     };
 
-    const move = function* (project, environment, configName, name, selector) {
-        const url = `${project.origin}/projects/${project.id}/environments/${environment}/configurations/${configName}/tags/${name}`;
+    const move = function*(project, environment, configName, name, selector) {
+        const url = `${project.origin}/projects/${
+            project.id
+        }/environments/${environment}/configurations/${configName}/tags/${name}`;
         const body = { selector };
 
         try {
@@ -26,8 +30,10 @@ module.exports = (client, ui) => {
         }
     };
 
-    const remove = function* (project, environment, configName, name) {
-        const url = `${project.origin}/projects/${project.id}/environments/${environment}/configurations/${configName}/tags/${name}`;
+    const remove = function*(project, environment, configName, name) {
+        const url = `${project.origin}/projects/${
+            project.id
+        }/environments/${environment}/configurations/${configName}/tags/${name}`;
 
         try {
             return yield client.delete(url, client.buildAuthorization(project));

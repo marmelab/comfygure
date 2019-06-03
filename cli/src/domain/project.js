@@ -10,7 +10,7 @@ const getConfigPath = () => `${process.cwd()}${path.sep}${CONFIG_PATH}`;
 // The function `fs.mkdir(folder, { recursive: true })` doesn't exist in Node <10
 const mkdirRecursive = function*(folder) {
     try {
-        return yield cb => fs.mkdir(folder, cb);
+        yield cb => fs.mkdir(folder, cb);
     } catch (error) {
         if (error.code !== 'EEXIST') {
             throw error;
@@ -38,7 +38,7 @@ module.exports = (client, ui) => {
                 secretToken: project.writeToken,
                 origin,
                 privateKey,
-                hmacKey
+                hmacKey,
             },
             { section: 'project' }
         );
@@ -100,7 +100,7 @@ Type ${bold('comfy init')} to do so.`);
             secretToken: process.env.COMFY_SECRET_TOKEN,
             privateKey: process.env.COMFY_PRIVATE_KEY,
             hmacKey: process.env.COMFY_HMAC_KEY,
-            origin: process.env.COMFY_ORIGIN
+            origin: process.env.COMFY_ORIGIN,
         };
 
         const filename = getConfigPath();
@@ -118,7 +118,7 @@ Type ${bold('comfy init')} to do so.`);
             secretToken: config.project.secretToken,
             privateKey: config.project.privateKey,
             hmacKey: config.project.hmacKey,
-            origin: config.project.origin
+            origin: config.project.origin,
         });
 
         checkProjectInfos(projectInfos);
@@ -150,6 +150,6 @@ Type ${bold('comfy init')} to do so.`);
         generateNewHmacKey,
         getConfigFolder,
         getConfigPath,
-        permanentlyDelete
+        permanentlyDelete,
     };
 };

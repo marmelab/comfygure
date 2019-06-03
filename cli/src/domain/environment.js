@@ -1,5 +1,5 @@
 module.exports = (client, ui) => {
-    const list = function* (project) {
+    const list = function*(project) {
         const url = `${project.origin}/projects/${project.id}/environments`;
 
         try {
@@ -10,7 +10,7 @@ module.exports = (client, ui) => {
         }
     };
 
-    const add = function* (project, environmentName) {
+    const add = function*(project, environmentName) {
         const url = `${project.origin}/projects/${project.id}/environments`;
         const data = { name: environmentName };
 

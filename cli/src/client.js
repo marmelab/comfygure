@@ -1,4 +1,4 @@
-module.exports = (request) => {
+module.exports = request => {
     const defaultHeaders = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -21,13 +21,10 @@ module.exports = (request) => {
         callback(null, JSON.parse(response.body));
     };
 
-    const get = (url, headers = {}) => cb => request(
-        url,
-        { headers: Object.assign({}, defaultHeaders, headers) },
-        parseResponse(cb)
-    );
+    const get = (url, headers = {}) => cb =>
+        request(url, { headers: Object.assign({}, defaultHeaders, headers) }, parseResponse(cb));
 
-    const post = (url, body, headers = {}) => (cb) => {
+    const post = (url, body, headers = {}) => cb => {
         const options = {
             method: 'POST',
             headers: Object.assign({}, defaultHeaders, headers),
@@ -37,7 +34,7 @@ module.exports = (request) => {
         return request(url, options, parseResponse(cb));
     };
 
-    const put = (url, body, headers = {}) => (cb) => {
+    const put = (url, body, headers = {}) => cb => {
         const options = {
             method: 'PUT',
             headers: Object.assign({}, defaultHeaders, headers),
@@ -47,7 +44,7 @@ module.exports = (request) => {
         return request(url, options, parseResponse(cb));
     };
 
-    const remove = (url, headers = {}) => (cb) => {
+    const remove = (url, headers = {}) => cb => {
         const options = {
             method: 'DELETE',
             headers: Object.assign({}, defaultHeaders, headers),

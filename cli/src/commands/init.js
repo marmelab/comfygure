@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const minimist = require('minimist');
 
-const help = (ui) => {
+const help = ui => {
     const { bold, cyan } = ui.colors;
 
     ui.print(`
@@ -25,52 +25,53 @@ ${bold('EXAMPLES')}
 `);
 };
 
-module.exports = (ui, modules) => function* (rawOptions) {
-    const { bold, dim, yellow, green } = ui.colors;
-    const options = minimist(rawOptions);
+module.exports = (ui, modules) =>
+    function*(rawOptions) {
+        const { bold, dim, yellow, green } = ui.colors;
+        const options = minimist(rawOptions);
 
-    if (options.help || options.h || options._.includes('help')) {
-        help(ui);
-        return ui.exit(0);
-    }
-
-    const CONFIG_PATH = modules.project.CONFIG_PATH;
-    const checkAlreadyInitialized = fs.existsSync(`${process.cwd()}${path.sep}${CONFIG_PATH}`);
-    const isGitDirectory = fs.existsSync(`${process.cwd()}${path.sep}.git`);
-    const gitignore = `${process.cwd()}${path.sep}.gitignore`;
-
-    if (checkAlreadyInitialized) {
-        ui.error(
-            `${yellow('comfy is already initialized!')}` +
-            `\nYou can update your configuration by editing ${dim(CONFIG_PATH)}.`
-        );
-        return ui.exit(1);
-    }
-
-    const folders = process.cwd().split(path.sep);
-    const defaultProjectName = folders[folders.length - 1];
-    const projectName = options.name || defaultProjectName;
-    const environment = options.env || process.env.NODE_ENV || 'development';
-    const privateKey = modules.project.generateNewPrivateKey();
-    const hmacKey = modules.project.generateNewHmacKey();
-
-    ui.print('\nInitializing project configuration...');
-
-    const project = yield modules.project.create(projectName, environment, options.origin);
-    yield modules.project.saveToConfig(project, privateKey, hmacKey, options.origin);
-    const { origin } = yield modules.project.retrieveFromConfig();
-
-    if (isGitDirectory && !options.g) {
-        const gitignoreContent = fs.readFileSync(gitignore);
-
-        if (!gitignoreContent.includes(CONFIG_PATH)) {
-            fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);
+        if (options.help || options.h || options._.includes('help')) {
+            help(ui);
+            return ui.exit(0);
         }
-    }
 
-    ui.print(`Project created on comfy server ${dim(origin)}`);
-    ui.print(`Configuration saved locally in ${dim(CONFIG_PATH)}`);
-    ui.print(`${bold(green('comfy project successfully created'))}`);
+        const CONFIG_PATH = modules.project.CONFIG_PATH;
+        const checkAlreadyInitialized = fs.existsSync(`${process.cwd()}${path.sep}${CONFIG_PATH}`);
+        const isGitDirectory = fs.existsSync(`${process.cwd()}${path.sep}.git`);
+        const gitignore = `${process.cwd()}${path.sep}.gitignore`;
 
-    ui.exit();
-};
+        if (checkAlreadyInitialized) {
+            ui.error(
+                `${yellow('comfy is already initialized!')}` +
+                    `\nYou can update your configuration by editing ${dim(CONFIG_PATH)}.`
+            );
+            return ui.exit(1);
+        }
+
+        const folders = process.cwd().split(path.sep);
+        const defaultProjectName = folders[folders.length - 1];
+        const projectName = options.name || defaultProjectName;
+        const environment = options.env || process.env.NODE_ENV || 'development';
+        const privateKey = modules.project.generateNewPrivateKey();
+        const hmacKey = modules.project.generateNewHmacKey();
+
+        ui.print('\nInitializing project configuration...');
+
+        const project = yield modules.project.create(projectName, environment, options.origin);
+        yield modules.project.saveToConfig(project, privateKey, hmacKey, options.origin);
+        const { origin } = yield modules.project.retrieveFromConfig();
+
+        if (isGitDirectory && !options.g) {
+            const gitignoreContent = fs.readFileSync(gitignore);
+
+            if (!gitignoreContent.includes(CONFIG_PATH)) {
+                fs.appendFileSync(gitignore, `${CONFIG_PATH}\n`);
+            }
+        }
+
+        ui.print(`Project created on comfy server ${dim(origin)}`);
+        ui.print(`Configuration saved locally in ${dim(CONFIG_PATH)}`);
+        ui.print(`${bold(green('comfy project successfully created'))}`);
+
+        ui.exit();
+    };

@@ -1,6 +1,6 @@
 const minimist = require('minimist');
 
-const help = (ui) => {
+const help = ui => {
     const { bold, cyan } = ui.colors;
 
     ui.print(`
@@ -20,7 +20,7 @@ ${bold('EXAMPLES')}
 `);
 };
 
-const info = function* (ui, modules) {
+const info = function*(ui, modules) {
     const project = yield modules.project.retrieveFromConfig();
     const folder = modules.project.getConfigFolder();
     const path = modules.project.getConfigPath();
@@ -34,16 +34,10 @@ const info = function* (ui, modules) {
     ]);
 };
 
-const del = function* (ui, modules, rawOptions) {
+const del = function*(ui, modules, rawOptions) {
     const project = yield modules.project.retrieveFromConfig();
     const options = minimist(rawOptions);
-    const {
-        black,
-        bgRedBright,
-        cyan,
-        bold,
-        green,
-    } = ui.colors;
+    const { black, bgRedBright, cyan, bold, green } = ui.colors;
 
     if (options.permanently === true && options.id === project.id) {
         yield modules.project.permanentlyDelete();
@@ -71,16 +65,17 @@ ${cyan('comfy project delete --permanently --id=<project-id>')}
     ui.exit();
 };
 
-module.exports = (ui, modules) => function* ([command, ...options]) {
-    switch (command) {
-    case 'i':
-    case 'info':
-        yield info(ui, modules);
-        break;
-    case 'delete':
-        yield del(ui, modules, options);
-        break;
-    default:
-        help(ui);
-    }
-};
+module.exports = (ui, modules) =>
+    function*([command, ...options]) {
+        switch (command) {
+            case 'i':
+            case 'info':
+                yield info(ui, modules);
+                break;
+            case 'delete':
+                yield del(ui, modules, options);
+                break;
+            default:
+                help(ui);
+        }
+    };

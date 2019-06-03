@@ -6,7 +6,7 @@ const traverse = (obj, parentKey = '') => {
     if (Array.isArray(obj)) {
         obj.forEach((item, i) => {
             const traversed = traverse(item, `${parentKey}[${i}]`);
-            traversed.forEach((t) => {
+            traversed.forEach(t => {
                 list.push(t);
             });
         });
@@ -26,7 +26,7 @@ const traverse = (obj, parentKey = '') => {
     return list;
 };
 
-const toFlat = (body) => {
+const toFlat = body => {
     const content = {};
     const keyList = traverse(body);
 

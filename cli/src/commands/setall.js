@@ -3,7 +3,7 @@ const path = require('path');
 const minimist = require('minimist');
 const { parseYAML, guessFormat } = require('../format');
 
-const help = (ui) => {
+const help = ui => {
     const { bold, cyan } = ui.colors;
 
     ui.print(`
@@ -25,68 +25,68 @@ ${bold('EXAMPLES')}
 `);
 };
 
+module.exports = (ui, modules) =>
+    function* setall(rawOptions) {
+        const { red, green, bold } = ui.colors;
+        const options = minimist(rawOptions);
+        const env = options._[0];
+        const configPath = options._[1];
+        const tag = options.tag || options.t || 'latest';
 
-module.exports = (ui, modules) => function* setall(rawOptions) {
-    const { red, green, bold } = ui.colors;
-    const options = minimist(rawOptions);
-    const env = options._[0];
-    const configPath = options._[1];
-    const tag = options.tag || options.t || 'latest';
+        if (options.help || options.h || options._.includes('help')) {
+            help(ui);
+            return ui.exit(0);
+        }
 
-    if (options.help || options.h || options._.includes('help')) {
-        help(ui);
-        return ui.exit(0);
-    }
+        if (!env) {
+            ui.error(red('No environment specified.'));
+        }
 
-    if (!env) {
-        ui.error(red('No environment specified.'));
-    }
+        if (!configPath) {
+            ui.error(red('No config file specified.'));
+        }
 
-    if (!configPath) {
-        ui.error(red('No config file specified.'));
-    }
-
-    if (!env || !configPath) {
-        ui.print(`${bold('SYNOPSIS')}
+        if (!env || !configPath) {
+            ui.print(`${bold('SYNOPSIS')}
         ${bold('comfy')} setall <environment> <path> [<options>]
 
 Type ${green('comfy setall --help')} for details`);
-        return ui.exit(0);
-    }
+            return ui.exit(0);
+        }
 
-    const filename = configPath.startsWith(path.sep)
-        ? path.normalize(configPath)
-        : path.normalize(`${process.cwd()}${path.sep}${configPath}`);
+        const filename = configPath.startsWith(path.sep)
+            ? path.normalize(configPath)
+            : path.normalize(`${process.cwd()}${path.sep}${configPath}`);
 
-    if (!fs.existsSync(filename)) {
-        ui.error(`The file ${red(configPath)} doesn't exist.`);
-        return ui.exit(1);
-    }
+        if (!fs.existsSync(filename)) {
+            ui.error(`The file ${red(configPath)} doesn't exist.`);
+            return ui.exit(1);
+        }
 
-    const stats = fs.statSync(filename);
-    if (!stats.isFile()) {
-        ui.error(`The object located at ${red(configPath)} is not a file.`);
-        return ui.exit(1);
-    }
+        const stats = fs.statSync(filename);
+        if (!stats.isFile()) {
+            ui.error(`The object located at ${red(configPath)} is not a file.`);
+            return ui.exit(1);
+        }
 
-    const file = fs.readFileSync(filename, 'utf-8');
+        const file = fs.readFileSync(filename, 'utf-8');
 
-    let parsedContent;
+        let parsedContent;
 
-    try {
-        parsedContent = parseYAML(file);
-    } catch (err) {
-        ui.error(red(`Failed to parse ${configPath}`));
-    }
+        try {
+            parsedContent = parseYAML(file);
+        } catch (err) {
+            ui.error(red(`Failed to parse ${configPath}`));
+        }
 
-    const project = yield modules.project.retrieveFromConfig();
+        const project = yield modules.project.retrieveFromConfig();
 
-    yield modules.config.add(project, env, parsedContent, {
-        tag,
-        configName: 'default',
-        format: guessFormat(path.extname(filename)),
-    });
+        yield modules.config.add(project, env, parsedContent, {
+            tag,
+            configName: 'default',
+            format: guessFormat(path.extname(filename)),
+        });
 
-    ui.print(`${bold(green('comfy configuration successfully saved'))}`);
-    return ui.exit();
-};
+        ui.print(`${bold(green('comfy configuration successfully saved'))}`);
+        return ui.exit();
+    };

@@ -1,0 +1,29 @@
+{
+    "env": {
+        "jest": true,
+        "node": true,
+        "es6": true
+    },
+    "plugins": ["prettier"],
+    "extends": ["eslint:recommended", "prettier"],
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
+    "rules": {
+        "prettier/prettier": [
+            "error",
+            {
+                "singleQuote": true,
+                "tabWidth": 4,
+                "trailingComma": "es5",
+                "printWidth": 120
+            }
+        ],
+        "no-unused-vars": [
+            "error",
+            {
+                "ignoreRestSiblings": true
+            }
+        ]
+    }
+}
