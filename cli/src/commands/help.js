@@ -17,7 +17,7 @@ ${bold('COMMANDS')}
         env         Manage configuration environments
         tag         Manage configuration tags
         log         List all configuration versions
-        project     Manage the current project
+        project     Manage or deploy the current project
         version     Output version information and exit
 
 ${bold('EXAMPLES')}
