@@ -63,7 +63,7 @@ Type ${dim('comfy set --help')} for details`);
         const project = yield modules.project.retrieveFromConfig();
         const config = yield modules.config.get(project, env, {
             configName: 'default',
-            tag
+            tag,
         });
 
         const sanitizedSelector = selector.toLowerCase();
@@ -72,7 +72,7 @@ Type ${dim('comfy set --help')} for details`);
         yield modules.config.add(project, env, updatedConfig, {
             tag,
             configName: 'default',
-            format: config.defaultFormat
+            format: config.defaultFormat,
         });
 
         ui.print(`${bold(green('comfy configuration successfully saved'))}`);

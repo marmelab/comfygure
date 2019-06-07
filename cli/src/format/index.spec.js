@@ -30,7 +30,9 @@ describe('Format', () => {
                 attributes: { size: 42 },
             };
 
-            expect(toJavascript(config)).toEqual('window.COMFY = {"nullable":null,"admin":"admin","password":"S3cret!","permissions":["read","write"],"attributes":{"size":42}};');
+            expect(toJavascript(config)).toEqual(
+                'window.COMFY = {"nullable":null,"admin":"admin","password":"S3cret!","permissions":["read","write"],"attributes":{"size":42}};'
+            );
         });
     });
 });

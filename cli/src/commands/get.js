@@ -29,9 +29,7 @@ ${bold('EXAMPLES')}
         ${dim('# Get the staging configuration for the next tag in yaml')}
         ${cyan('comfy get staging -t next --yml > config/staging.yaml')}
         ${dim('# Get the staging configuration for a specific hash in yaml')}
-        ${cyan(
-            'comfy get staging --hash=5eb9f3ea5cf01384333115007cf7606f --yml > config/staging.yaml'
-        )}
+        ${cyan('comfy get staging --hash=5eb9f3ea5cf01384333115007cf7606f --yml > config/staging.yaml')}
         ${dim('# Get the production configuration and set it as environment variables')}
         ${cyan('comfy get production --envvars | source /dev/stdin')}
 
@@ -67,7 +65,7 @@ Type ${green('comfy get --help')} for details`);
         const config = yield modules.config.get(project, env, {
             configName: 'default',
             tag,
-            hash
+            hash,
         });
 
         if ([options.json, options.yml, options.js].filter(x => x).length > 1) {
@@ -95,12 +93,12 @@ Type ${green('comfy get --help')} for details`);
                 .map(([key, value]) => [key.toLowerCase(), value])
                 .filter(([key]) => key.startsWith(sanitizedSelector))
                 .reduce(
-                    (newEntries, [key, value]) => ({
-                        ...newEntries,
-                        [options.envvars || format === 'envvars'
-                            ? key
-                            : key.replace(`${sanitizedSelector}.`, '')]: value
-                    }),
+                    (newEntries, [key, value]) =>
+                        Object.assign({}, newEntries, {
+                            [options.envvars || format === 'envvars'
+                                ? key
+                                : key.replace(`${sanitizedSelector}.`, '')]: value,
+                        }),
                     {}
                 );
         }

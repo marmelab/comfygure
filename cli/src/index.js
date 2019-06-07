@@ -18,7 +18,7 @@ const main = (ui, evt) => {
         log: require('./commands/log'),
         tag: require('./commands/tag'),
         version: require('./commands/version'),
-        project: require('./commands/project')
+        project: require('./commands/project'),
     };
 
     return function* mainCommand() {
@@ -50,7 +50,7 @@ const main = (ui, evt) => {
             project: projectModuleFactory(client, ui),
             environment: environmentModuleFactory(client, ui),
             config: configModuleFactory(client, ui),
-            tag: tagModuleFactory(client, ui)
+            tag: tagModuleFactory(client, ui),
         };
 
         yield command(ui, modules)(request.arguments);

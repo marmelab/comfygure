@@ -97,7 +97,7 @@ Type ${green('comfy tag --help')} for details`);
 
     const noTag = gray('no tag');
     for (const config of configs) {
-        const tags = config.tags.length > 0 ? config.tags.map(tag => yellow(tag)).join(', ') : notTag;
+        const tags = config.tags.length > 0 ? config.tags.map(tag => yellow(tag)).join(', ') : noTag;
 
         ui.print(`${formatDate(config.created_at)}\t${env}\t${config.hash}\t${tags}`);
     }
@@ -166,7 +166,7 @@ Type ${green('comfy tag --help')} for details`);
     }
 
     const project = yield modules.project.retrieveFromConfig();
-    const removedTag = yield modules.tag.remove(project, environment, 'default', tag);
+    yield modules.tag.remove(project, environment, 'default', tag);
 
     ui.print(`${bold(green('Tag successfully deleted'))}`);
     ui.exit();

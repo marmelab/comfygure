@@ -9,13 +9,13 @@ const toJSON = content => JSON.stringify(content, null, 4);
 
 const parseYAML = content => yaml.safeLoad(content);
 
-const toYAML = (content) => {
+const toYAML = content => {
     if (!content || Object.keys(content).length === 0) return '';
 
     return yaml.safeDump(content);
 };
 
-const parseFlat = (content) => {
+const parseFlat = content => {
     const body = {};
     const keys = Object.keys(content).sort();
 
@@ -26,7 +26,7 @@ const parseFlat = (content) => {
     return body;
 };
 
-const toEnvVars = (flatContent) => {
+const toEnvVars = flatContent => {
     let source = '';
 
     for (const key of Object.keys(flatContent).sort()) {

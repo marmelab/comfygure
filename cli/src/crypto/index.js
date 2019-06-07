@@ -69,5 +69,5 @@ module.exports = {
     encrypt,
     decrypt,
     generateNewPrivateKey,
-    generateNewHmacKey
+    generateNewHmacKey,
 };
