@@ -304,4 +304,24 @@ describe('Commands', () => {
             expect(stdout).toContain(`${hash}\tlatest`);
         });
     });
+
+    describe('diff', () => {
+        it('should display a git-like diff between two configuration versions', function*() {
+            yield run(`echo '${JSON.stringify({ login: 'admin', password: 'S3cret' })}' > test.json`);
+            yield run('comfy setall development test.json');
+            yield run('comfy set development login user')
+
+            const { stdout, stderr } = yield run('comfy get development login');
+            expect(stdout).toEqual('user\n');
+
+            const { stdout: history } = yield run('comfy log development');
+
+            const lines = history.trim().split('\n');
+            const [dateStr, environment, hash] = lines[1].split('\t');
+
+            const { stdout: diff } = yield run(`comfy diff development ${hash}`);
+            expect(diff).toContain('-    "login": "admin",');
+            expect(diff).toContain('+    "login": "user",');
+        });
+    })
 });

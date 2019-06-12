@@ -15,6 +15,7 @@ const main = (ui, evt) => {
         setall: require('./commands/setall'),
         set: require('./commands/set'),
         get: require('./commands/get'),
+        diff: require('./commands/diff'),
         log: require('./commands/log'),
         tag: require('./commands/tag'),
         version: require('./commands/version'),

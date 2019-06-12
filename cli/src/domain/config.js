@@ -1,4 +1,6 @@
-const { toFlat } = require('../format');
+const { parseFlat, toJSON, toYAML, toEnvVars, toJavascript, toFlat } = require('../format');
+const { JSON, YAML, JAVASCRIPT } = require('../format/constants');
+
 const { encrypt, decrypt } = require('../crypto');
 
 module.exports = (client, ui) => {
@@ -41,13 +43,12 @@ module.exports = (client, ui) => {
         }
     };
 
-    const get = function*(project, env, { configName = 'default', tag, hash }) {
-        let url = `${project.origin}/projects/${project.id}/environments/${env}/configurations`;
+    const get = function*(project, env, { tag, hash }) {
+        let url = `${project.origin}/projects/${project.id}/environments/${env}/configurations/default`;
         const hashOrTag = hash || tag;
-        if (configName && hashOrTag) {
-            url += `/${configName}/${hashOrTag}`;
-        } else if (configName || hashOrTag) {
-            url += `/${configName || hashOrTag}`;
+
+        if (hashOrTag) {
+            url += `/${hashOrTag}`;
         }
 
         let response;
@@ -67,5 +68,53 @@ module.exports = (client, ui) => {
         return { body, defaultFormat };
     };
 
-    return { list, add, get };
+    const getAndFormat = function*(project, env, hash, selector, options = {}) {
+        const config = yield get(project, env, { hash });
+
+        let format = config.defaultFormat;
+        if (options.json) format = JSON;
+        if (options.yml) format = YAML;
+        if (options.js) format = JAVASCRIPT;
+
+        let entries = config.body;
+        if (selector) {
+            const sanitizedSelector = selector.toLowerCase();
+            const entry = entries[sanitizedSelector] || entries[selector];
+
+            if (entry) {
+                // @TODO Support subset getter for nested entries
+                return entry;
+            }
+
+            entries = Object.entries(entries)
+                .map(([key, value]) => [key.toLowerCase(), value])
+                .filter(([key]) => key.startsWith(sanitizedSelector))
+                .reduce(
+                    (newEntries, [key, value]) =>
+                        Object.assign({}, newEntries, {
+                            [options.envvars || format === 'envvars'
+                                ? key
+                                : key.replace(`${sanitizedSelector}.`, '')]: value,
+                        }),
+                    {}
+                );
+        }
+
+        if (options.envvars) {
+            return toEnvVars(entries);
+        }
+
+        const body = parseFlat(entries);
+
+        switch (format) {
+            case YAML:
+                return toYAML(body);
+            case JAVASCRIPT:
+                return toJavascript(body);
+            default:
+                return toJSON(body);
+        }
+    };
+
+    return { list, add, get, getAndFormat };
 };

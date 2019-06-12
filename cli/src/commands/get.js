@@ -1,6 +1,4 @@
 const minimist = require('minimist');
-const { parseFlat, toJSON, toYAML, toEnvVars, toJavascript } = require('../format');
-const { JSON, YAML, JAVASCRIPT } = require('../format/constants');
 
 const help = ui => {
     const { bold, cyan, dim } = ui.colors;
@@ -15,7 +13,7 @@ ${bold('SYNOPSIS')}
 ${bold('OPTIONS')}
         <environment>   Name of the environment (must already exist in project)
         <selector>      Get only a subset of the config (dot separated)
-        --json          Output the configuration as a JSON file (default)
+        --json          Output the configuration as a JSON file
         --envvars       Output the configuration as a sourceable bash file
         --yml           Output the configuration as a YAML file
         --js            Output the configuration as a JavaScript script
@@ -61,65 +59,15 @@ Type ${green('comfy get --help')} for details`);
             return ui.exit(0);
         }
 
-        const project = yield modules.project.retrieveFromConfig();
-        const config = yield modules.config.get(project, env, {
-            configName: 'default',
-            tag,
-            hash,
-        });
-
         if ([options.json, options.yml, options.js].filter(x => x).length > 1) {
             ui.error(`${red('You need to chose either --json, --yml or --js')}`);
             help(ui, 1);
         }
 
-        let format = config.defaultFormat;
-        if (options.json) format = JSON;
-        if (options.yml) format = YAML;
-        if (options.js) format = JAVASCRIPT;
+        const project = yield modules.project.retrieveFromConfig();
 
-        let entries = config.body;
-        if (selector) {
-            const sanitizedSelector = selector.toLowerCase();
-            const entry = entries[sanitizedSelector] || entries[selector];
+        const output = yield modules.config.getAndFormat(project, env, hash || tag, selector, options);
 
-            if (entry) {
-                // @TODO Support subset getter for nested entries
-                ui.print(entry);
-                return ui.exit();
-            }
-
-            entries = Object.entries(entries)
-                .map(([key, value]) => [key.toLowerCase(), value])
-                .filter(([key]) => key.startsWith(sanitizedSelector))
-                .reduce(
-                    (newEntries, [key, value]) =>
-                        Object.assign({}, newEntries, {
-                            [options.envvars || format === 'envvars'
-                                ? key
-                                : key.replace(`${sanitizedSelector}.`, '')]: value,
-                        }),
-                    {}
-                );
-        }
-
-        if (options.envvars) {
-            ui.print(toEnvVars(entries));
-            ui.exit();
-        }
-
-        const body = parseFlat(entries);
-
-        switch (format) {
-            case YAML:
-                ui.print(toYAML(body));
-                break;
-            case JAVASCRIPT:
-                ui.print(toJavascript(body));
-                break;
-            default:
-                ui.print(toJSON(body));
-        }
-
-        return ui.exit();
+        ui.print(output);
+        ui.exit();
     };
