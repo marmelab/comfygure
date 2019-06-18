@@ -14,11 +14,12 @@ ${bold('COMMANDS')}
         setall      Add a new configuration version
         set         Replace a single entry in an existing configuration
         get         Retrieve a configuration
+        diff        Diff two configuration versions
         env         Manage configuration environments
         tag         Manage configuration tags
         log         List all configuration versions
         project     Manage the current project
-        version     Output version information and exit
+        version     Output CLI version information and exit
 
 ${bold('EXAMPLES')}
         ${dim('# Display the help')}
@@ -35,6 +36,8 @@ ${bold('EXAMPLES')}
         ${cyan('comfy log production')}
         ${dim('# Retrieve the latest development configuration and use it to set env vars')}
         ${cyan('comfy get development --envvars | source /dev/stdin')}
+        ${dim('# Diff from your latest version to the stable one')}
+        ${cyan('comfy diff development stable')}
 
 ${bold('ABOUT')}
         ${bold('comfy')} is licensed under the MIT Licence, sponsored and supported by marmelab.
