@@ -14,7 +14,7 @@ ${bold('SYNOPSIS')}
 
 ${bold('OPTIONS')}
         <environment>   Name of the environment (must already exist in project)
-        <hash>          Hash or tag of your configuration to diff it
+        <hash|tag>      Hash or tag of your configuration to diff it
         --json          Output the configurations as a JSON file
         --envvars       Output the configurations as a sourceable bash file
         --yml           Output the configurations as a YAML file
