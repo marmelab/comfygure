@@ -26,7 +26,7 @@ ${bold('EXAMPLES')}
         ${dim('# Diff from the latest version to the `stable` one')}
         ${cyan('comfy diff development stable')}
         ${dim('# Diff from one version to another')}
-        ${cyan('comfy diff development ')}
+        ${cyan('comfy diff development stable latest')}
 `);
 };
 
