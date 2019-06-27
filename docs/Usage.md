@@ -17,13 +17,13 @@ Configuration saved locally in .comfy/config
 comfy project successfully created
 ```
 
-By default, the `comfy` command stores encrypted data in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](./HostYourOwn.html#host-your-own-comfy-server).
+By default, the `comfy` command stores encrypted data in the `comfy.marmelab.com` server. To host your own comfy server, see [the related documentation](./HostYourOwn.html).
 
 ### `.comfy/` Folder
 
-The initialization creates:
+The initialization command creates:
 
--   A `.comfy/config` file containing all identification and credentials about the current project, to allow synchronization with the comfygure server
+-   A `.comfy/config` file containing all identification and credentials about the current project, in order to sync with the comfygure origin server
 -   A new line on your `.gitignore` in order to avoid committing this file (if a `.git` folder is found in the current folder)
 
 Here is how the comfygure config file looks like.
@@ -34,7 +34,7 @@ Here is how the comfygure config file looks like.
 [project]
 # Your project ID to identify your project, useful to debug
 projectId=1111111111-1111-1111-1111-1111111111111
-# Your credentials to access to the comfy server
+# Your credentials to access to the comfy origin server
 accessKey=XXXXXXXXXXXXXXXX
 secretToken=YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
 # The comfy server URI
@@ -91,9 +91,17 @@ In order to add a new version of the settings, you have to use the `setall` comm
 comfy configuration successfully saved
 ```
 
-## Retrieving Settings
+Or your can use the `set` command to add or update a single entry in your config:
 
-To retrieve the settings for an app, use `comfy get`:
+```
+> comfy set development version "0.1"
+> comfy get development version
+0.1
+```
+
+## Retrieving Configuration
+
+To retrieve a configuration, use `comfy get`:
 
 ```bash
 > comfy get development
@@ -103,7 +111,7 @@ To retrieve the settings for an app, use `comfy get`:
 }
 ```
 
-Optionally, you can format the settings as a YAML, or as environment variables:
+Optionally, you can format the configuration as a YAML, or as environment variables:
 
 ```bash
 > comfy get development --yml
@@ -146,7 +154,24 @@ The `.comfy/config` file is convenient for tests and development, but not for re
 
 To this end, if comfy doesn't find `.comfy/config` from the current folder, it looks for the credentials in environment variables.
 
-So for example, provided you have the following `.comfy/config` file:
+Instructions to retrieve your configurations from a remote server are available by running `comfy project deploy`.
+
+```
+> comfy project deploy
+Here are the instructions to install comfy on an remote server:
+
+    1. Install comfygure
+    2. Export the following environment variable
+    3. Retrieve your config in the format of your choice
+
+    npm install -g comfygure
+    export COMFY_CREDENTIALS=<TOKEN>
+    comfy get production --json
+```
+
+The `COMFY_CREDENTIALS` environment variable is generated using your credentials in `.comfy/config`. It contains your comfy credentials in a JSON string encoded in base64, is is not encrypted. **Do not share this token.**
+
+Alternatively, you can specify all environment variable one by one, if you need to fine tune your comfy CLI. Say, you have the following `.comfy/config` file:
 
 ```ini
 [project]
@@ -161,6 +186,7 @@ hmacKey=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 You can specify the following environment variables to replace it:
 
 ```bash
+# All of these are included in COMFY_CREDENTIALS
 export COMFY_PROJECT_ID=1111111111-1111-1111-1111-1111111111111;
 export COMFY_ACCESS_KEY=XXXXXXXXXXXXXXXX;
 export COMFY_SECRET_TOKEN=YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY;
@@ -171,4 +197,4 @@ export COMFY_HMAC_KEY=yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 comfy get production
 ```
 
-Set these environment variables in your CI configuration, code builder, or any continuous delivery system to let them use your settings. The advantage is that you only have to do it once.
+Set the environment variable(s) in your CI configuration, code builder, or any continuous delivery system to let them use your configurations.
