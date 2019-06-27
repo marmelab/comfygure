@@ -12,10 +12,12 @@ ${bold('SYNOPSIS')}
 
 ${bold('COMMANDS')}
         info            Display available infos of the current project
+        deploy          Show instructions to deploy your configurations on a server
         delete          Permanently delete the current project from the store
 
 ${bold('EXAMPLES')}
         ${cyan('comfy project info')}
+        ${cyan('comfy project deploy')}
         ${cyan('comfy project delete')}
 `);
 };
@@ -32,6 +34,27 @@ const info = function*(ui, modules) {
         ['Config. File', path],
         ['API Access Key', project.accessKey],
     ]);
+};
+
+const deploy = (ui, modules) => {
+    const { CREDENTIALS_VARIABLE, toEncodedCredentials } = modules.project;
+    const credentials = toEncodedCredentials();
+
+    const { dim } = ui.colors;
+
+    ui.print(
+        `Here are the instructions to install comfy on an remote server:
+
+    1. Install comfygure
+    2. Export the following environment variable
+    3. Retrieve your config in the format of your choice
+
+    ${dim('npm install -g comfygure')}
+    ${dim(`export ${CREDENTIALS_VARIABLE}=${credentials}`)}
+    ${dim('comfy get production --json')}
+`
+    );
+    ui.exit(0);
 };
 
 const del = function*(ui, modules, rawOptions) {
@@ -71,6 +94,9 @@ module.exports = (ui, modules) =>
             case 'i':
             case 'info':
                 yield info(ui, modules);
+                break;
+            case 'deploy':
+                deploy(ui, modules);
                 break;
             case 'delete':
                 yield del(ui, modules, options);
