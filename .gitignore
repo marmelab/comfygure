@@ -8,3 +8,7 @@ docs/_site/
 docs/.jekyll-metadata
 
 .comfy/config
+
+sonar-project.properties
+.scannerwork/
+.vscode/

@@ -5,7 +5,7 @@ describe('Commands', () => {
     beforeEach(createProject);
 
     describe('setall', () => {
-        it('should accept relative path for config', function*() {
+        it('should accept relative path for config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -15,7 +15,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(config);
         });
 
-        it('should accept absolute path for config', function*() {
+        it('should accept absolute path for config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -25,7 +25,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(config);
         });
 
-        it('should display a readable error if the environment does not exist', function*() {
+        it('should display a readable error if the environment does not exist', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -42,7 +42,7 @@ describe('Commands', () => {
     });
 
     describe('get', () => {
-        it('should display a readable error if the environment does not exist', function*() {
+        it('should display a readable error if the environment does not exist', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -58,7 +58,7 @@ describe('Commands', () => {
             expect('This command should fail').toBe(false);
         });
 
-        it('should be able to select a subset of the config', function*() {
+        it('should be able to select a subset of the config', function* () {
             const config = {
                 admin: 'Admin',
                 password: 'S3cret!',
@@ -90,7 +90,7 @@ describe('Commands', () => {
             expect(envvars.trim()).toBe("export NESTED_A_A='3';\nexport NESTED_A_B='4';");
         });
 
-        it('should be able to select a subset of the config with an uppercase selector', function*() {
+        it('should be able to select a subset of the config with an uppercase selector', function* () {
             const config = {
                 version: 3,
                 id: 'id',
@@ -109,7 +109,7 @@ describe('Commands', () => {
             expect(cipher).toBe('cipher\n');
         });
 
-        it('should get config with hash name', function*() {
+        it('should get config with hash name', function* () {
             const configV1 = { version: '1', login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(configV1)}' > test.json`);
@@ -134,7 +134,7 @@ describe('Commands', () => {
     });
 
     describe('set', () => {
-        it('should change the value of a direct entry of the config', function*() {
+        it('should change the value of a direct entry of the config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -150,7 +150,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(expectedConfig);
         });
 
-        it('should change the value of a subset of the config', function*() {
+        it('should change the value of a subset of the config', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -166,7 +166,7 @@ describe('Commands', () => {
             expect(JSON.parse(stdout)).toEqual(expectedConfig);
         });
 
-        it('should display a readable error if the environment does not exist', function*() {
+        it('should display a readable error if the environment does not exist', function* () {
             try {
                 yield run('comfy set donotexist login user');
             } catch (error) {
@@ -179,7 +179,7 @@ describe('Commands', () => {
     });
 
     describe('project', () => {
-        it('should allow to permanently delete the current project', function*() {
+        it('should allow to permanently delete the current project', function* () {
             const { stdout: warning } = yield run('comfy project delete');
             expect(warning).toContain('This action is irreversible');
 
@@ -209,13 +209,13 @@ describe('Commands', () => {
     const parseHash = line => line.split('\t')[2];
 
     describe('tag', () => {
-        it('should allow to list tags', function*() {
+        it('should allow to list tags', function* () {
             const { stdout } = yield run('comfy tag list development');
 
             expect(stdout).toContain('latest');
         });
 
-        it('should allow to create a new tag', function*() {
+        it('should allow to create a new tag', function* () {
             const { stdout: log } = yield run('comfy tag list development');
             const hash = parseHash(log);
 
@@ -226,7 +226,7 @@ describe('Commands', () => {
             expect(stdout).toContain(`${hash}\tlatest, newtag`);
         });
 
-        it('should allow to move an existing tag', function*() {
+        it('should allow to move an existing tag', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -249,7 +249,7 @@ describe('Commands', () => {
             expect(movedTag).toContain(`${secondHash}\tnewtag`);
         });
 
-        it('should not allow to move the `latest` tag', function*() {
+        it('should not allow to move the `latest` tag', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -270,7 +270,7 @@ describe('Commands', () => {
             expect(stdout).toContain(`${firstHash}\tlatest`);
         });
 
-        it('should allow to delete a tag', function*() {
+        it('should allow to delete a tag', function* () {
             const { stdout: log } = yield run('comfy tag list development');
             const hash = parseHash(log);
 
@@ -288,7 +288,7 @@ describe('Commands', () => {
             expect(stdout).not.toContain(`${hash}\tlatest, newtag`);
         });
 
-        it('should not allow to delete the `latest` tag', function*() {
+        it('should not allow to delete the `latest` tag', function* () {
             const { stdout: log } = yield run('comfy tag list development');
             const hash = parseHash(log);
             expect(log).toContain(`${hash}\tlatest`);
@@ -306,12 +306,12 @@ describe('Commands', () => {
     });
 
     describe('diff', () => {
-        it('should display a git-like diff between two configuration versions', function*() {
+        it('should display a git-like diff between two configuration versions', function* () {
             yield run(`echo '${JSON.stringify({ login: 'admin', password: 'S3cret' })}' > test.json`);
             yield run('comfy setall development test.json');
             yield run('comfy set development login user')
 
-            const { stdout, stderr } = yield run('comfy get development login');
+            const { stdout } = yield run('comfy get development login');
             expect(stdout).toEqual('user\n');
 
             const { stdout: history } = yield run('comfy log development');

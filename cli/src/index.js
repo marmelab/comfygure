@@ -54,7 +54,9 @@ const main = (ui, evt) => {
             tag: tagModuleFactory(client, ui),
         };
 
-        yield command(ui, modules)(request.arguments);
+        if (typeof command === 'function') {
+            yield command(ui, modules)(request.arguments);
+        }
     };
 };
 
