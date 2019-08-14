@@ -1,6 +1,6 @@
 {
     "name": "comfygure",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Encrypted and versioned configuration store built with collaboration in mind",
     "keywords": [
         "configuration",
