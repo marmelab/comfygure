@@ -1,7 +1,6 @@
 import rename from './rename';
 
 import environmentsQueries from '../../queries/environments';
-import { getProjectOr404 } from '../projects/get';
 import { getEnvironmentOr404 } from './get';
 
 jest.mock('../../queries/environments');

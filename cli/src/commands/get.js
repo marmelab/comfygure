@@ -61,7 +61,8 @@ Type ${green('comfy get --help')} for details`);
 
         if ([options.json, options.yml, options.js].filter(x => x).length > 1) {
             ui.error(`${red('You need to chose either --json, --yml or --js')}`);
-            help(ui, 1);
+            help(ui);
+            return ui.exit(1);
         }
 
         const project = yield modules.project.retrieveFromConfig();

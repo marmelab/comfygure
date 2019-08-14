@@ -2,13 +2,12 @@ import co from 'co';
 import logger from '../../logger';
 import config from '../../config';
 
-import { HttpError, convertErrorToHttpError } from './errors';
-import { NotFoundError } from '../../domain/errors';
+import { convertErrorToHttpError } from './errors';
 
 export default handler => {
     if (!!process.env.SERVERLESS) {
         return (event, context) => {
-            co(function*() {
+            co(function* () {
                 const body = yield handler({
                     ...event,
                     body: event.body ? JSON.parse(event.body) : null
