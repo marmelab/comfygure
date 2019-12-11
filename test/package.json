@@ -3,9 +3,9 @@
   "private": true,
   "devDependencies": {
     "co-mocha": "^1.2.2",
-    "expect": "^24.8.0",
+    "expect": "^24.9.0",
     "js-yaml": "^3.13.1",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.2",
     "pm2": "^3.5.1"
   }
 }
