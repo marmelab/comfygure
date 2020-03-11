@@ -43,3 +43,6 @@ test-watch: setup-test
 		./setup.js \
 		'./specs/**/*.js'
 	make teardown-test
+
+logs:
+	./node_modules/.bin/pm2 logs
