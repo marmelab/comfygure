@@ -3,12 +3,17 @@ DATABASE ?= comfy
 
 export PGUSER ?= postgres
 export PGHOST ?= localhost
+export PGPASSWORD ?= password
 
 install:
 	npm i
 
 install-db:
-	docker run --name comfy-db -p 5432:5432 -d postgres:9.6
+	docker run \
+		-e POSTGRES_PASSWORD=${PGPASSWORD} \
+		--name comfy-db \
+		-p 5432:5432 \
+		-d postgres:9.6
 	sleep 5s
 	psql -c "CREATE DATABASE ${DATABASE}"
 	psql -h localhost -U postgres -d comfy -f ./var/schema.sql
