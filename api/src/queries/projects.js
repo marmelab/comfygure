@@ -1,4 +1,4 @@
-import knex from "./knex";
+import knex, { findOne, insertOne, updateOne } from "./knex";
 
 const table = "project";
 
@@ -9,32 +9,6 @@ const fields = [
   "read_token as readToken",
   "write_token as writeToken"
 ];
-
-const findOne = async id => {
-  const results = await knex
-    .select(fields)
-    .from(table)
-    .where({ id });
-
-  return results[0];
-};
-
-const insertOne = async project => {
-  const results = await knex(table)
-    .insert(project)
-    .returning(fields);
-
-  return results[0];
-};
-
-const updateOne = async (id, project) => {
-  const results = await knex(table)
-    .where({ id })
-    .update(project)
-    .returning(fields);
-
-  return results[0];
-};
 
 const findFromIdAndToken = async (id, token) => {
   const results = await knex
@@ -52,8 +26,8 @@ const findFromIdAndToken = async (id, token) => {
 };
 
 export default {
-  findOne,
-  insertOne,
-  updateOne,
+  findOne: findOne(table, fields),
+  insertOne: insertOne(table, fields),
+  updateOne: updateOne(table, fields),
   findFromIdAndToken
 };
