@@ -5,11 +5,11 @@ install:
 	npm install
 
 run-test-api:
-	if [ "${CI}" = "false" ]; then \
-		echo 'Starting test database...'; \
-		cd ../api && make install-db; \
-		cd ../api && make start-db; \
-	fi
+ifeq (${CI},false)
+	echo 'Starting test database...'
+	-cd ../api && make install-db
+	cd ../api && make start-db
+endif
 	@echo 'Starting test API...'
 	./node_modules/.bin/pm2 start pm2_configuration.json
 	@echo 'Waiting for webpack...'
