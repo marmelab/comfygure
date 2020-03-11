@@ -1,85 +1,57 @@
-import { crudQueries } from 'co-postgres-queries';
+import { raw } from "knex";
+import client, { insertOne } from "./knex";
 
-import db from './db';
+const table = "version";
+const fields = ["id", "configuration_id", "hash", "previous", "created_at"];
 
-const query = crudQueries(
-    'version',
-    ['id', 'configuration_id', 'hash', 'previous'],
-    ['id'],
-    ['id', 'configuration_id', 'hash', 'previous', 'created_at']
-);
+const prefix = pre => str => `${pre}.${str}`;
 
-query.selectPage = query.selectPage
-    .table('version LEFT JOIN tag on (version.id = tag.version_id)')
-    .searchableFields(['version.configuration_id', 'hash'])
-    .returnFields([
-        'version.id',
-        'hash',
-        'previous',
-        'version.configuration_id',
-        "case when count(tag.name) = 0 then '[]' else json_agg(tag.name) end as tags",
-        'version.created_at'
+const selectVersions = async (whereConditions, single = true) => {
+  const versions = await client
+    .select([
+      ...fields.map(prefix(table)),
+      raw(
+        "case when count(tag.name) = 0 then '[]' else json_agg(tag.name) end as tags"
+      )
     ])
-    .groupByFields(['version.id', 'version.hash', 'version.previous']);
+    .leftJoin("tag", "tag.version_id", "version.id")
+    .from(table)
+    .where(whereConditions)
+    .groupBy(fields.map(prefix(table)));
 
-const findOne = async version => {
-    const client = await db.link(query);
-    const result = await client.selectOne(version);
-    client.release();
+  if (single) {
+    return versions[0];
+  }
 
-    return result;
+  return versions;
 };
 
-const insertOne = async version => {
-    const client = await db.link(query);
-    const result = await client.insertOne(version);
-    client.release();
+const findOne = async id => selectVersions({ "version.id": id });
 
-    return result;
-};
+const find = async configurationId =>
+  selectVersions(
+    {
+      "version.configuration_id": configurationId
+    },
+    false
+  );
 
-const find = async configurationId => {
-    const client = await db.link(query);
-    const result = await client.selectPage(undefined, undefined, {
-        'version.configuration_id': configurationId
-    });
-    client.release();
+const findOneByHash = async (configurationId, hash) =>
+  selectVersions({
+    "version.configuration_id": configurationId,
+    "version.hash": hash
+  });
 
-    return result;
-};
-
-const findOneByHash = async (configurationId, hash) => {
-    const client = await db.link(query);
-    const result = await client.selectPage(undefined, undefined, {
-        'version.configuration_id': configurationId,
-        hash
-    });
-    client.release();
-
-    if (!result.length) {
-        return null;
-    }
-    return result[0];
-};
-
-const findOneByTag = async (configurationId, tagId) => {
-    const client = await db.link(query);
-    const result = await client.selectPage(undefined, undefined, {
-        'version.configuration_id': configurationId,
-        'tag.id': tagId
-    });
-    client.release();
-
-    if (!result.length) {
-        return null;
-    }
-    return result[0];
-};
+const findOneByTag = async (configurationId, tagId) =>
+  selectVersions({
+    "version.configuration_id": configurationId,
+    "tag.id": tagId
+  });
 
 export default {
-    findOne,
-    insertOne,
-    find,
-    findOneByHash,
-    findOneByTag
+  findOne,
+  insertOne: insertOne(table, fields),
+  find,
+  findOneByHash,
+  findOneByTag
 };
