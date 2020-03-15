@@ -9,7 +9,7 @@ const updateOne = async (tag, { version_id: newVersionId }) => {
     .update({ version_id: newVersionId })
     .returning(fields);
 
-  return results[0];
+  return results[0]; // Cannot chain .first() on "update" query
 };
 
 const removeOne = async tag => {
@@ -18,7 +18,7 @@ const removeOne = async tag => {
     .del()
     .returning(fields);
 
-  return results[0];
+  return results[0]; // Cannot chain .first() on "del" query
 };
 
 const batchInsert = async tags =>
@@ -26,14 +26,12 @@ const batchInsert = async tags =>
     .insert(tags)
     .returning(fields);
 
-const findOne = async (configurationId, tagName) => {
-  const results = await client
+const findOne = async (configurationId, tagName) =>
+  client
     .select(fields)
     .from(table)
-    .where({ configuration_id: configurationId, name: tagName });
-
-  return results[0];
-};
+    .where({ configuration_id: configurationId, name: tagName })
+    .first();
 
 export default {
   updateOne,

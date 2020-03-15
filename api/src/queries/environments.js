@@ -3,18 +3,16 @@ import client, { insertOne, updateOne } from "./knex";
 const table = "environment";
 const fields = ["id", "name"];
 
-const findOne = async (projectId, environmentName) => {
-  const results = await client
+const findOne = async (projectId, environmentName) =>
+  client
     .select(fields)
     .from(table)
     .where({
       project_id: projectId,
       state: "live",
       name: environmentName
-    });
-
-  return results[0];
-};
+    })
+    .first();
 
 const selectByProject = async projectId => {
   const environments = await client

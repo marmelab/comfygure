@@ -17,8 +17,8 @@ const fields = [
   "environment.project_id as project_id"
 ];
 
-const findOne = async (projectId, environmentName, configurationName) => {
-  const results = await client
+const findOne = async (projectId, environmentName, configurationName) =>
+  client
     .select(fields)
     .from(table)
     .innerJoin("environment", "environment.id", "configuration.environment_id")
@@ -27,10 +27,8 @@ const findOne = async (projectId, environmentName, configurationName) => {
       "environment.name": environmentName,
       "configuration.name": configurationName,
       "configuration.state": "live"
-    });
-
-  return results[0];
-};
+    })
+    .first();
 
 const findAllByEnvironmentName = async (projectId, environmentName) =>
   client
@@ -46,15 +44,14 @@ const findAllByEnvironmentName = async (projectId, environmentName) =>
 const insertOne = async data => {
   const { id } = await insertOneQuery(table, ["id"])(data);
 
-  const results = await client
+  return client
     .select(fields)
     .from(table)
     .innerJoin("environment", "environment.id", "configuration.environment_id")
     .where({
       "configuration.id": id
-    });
-
-  return results[0];
+    })
+    .first();
 };
 
 const updateOne = async (id, data) => {
@@ -63,15 +60,14 @@ const updateOne = async (id, data) => {
     omit(data, ["project_id", "environment_name"])
   );
 
-  const results = await client
+  return client
     .select(fields)
     .from(table)
     .innerJoin("environment", "environment.id", "configuration.environment_id")
     .where({
       "configuration.id": id
-    });
-
-  return results[0];
+    })
+    .first();
 };
 
 export default {

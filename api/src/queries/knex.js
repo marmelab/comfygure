@@ -8,25 +8,19 @@ const client = knex({
   pool: config.db.pooling
 });
 
-export const findOne = (
-  table,
-  fields,
-  primaryKey = "id"
-) => async identifier => {
-  const results = await client
+export const findOne = (table, fields, primaryKey = "id") => async identifier =>
+  client
     .select(fields)
     .from(table)
-    .where({ [primaryKey]: identifier });
-
-  return results[0];
-};
+    .where({ [primaryKey]: identifier })
+    .first();
 
 export const insertOne = (table, fields) => async row => {
   const results = await client(table)
     .insert(row)
     .returning(fields);
 
-  return results[0];
+  return results[0]; // Cannot chain .first() on "insert" query
 };
 
 export const updateOne = (table, fields, primaryKey = "id") => async (
@@ -38,7 +32,7 @@ export const updateOne = (table, fields, primaryKey = "id") => async (
     .update(row)
     .returning(fields);
 
-  return results[0];
+  return results[0]; // Cannot chain .first() on "update" query
 };
 
 export default client;

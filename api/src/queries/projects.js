@@ -1,4 +1,4 @@
-import knex, { findOne, insertOne, updateOne } from "./knex";
+import client, { findOne, insertOne, updateOne } from "./knex";
 
 const table = "project";
 
@@ -10,8 +10,8 @@ const fields = [
   "write_token as writeToken"
 ];
 
-const findFromIdAndToken = async (id, token) => {
-  const results = await knex
+const findFromIdAndToken = async (id, token) =>
+  client
     .select(fields)
     .from(table)
     .where({
@@ -20,10 +20,8 @@ const findFromIdAndToken = async (id, token) => {
     })
     .andWhere(function() {
       return this.where({ write_token: token }).orWhere({ read_token: token });
-    });
-
-  return results[0];
-};
+    })
+    .first();
 
 export default {
   findOne: findOne(table, fields),
