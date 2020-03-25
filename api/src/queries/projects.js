@@ -1,76 +1,31 @@
-import { crudQueries } from 'co-postgres-queries';
+import client, { findOne, insertOne, updateOne } from "./knex";
 
-import db from './db';
+const table = "project";
 
-const table = 'project';
-
-const readFields = [
-    'id',
-    'name',
-    'access_key as "accessKey"',
-    'read_token as "readToken"',
-    'write_token as "writeToken"',
+const fields = [
+  "id",
+  "name",
+  "access_key as accessKey",
+  "read_token as readToken",
+  "write_token as writeToken"
 ];
 
-const query = crudQueries(
-    table,
-    ['name', 'state', 'access_key', 'read_token', 'write_token'],
-    ['id'],
-    readFields,
-);
-
-const findOne = async (id) => {
-    const client = await db.link(query);
-    const result = await client.selectPage(undefined, undefined, { id });
-    client.release();
-
-    if (!result.length) {
-        return null;
-    }
-    return result[0];
-};
-
-const insertOne = async (project) => {
-    const client = await db.link(query);
-    const result = await client.insertOne(project);
-    client.release();
-
-    return result;
-};
-
-const updateOne = async (id, project) => {
-    const client = await db.link(query);
-    const result = await client.updateOne(id, project);
-    client.release();
-
-    return result;
-};
-
-const findFromIdAndToken = async (id, token) => {
-    const client = await db.link(query);
-    const result = await client.query({
-        sql: `
-            SELECT ${readFields.join(', ')}
-            FROM ${table}
-            WHERE
-                state = 'live'
-                AND id = $id
-                AND (write_token = $token OR read_token = $token)
-        `,
-        parameters: { id, token },
-    });
-    client.release();
-
-    if (!result.length) {
-        return null;
-    }
-
-    return result[0];
-};
+const findFromIdAndToken = async (id, token) =>
+  client
+    .select(fields)
+    .from(table)
+    .where({
+      id,
+      state: "live"
+    })
+    .andWhere(function() {
+      return this.where({ write_token: token }).orWhere({ read_token: token });
+    })
+    .first();
 
 export default {
-    findOne,
-    insertOne,
-    updateOne,
-    findFromIdAndToken,
+  findOne: findOne(table, fields),
+  insertOne: insertOne(table, fields),
+  updateOne: updateOne(table, fields),
+  findFromIdAndToken
 };

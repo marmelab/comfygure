@@ -5,7 +5,7 @@ describe('Basic Usages', () => {
     beforeEach(createProject);
 
     describe('accessors', () => {
-        it('should be able to add and read a basic JSON file', function*() {
+        it('should be able to add and read a basic JSON file', function* () {
             const config = { login: 'admin', password: 'S3cret' };
 
             yield run(`echo '${JSON.stringify(config)}' > test.json`);
@@ -15,7 +15,7 @@ describe('Basic Usages', () => {
             expect(JSON.parse(stdout)).toEqual(config);
         });
 
-        it('should retrieve the latest version by default', function*() {
+        it('should retrieve the latest version by default', function* () {
             const config = { login: 'admin', password: 'S3cret' };
             const latestConfig = { login: 'admin' };
 
@@ -32,7 +32,7 @@ describe('Basic Usages', () => {
             expect(JSON.parse(latestStdout)).toEqual(latestConfig);
         });
 
-        it('should keep the default format of guessed by the file extension', function*() {
+        it('should keep the default format of guessed by the file extension', function* () {
             const config = 'login: admin';
 
             yield run(`echo '${config}' > test.yml`);
@@ -44,13 +44,13 @@ describe('Basic Usages', () => {
     });
 
     describe('environments', () => {
-        it('should be able to list environments', function*() {
+        it('should be able to list environments', function* () {
             const { stdout } = yield run('comfy env ls');
 
             expect(stdout).toContain('development');
         });
 
-        it('should be able to create an environment', function*() {
+        it('should be able to create an environment', function* () {
             yield run('comfy env add production');
             const { stdout } = yield run('comfy env ls');
 
@@ -60,7 +60,7 @@ describe('Basic Usages', () => {
     });
 
     describe('log', () => {
-        it('should be able to list all config versions for a given environment', function*() {
+        it('should be able to list all config versions for a given environment', function* () {
             const { stdout } = yield run('comfy log development');
 
             const lines = stdout.trim().split('\n');

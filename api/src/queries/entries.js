@@ -1,31 +1,15 @@
-import { crudQueries } from 'co-postgres-queries';
+import client, { insertOne } from "./knex";
 
-import db from './db';
+const table = "entry";
+const fields = ["version_id", "key", "value"];
 
-const query = crudQueries(
-    'entry',
-    ['version_id', 'key', 'value'],
-    ['version_id', 'key'],
-    ['version_id', 'key', 'value'],
-);
-
-const insertOne = async (entry) => {
-    const client = await db.link(query);
-    const result = await client.insertOne(entry);
-    client.release();
-
-    return result;
-};
-
-const findByVersion = async (versionId) => {
-    const client = await db.link(query);
-    const result = await client.selectPage(undefined, undefined, { version_id: versionId });
-    client.release();
-
-    return result;
-};
+const findByVersion = async version_id =>
+  client
+    .select(fields)
+    .from(table)
+    .where({ version_id });
 
 export default {
-    insertOne,
-    findByVersion,
+  insertOne: insertOne(table, fields),
+  findByVersion
 };
