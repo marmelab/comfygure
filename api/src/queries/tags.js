@@ -12,19 +12,14 @@ const updateOne = async (tag, { version_id: newVersionId }) => {
   return results[0]; // Cannot chain .first() on "update" query
 };
 
-const removeOne = async tag => {
-  const results = await client(table)
-    .where(tag)
-    .del()
-    .returning(fields);
+const removeOne = async (tag) => {
+  const results = await client(table).where(tag).del().returning(fields);
 
   return results[0]; // Cannot chain .first() on "del" query
 };
 
-const batchInsert = async tags =>
-  client(table)
-    .insert(tags)
-    .returning(fields);
+const batchInsert = async (tags) =>
+  client(table).insert(tags).returning(fields);
 
 const findOne = async (configurationId, tagName) =>
   client
@@ -38,5 +33,5 @@ export default {
   insertOne: insertOne(table, fields),
   removeOne,
   batchInsert,
-  findOne
+  findOne,
 };

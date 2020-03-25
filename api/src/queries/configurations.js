@@ -1,7 +1,7 @@
 import omit from "lodash.omit";
 import client, {
   insertOne as insertOneQuery,
-  updateOne as updateOneQuery
+  updateOne as updateOneQuery,
 } from "./knex";
 
 const table = "configuration";
@@ -14,7 +14,7 @@ const fields = [
   "configuration.created_at",
   "configuration.updated_at",
   "environment.name as environment_name",
-  "environment.project_id as project_id"
+  "environment.project_id as project_id",
 ];
 
 const findOne = async (projectId, environmentName, configurationName) =>
@@ -26,7 +26,7 @@ const findOne = async (projectId, environmentName, configurationName) =>
       project_id: projectId,
       "environment.name": environmentName,
       "configuration.name": configurationName,
-      "configuration.state": "live"
+      "configuration.state": "live",
     })
     .first();
 
@@ -38,10 +38,10 @@ const findAllByEnvironmentName = async (projectId, environmentName) =>
     .where({
       project_id: projectId,
       "environment.name": environmentName,
-      "configuration.state": "live"
+      "configuration.state": "live",
     });
 
-const insertOne = async data => {
+const insertOne = async (data) => {
   const { id } = await insertOneQuery(table, ["id"])(data);
 
   return client
@@ -49,7 +49,7 @@ const insertOne = async data => {
     .from(table)
     .innerJoin("environment", "environment.id", "configuration.environment_id")
     .where({
-      "configuration.id": id
+      "configuration.id": id,
     })
     .first();
 };
@@ -65,7 +65,7 @@ const updateOne = async (id, data) => {
     .from(table)
     .innerJoin("environment", "environment.id", "configuration.environment_id")
     .where({
-      "configuration.id": id
+      "configuration.id": id,
     })
     .first();
 };
@@ -74,5 +74,5 @@ export default {
   findOne,
   findAllByEnvironmentName,
   insertOne,
-  updateOne
+  updateOne,
 };

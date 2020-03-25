@@ -1,9 +1,5 @@
-const ENVVARS = 'envvars';
-const JSON = 'json';
-const YAML = 'yaml';
+const ENVVARS = "envvars";
+const JSON = "json";
+const YAML = "yaml";
 
-export {
-    ENVVARS,
-    JSON,
-    YAML,
-};
+export { ENVVARS, JSON, YAML };
