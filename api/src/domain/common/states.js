@@ -1,7 +1,4 @@
-const LIVE = 'live';
-const ARCHIVED = 'archived';
+const LIVE = "live";
+const ARCHIVED = "archived";
 
-export {
-    LIVE,
-    ARCHIVED,
-};
+export { LIVE, ARCHIVED };

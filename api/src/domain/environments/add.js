@@ -15,25 +15,25 @@ export default async (projectId, environmentName, configName = "default") => {
   const environment = await environmentsQueries.insertOne({
     name: environmentName,
     project_id: projectId,
-    state: LIVE
+    state: LIVE,
   });
 
   const configuration = await configurationsQueries.insertOne({
     environment_id: environment.id,
     name: configName,
-    default_format: ENVVARS
+    default_format: ENVVARS,
   });
 
   const version = await versionsQueries.insertOne({
     configuration_id: configuration.id,
     hash: hash({ previous: null }),
-    previous: null
+    previous: null,
   });
 
   await addTag(configuration.id, version.id, "latest");
 
   return {
     ...environment,
-    configurations: [configuration]
+    configurations: [configuration],
   };
 };

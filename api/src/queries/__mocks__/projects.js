@@ -1,5 +1,5 @@
-const findOne = jest.fn(id => Promise.resolve({ id }));
+const findOne = jest.fn((id) => Promise.resolve({ id }));
 
 export default {
-    findOne,
+  findOne,
 };
