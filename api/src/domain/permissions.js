@@ -1,7 +1,7 @@
 import tokenQueries from "../queries/tokens";
 
 export const checkPermission = async (projectId, tokenKey, level) => {
-  const token = await tokenQueries.findFromKeyAndProjectId(projectId, tokenKey);
+  const token = await tokenQueries.findValidTokenByKey(projectId, tokenKey);
 
   if (!token) {
     throw new Error("Project ID or token is invalid.");

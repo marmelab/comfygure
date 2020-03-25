@@ -13,7 +13,16 @@ const fields = [
   "updated_at"
 ];
 
-const findFromKeyAndProjectId = async (project_id, key) =>
+const findByProjectId = async project_id =>
+  client
+    .select(fields)
+    .from(table)
+    .where({
+      project_id
+    })
+    .orderBy("created_at");
+
+const findValidTokenByKey = async (project_id, key) =>
   client
     .select(fields)
     .from(table)
@@ -30,6 +39,7 @@ const findFromKeyAndProjectId = async (project_id, key) =>
     .first();
 
 export default {
-  findFromKeyAndProjectId,
+  findByProjectId,
+  findValidTokenByKey,
   insertOne: insertOne(table, [...fields, "key"])
 };
