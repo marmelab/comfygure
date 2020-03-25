@@ -1,14 +1,9 @@
 import client, { findOne, insertOne, updateOne } from "./knex";
+import { LIVE } from "../domain/common/states";
 
 const table = "project";
 
-const fields = [
-  "id",
-  "name",
-  "access_key as accessKey",
-  "read_token as readToken",
-  "write_token as writeToken",
-];
+const fields = ["id", "name", "access_key as accessKey"];
 
 const findFromIdAndToken = async (id, token) =>
   client
@@ -16,9 +11,9 @@ const findFromIdAndToken = async (id, token) =>
     .from(table)
     .where({
       id,
-      state: "live",
+      state: LIVE
     })
-    .andWhere(function () {
+    .andWhere(function() {
       return this.where({ write_token: token }).orWhere({ read_token: token });
     })
     .first();
@@ -27,5 +22,5 @@ export default {
   findOne: findOne(table, fields),
   insertOne: insertOne(table, fields),
   updateOne: updateOne(table, fields),
-  findFromIdAndToken,
+  findFromIdAndToken
 };
