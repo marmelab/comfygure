@@ -37,7 +37,7 @@ test: setup-test
 		'./specs/**/*.js'
 	make teardown-test
 
-test-watch: setup-test
+test-watch:
 	@echo 'Starting test suite...'
 	./node_modules/.bin/mocha --require co-mocha --watch \
 		./setup.js \

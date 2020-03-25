@@ -39,7 +39,6 @@ export default async (
     configurationName
   );
 
-  // p.id, 'read_only', 'read', p.read_token, NULL
   const [writeToken, readToken] = await Promise.all([
     tokenQueries.insertOne({
       project_id: project.id,
