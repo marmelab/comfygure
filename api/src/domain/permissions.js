@@ -1,9 +1,9 @@
-import projectQueries from "../queries/projects";
+import tokenQueries from "../queries/tokens";
 
-export const checkPermission = async (projectId, token, level) => {
-  const project = await projectQueries.findFromIdAndToken(projectId, token);
+export const checkPermission = async (projectId, tokenKey, level) => {
+  const token = await tokenQueries.findFromKeyAndProjectId(projectId, tokenKey);
 
-  if (!project) {
+  if (!token) {
     throw new Error("Project ID or token is invalid.");
   }
 
@@ -11,12 +11,10 @@ export const checkPermission = async (projectId, token, level) => {
 
   switch (level) {
     case "write":
-      permissionIsValid = token === project.writeToken;
+      permissionIsValid = token.level === "write";
       break;
     case "read":
-      // TODO (Kevin): Find out why `.includes` doesn't work here
-      permissionIsValid =
-        [project.writeToken, project.readToken].indexOf(token) !== -1;
+      permissionIsValid = ["write", "read"].includes(token.level);
       break;
     default:
       throw new Error(`Level "${level}" doesn't exists.`);
