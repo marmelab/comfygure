@@ -1,5 +1,5 @@
 import config from "../../config";
-import { NotFoundError } from "../../domain/errors";
+import { NotFoundError, ValidationError } from "../../domain/errors";
 
 export class HttpError extends Error {
   constructor(statusCode = 500, message = "An error occured", details = null) {
@@ -24,6 +24,10 @@ export const convertErrorToHttpError = (error) => {
 
   if (error instanceof NotFoundError) {
     return new HttpError(404, error.message, error.details);
+  }
+
+  if (error instanceof ValidationError) {
+    return new HttpError(400, error.message, error.details);
   }
 
   return new HttpError(

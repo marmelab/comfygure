@@ -39,10 +39,10 @@ test: setup-test
 
 test-watch:
 	@echo 'Starting test suite...'
-	./node_modules/.bin/mocha --require co-mocha --watch \
+	./node_modules/.bin/mocha --timeout 5000 --require co-mocha --watch \
 		./setup.js \
 		'./specs/**/*.js'
 	make teardown-test
 
 logs:
-	./node_modules/.bin/pm2 logs
+	./node_modules/.bin/pm2 logs -f

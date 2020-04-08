@@ -234,6 +234,12 @@ ALTER TABLE ONLY public.token
 ALTER TABLE ONLY public.token
     ADD CONSTRAINT token_project_id_key_key UNIQUE (project_id, key);
 
+--
+-- Name: token token_project_id_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.token
+    ADD CONSTRAINT token_project_id_name_key UNIQUE (project_id, name);
 
 --
 -- Name: tag unique_tag; Type: CONSTRAINT; Schema: public; Owner: -
