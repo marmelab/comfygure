@@ -160,6 +160,15 @@ functions:
           path: projects/{id}/tokens
           cors: true
 
+  tokenAdd:
+    handler: src/handlers/tokens.create
+    description: Add a new token
+    events:
+      - http:
+          method: POST
+          path: projects/{id}/tokens
+          cors: true
+
 plugins:
   - serverless-webpack
   - serverless-offline

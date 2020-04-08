@@ -4,6 +4,7 @@ import {
   parseAuthorizationToken,
 } from "./utils/authorization";
 import getTokens from "../domain/tokens/get";
+import addToken from "../domain/tokens/add";
 
 export const get = λ(async (event) => {
   const { id: projectId } = event.pathParameters || {};
@@ -18,4 +19,17 @@ export const get = λ(async (event) => {
     Object.keys(event.queryStringParameters).includes("all");
 
   return getTokens(projectId, all);
+});
+
+export const create = λ(async (event) => {
+  const { id: projectId } = event.pathParameters;
+  const { name, level, expiresInDays } = event.body;
+
+  await checkAuthorizationOr403(
+    parseAuthorizationToken(event),
+    projectId,
+    "write"
+  );
+
+  return addToken(projectId, name, level, expiresInDays);
 });

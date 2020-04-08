@@ -1,26 +1,7 @@
 import { LIVE } from "../common/states";
 import projectsQueries from "../../queries/projects";
-import tokenQueries from "../../queries/tokens";
 import addEnvironment from "../environments/add";
-
-const generateRandomString = (size, upperAlphaOnly = false) => {
-  const numeric = "0123456789";
-  const lowerAlpha = "abcdefghijklmnopqrstuvwxyz";
-  const upperAlpha = lowerAlpha.toUpperCase();
-
-  const source = upperAlphaOnly
-    ? upperAlpha
-    : numeric + lowerAlpha + upperAlpha;
-
-  let randomlyGeneratedString = "";
-
-  while (randomlyGeneratedString.length < size) {
-    const randomIndex = Math.floor(Math.random() * (source.length - 1));
-    randomlyGeneratedString += source[randomIndex];
-  }
-
-  return randomlyGeneratedString;
-};
+import addToken from "../tokens/add";
 
 export default async (
   name,
@@ -39,13 +20,7 @@ export default async (
     configurationName
   );
 
-  const writeToken = await tokenQueries.insertOne({
-    project_id: project.id,
-    name: "root",
-    level: "write",
-    key: generateRandomString(40),
-    expiry_date: null,
-  });
+  const writeToken = await addToken(project.id, "root", "write");
 
   return {
     ...project,

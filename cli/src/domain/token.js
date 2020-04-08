@@ -14,5 +14,21 @@ module.exports = (client, ui) => {
     }
   };
 
-  return { list };
+  const add = function*(project, name, level = "read", expiresInDays = null) {
+    const url = `${project.origin}/projects/${project.id}/tokens`;
+    const body = {
+      name,
+      level,
+      expiresInDays,
+    };
+
+    try {
+      return yield client.post(url, body, client.buildAuthorization(project));
+    } catch (error) {
+      ui.printRequestError(error);
+      ui.exit(1);
+    }
+  };
+
+  return { list, add };
 };

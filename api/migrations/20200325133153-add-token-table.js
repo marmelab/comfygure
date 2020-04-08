@@ -1,7 +1,7 @@
 /* eslint-disable */
 "use strict";
 
-exports.up = function(db, cb) {
+exports.up = function (db, cb) {
   db.runSql(
     `
     DO $$
@@ -21,7 +21,8 @@ exports.up = function(db, cb) {
         expiry_date timestamp with time zone,
         created_at timestamp with time zone DEFAULT now() NOT NULL,
         updated_at timestamp with time zone DEFAULT now() NOT NULL,
-        UNIQUE(project_id, key)
+        UNIQUE(project_id, key),
+        UNIQUE(project_id, name)
       );
 
       INSERT INTO token ("project_id", "name", "level", "key", "expiry_date")
@@ -42,7 +43,7 @@ exports.up = function(db, cb) {
   );
 };
 
-exports.down = function(db, cb) {
+exports.down = function (db, cb) {
   db.runSql(
     `
     DO $$
@@ -66,10 +67,6 @@ exports.down = function(db, cb) {
         t.project_id = project.id AND
         t."level" = 'read' AND
         t."name" = 'read_only';
-    
-      ALTER TABLE project
-        ALTER COLUMN write_token set not null,
-        ALTER COLUMN read_token set not NULL;
 
       DROP TABLE token;
       DROP TYPE token_level;
@@ -81,5 +78,5 @@ exports.down = function(db, cb) {
 };
 
 exports._meta = {
-  version: 1
+  version: 1,
 };
