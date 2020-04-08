@@ -1,4 +1,4 @@
-import client, { insertOne } from "./knex";
+import client, { insertOne, updateOne } from "./knex";
 import { LIVE } from "../domain/common/states";
 
 const table = "token";
@@ -54,4 +54,5 @@ export default {
   findByProjectId,
   findValidTokenByKey,
   insertOne: insertOne(table, [...fields, "key"]),
+  updateOne: updateOne(table, fields),
 };

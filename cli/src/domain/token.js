@@ -30,5 +30,16 @@ module.exports = (client, ui) => {
     }
   };
 
-  return { list, add };
+  const remove = function*(project, id) {
+    const url = `${project.origin}/projects/${project.id}/tokens/${id}`;
+
+    try {
+      return yield client.delete(url, client.buildAuthorization(project));
+    } catch (error) {
+      ui.printRequestError(error);
+      ui.exit(1);
+    }
+  };
+
+  return { list, add, remove };
 };

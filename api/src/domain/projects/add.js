@@ -2,6 +2,7 @@ import { LIVE } from "../common/states";
 import projectsQueries from "../../queries/projects";
 import addEnvironment from "../environments/add";
 import addToken from "../tokens/add";
+import generateRandomString from "../tokens/generateRandomString";
 
 export default async (
   name,

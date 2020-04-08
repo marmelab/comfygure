@@ -169,6 +169,14 @@ functions:
           path: projects/{id}/tokens
           cors: true
 
+  tokenRemove:
+    handler: src/handlers/tokens.remove
+    description: Remove a token
+    events:
+      - http:
+          method: DELETE
+          path: projects/{id}/tokens/{tokenId}
+          cors: true
 plugins:
   - serverless-webpack
   - serverless-offline

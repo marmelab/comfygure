@@ -5,6 +5,7 @@ import {
 } from "./utils/authorization";
 import getTokens from "../domain/tokens/get";
 import addToken from "../domain/tokens/add";
+import removeToken from "../domain/tokens/remove";
 
 export const get = λ(async (event) => {
   const { id: projectId } = event.pathParameters || {};
@@ -32,4 +33,16 @@ export const create = λ(async (event) => {
   );
 
   return addToken(projectId, name, level, expiresInDays);
+});
+
+export const remove = λ(async (event) => {
+  const { id: projectId, tokenId } = event.pathParameters;
+
+  await checkAuthorizationOr403(
+    parseAuthorizationToken(event),
+    projectId,
+    "write"
+  );
+
+  return removeToken(tokenId);
 });
