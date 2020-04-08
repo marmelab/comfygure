@@ -1,44 +1,44 @@
 {
-    "name": "comfygure",
-    "version": "1.2.0",
-    "license": "MIT",
-    "private": true,
-    "scripts": {
-        "start": "node build/launcher.js",
-        "dev": "node --require @babel/register src/launcher.js",
-        "build": "rm -rf build && babel src -d build",
-        "now-build": "rm -rf build && babel src -d build"
-    },
-    "dependencies": {
-        "body-parser": "^1.19.0",
-        "co": "~4.6.0",
-        "convict": "^5.2.0",
-        "date-fns": "^2.11.1",
-        "express": "^4.17.1",
-        "knex": "^0.20.13",
-        "lodash.omit": "^4.5.0",
-        "object-hash": "^2.0.3",
-        "pg": "^7.18.2",
-        "slug": "^2.1.1"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.8.4",
-        "@babel/core": "^7.9.0",
-        "@babel/plugin-transform-async-to-generator": "^7.8.3",
-        "@babel/preset-env": "^7.9.0",
-        "@babel/register": "^7.9.0",
-        "babel-eslint": "^10.1.0",
-        "babel-jest": "^25.2.6",
-        "babel-loader": "^8.1.0",
-        "jest": "^25.2.7",
-        "json-loader": "~0.5.4",
-        "request": "^2.88.2",
-        "serverless": "^1.67.0",
-        "serverless-offline": "^5.12.1",
-        "serverless-webpack": "^5.3.1",
-        "webpack": "^4.42.1"
-    },
-    "jest": {
-        "testEnvironment": "node"
-    }
+  "name": "comfygure",
+  "version": "1.2.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node build/launcher.js",
+    "dev": "node --require @babel/register src/launcher.js",
+    "build": "rm -rf build && babel src -d build",
+    "now-build": "rm -rf build && babel src -d build"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "co": "~4.6.0",
+    "convict": "^5.2.0",
+    "date-fns": "^2.11.1",
+    "express": "^4.17.1",
+    "knex": "^0.20.13",
+    "lodash.omit": "^4.5.0",
+    "object-hash": "^2.0.3",
+    "pg": "^8.0.0",
+    "slug": "^2.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-async-to-generator": "^7.8.3",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.9.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.3.0",
+    "babel-loader": "^8.1.0",
+    "jest": "^25.3.0",
+    "json-loader": "~0.5.4",
+    "request": "^2.88.2",
+    "serverless": "^1.67.3",
+    "serverless-offline": "^6.1.4",
+    "serverless-webpack": "^5.3.1",
+    "webpack": "^4.42.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
 }
