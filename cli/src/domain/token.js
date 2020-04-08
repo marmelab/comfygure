@@ -1,6 +1,10 @@
 module.exports = (client, ui) => {
-  const list = function*(project) {
-    const url = `${project.origin}/projects/${project.id}/tokens`;
+  const list = function*(project, all = false) {
+    let url = `${project.origin}/projects/${project.id}/tokens`;
+
+    if (all) {
+      url += "?all";
+    }
 
     try {
       return yield client.get(url, client.buildAuthorization(project));

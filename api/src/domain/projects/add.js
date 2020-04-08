@@ -30,7 +30,7 @@ export default async (
   const project = await projectsQueries.insertOne({
     name,
     state: LIVE,
-    access_key: generateRandomString(20, true)
+    access_key: generateRandomString(20, true),
   });
 
   const environment = await addEnvironment(
@@ -39,29 +39,20 @@ export default async (
     configurationName
   );
 
-  const [writeToken, readToken] = await Promise.all([
-    tokenQueries.insertOne({
-      project_id: project.id,
-      name: "root",
-      level: "write",
-      key: generateRandomString(40),
-      expiry_date: null
-    }),
-    tokenQueries.insertOne({
-      project_id: project.id,
-      name: "read_only",
-      level: "read",
-      key: generateRandomString(40),
-      expiry_date: null
-    })
-  ]);
+  const writeToken = await tokenQueries.insertOne({
+    project_id: project.id,
+    name: "root",
+    level: "write",
+    key: generateRandomString(40),
+    expiry_date: null,
+  });
 
   return {
     ...project,
     environments: [environment],
-    tokens: [readToken, writeToken],
+    tokens: [writeToken],
     // Keep the following keys to not break retro-compatibility
     writeToken: writeToken.key,
-    readToken: readToken.key
+    readToken: null,
   };
 };

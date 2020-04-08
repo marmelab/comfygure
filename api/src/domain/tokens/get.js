@@ -1,3 +1,4 @@
 import tokensQueries from "../../queries/tokens";
 
-export default projectId => tokensQueries.findByProjectId(projectId);
+export default (projectId, all = false) =>
+  tokensQueries.findByProjectId(projectId, all);
