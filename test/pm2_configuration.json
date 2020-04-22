@@ -4,7 +4,7 @@
             "name": "comfy-api",
             "cwd": "../api",
             "script": "node_modules/.bin/serverless",
-            "args": "offline --host=0.0.0.0 --port=3000 --noPrependStageInUrl",
+            "args": "offline start --host=0.0.0.0 --port=3000 --noPrependStageInUrl",
             "env": {
                 "SLS_DEBUG": "*",
                 "PGPASSWORD": "password"
