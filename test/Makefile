@@ -10,10 +10,20 @@ ifeq (${CI},false)
 	-cd ../api && make install-db
 	cd ../api && make start-db
 endif
+ifeq (${CI},true)
+	@echo 'Switching NodeJS version for the API...'
+	nvm install 10
+	nvm use 10
+endif
 	@echo 'Starting test API...'
 	./node_modules/.bin/pm2 start pm2_configuration.json
 	@echo 'Waiting for webpack...'
 	@sleep 10
+	./node_modules/.bin/pm2 logs --nostream
+ifeq (${CI},true)
+	@echo 'Switching back to the correct NodeJS version'
+	nvm use ${TRAVIS_NODE_VERSION}
+endif
 
 stop-test-api:
 	@echo 'Stopping test API...'

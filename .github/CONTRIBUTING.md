@@ -1,5 +1,9 @@
 Want to open a PR on comfy? Thank you! Here are a few things you need to know.
 
+**Requirements**
+
+- NodeJS LTS
+
 # Project organisation
 This repository is splitted into a few parts.
 

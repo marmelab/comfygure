@@ -6,6 +6,7 @@ node_js:
     - '11'
     - '12'
     - '13'
+    - '14'
 
 services:
     - postgresql
@@ -16,6 +17,7 @@ addons:
 before_install:
     - psql -c 'create database comfy;' -U postgres
     - psql -U postgres comfy < api/var/schema.sql
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
 install: make install
 script: make test
