@@ -28,7 +28,7 @@ connect-db:
 	psql comfy
 
 run:
-	$(SERVERLESS) offline start --host=0.0.0.0 --port=3000
+	$(SERVERLESS) offline start --host=0.0.0.0 --port=3000 --noPrependStageInUrl
 
 deploy:
 	NODE_ENV=production $(SERVERLESS) deploy --stage prod
